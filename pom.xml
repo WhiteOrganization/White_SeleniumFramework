@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.white_sdev</groupId>
+    <artifactId>White_SeleniumFramework</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>A Selenium Framework that will help to execute tests and functions faster and reduce the effort to access many sections Selenium related.</description>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>12</maven.compiler.source>
+        <maven.compiler.target>12</maven.compiler.target>
+    </properties>
+    
+    <dependencies>
+	<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-server -->
+	<dependency>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-server</artifactId>
+	    <version>3.141.59</version>
+	    <!-- <version>2.53.0</version>-->
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
+	<dependency>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-chrome-driver</artifactId>
+	    <version>3.141.59</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+	<dependency>
+	    <groupId>io.github.bonigarcia</groupId>
+	    <artifactId>webdrivermanager</artifactId>
+	    <version>3.2.0</version>
+	</dependency>
+	
+	
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.30</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.projectlombok</groupId>
+	    <artifactId>lombok</artifactId>
+	    <version>1.18.12</version>
+	    <type>jar</type>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-simple</artifactId>
+	    <version>1.7.30</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.bitbucket.white_sdev</groupId>
+	    <artifactId>PropertiesManager</artifactId>
+	    <version>1.0.3</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.github.white-sdev</groupId>
+	    <artifactId>White_Validations</artifactId>
+	    <version>1.0.1</version>
+	    <exclusions>
+	     <exclusion>
+	      <groupId>org.slf4j</groupId>
+	      <artifactId>slf4j-api</artifactId>
+	     </exclusion>
+	    </exclusions>
+	</dependency>
+    </dependencies>
+    
+</project>
