@@ -168,7 +168,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebDriver;
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
+import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.*;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
@@ -177,45 +177,29 @@ import static org.white_sdev.white_validations.parameters.ParameterValidator.not
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
  * @since Dec 6, 2020
  */
-@Slf4j
-public abstract class TestCase {
-    
-    
-    /**
-     * Class Constructor. {Requirement_Reference}
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since Dec 6, 2020
-     * @param parameter The {@linkn Object} parameter to create <code>this</code> instance.
-     * @throws IllegalArgumentException - if the argument provided is null.
-     */
-    public TestCase(Object parameter) {
-	log.trace("::TestCase() - Start: ");
-	//notNullValidation(parameter,"Impossible to create the object. The parameter can't be null.");
-	try{
-	    
-	    
-	    //TODO OV: Implement operations of the method
-	    
 
-	    log.trace("::TestCase() - Finish: ");
-	} catch (Exception e) {
-            throw new RuntimeException("Impossible to complete the operation due to an unknown internal error.", e);
-        }
-    }
+public interface TestCase {
     
-    
-    public Boolean quitOnFinish=true;
     public final PrintStream SYSTEM_OUT=System.out;
     public final PrintStream SYSTEM_ERR=System.err;
     
-    public void performTest(Class<WebDriver> driverClass) throws Exception{
-	WebDriver driver=initialize(driverClass);
-	test(driver);
-	if(quitOnFinish)driver.quit();
-	quitOnFinish=true;
+    public default void performTest(Class<WebDriver> driverClass) throws Exception{
+	try{
+	    WebDriver driver=initialize(driverClass);
+	    try{
+		test(driver);
+		if(getQuitOnFinish())driver.quit();
+		setQuitOnFinish(true);
+	    }catch(Exception ex){
+		if(Boolean.parseBoolean(getProperty("close-on-error"))) driver.quit();
+		throw new White_SeleniumFrameworkException("An Error has ocurred while executing a test case",ex);
+	    }
+	}catch(Exception ex){
+	    throw new White_SeleniumFrameworkException("An Error has ocurred while permorming the test case execution",ex);
+	}
     }
 
-    public WebDriver initialize(Class<WebDriver> driverClass) throws Exception{
+    public default WebDriver initialize(Class<WebDriver> driverClass) throws Exception{
 	notNullValidation(driverClass);
 	disableLogs();
 	try{
@@ -235,7 +219,7 @@ public abstract class TestCase {
     
     public abstract String getTestFullName();
 
-    public void disableLogs() {
+    public default void disableLogs() {
 	System.setOut(
 	    new PrintStream(new OutputStream() { 
 		@Override
@@ -266,9 +250,11 @@ public abstract class TestCase {
 	    }));
     }
 
-    public void enableLogs() {
+    public default void enableLogs() {
 	System.setOut(SYSTEM_OUT);
 	System.setErr(SYSTEM_ERR);
     }
     
+    public void setQuitOnFinish(Boolean shouldQuitOnFish);
+    public Boolean getQuitOnFinish();
 }

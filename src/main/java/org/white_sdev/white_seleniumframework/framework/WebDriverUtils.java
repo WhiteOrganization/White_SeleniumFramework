@@ -184,6 +184,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.interactions.Actions;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 //import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
@@ -216,6 +217,8 @@ public class WebDriverUtils {
     public Boolean defaultContentFocused=true;
     
     public static Integer screenShootCounter=1;
+    
+    public Actions action = null;
     
 //</editor-fold>
     
@@ -843,6 +846,7 @@ public class WebDriverUtils {
      * @since 2019-03-02
      * @param name	    the name to locate the element to obtain
      * @return		    The found element with the name
+     * @see WebDriverUtils#getElementByName(java.lang.String, java.lang.Integer)  
      */
     public WebElement getElementByName(String name) {
 	return getElementByName(name, null);
@@ -922,6 +926,20 @@ public class WebDriverUtils {
 	return webElement;
     } // this method will not be used locally
 
+    /**
+     * Obtains an element from the page by its xpath. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
+     * it uses to accomplish this {@link #wait() }.
+     * This is a bridge method that will set the seconds to wait as null while calling the method.
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param xpath	    the xpath to locate the element to obtain
+     * @return		    The found element with the xpath
+     * @see WebDriverUtils#getElementByXPath(java.lang.String, java.lang.Integer) 
+     */
+    public WebElement getElementByXPath(String xpath) {
+	return getElementByXPath(xpath,null);
+    }
+    
     /**
      * Obtains an element from the page by its xpath. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
      * it uses to accomplish this {@link #wait() }.
@@ -1152,7 +1170,7 @@ public class WebDriverUtils {
 
 
 	} catch(TimeoutException ex){
-	    log.warn("waitFor(locator,secs)","The element ["+locator+"] Never showed up. Trying without waiting.");
+	    log.warn("waitFor(locator,secs) - The element ["+locator+"] Never showed up. Trying without waiting.");
 	    try{
 		element= driver.findElement(locator);
 		return element;
@@ -1399,5 +1417,25 @@ public class WebDriverUtils {
 	return fileName;
     }
 //</editor-fold>
+
+    public void pageDown() {
+	log.trace("::pageDown(parameter) - Start: ");
+	try {
+	    
+	    if(action==null) action = new Actions(driver);
+	    action.sendKeys(Keys.PAGE_DOWN).build().perform();
+	    
+	    log.trace("::pageDown(parameter) - Finish: ");
+	    
+	} catch (Exception e) {
+	    throw new RuntimeException("Impossible to complete the operation due to an unknown internal error.", e);
+	}
+    }
+    
+    public void wait(Long milisecs) throws InterruptedException{
+	synchronized (driver){
+	    driver.wait(milisecs);
+	}
+    }
 
 }
