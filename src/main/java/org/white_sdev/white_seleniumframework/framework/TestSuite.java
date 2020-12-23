@@ -165,7 +165,7 @@
 
 package org.white_sdev.white_seleniumframework.framework;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.IOException;
 import java.util.ArrayList;
