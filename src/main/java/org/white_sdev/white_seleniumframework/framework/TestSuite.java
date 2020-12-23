@@ -269,7 +269,7 @@ public class TestSuite {
 	WebDriverManager.getInstance(DriverManagerType.IEXPLORER).setup();
     }
 
-    private HashMap<Class<?  extends WebDriver>, Boolean> getDrivers() throws IOException {
+    public HashMap<Class<?  extends WebDriver>, Boolean> getDrivers() throws IOException {
 	HashMap<Class<?  extends WebDriver>, Boolean> drivers;
 	drivers = new LinkedHashMap<Class<?  extends WebDriver>, Boolean>() {{
 		put(ChromeDriver.class, Boolean.parseBoolean(getProperty("run.tests.chrome")) );
