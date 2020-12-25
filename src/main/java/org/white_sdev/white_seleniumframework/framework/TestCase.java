@@ -195,7 +195,7 @@ public interface TestCase {
 		throw new White_SeleniumFrameworkException("An Error has ocurred while executing a test case",ex);
 	    }
 	}catch(Exception ex){
-	    throw new White_SeleniumFrameworkException("An Error has ocurred while permorming the test case execution",ex);
+	    throw new White_SeleniumFrameworkException("An Error has ocurred while performing the test case execution",ex);
 	}
     }
 
