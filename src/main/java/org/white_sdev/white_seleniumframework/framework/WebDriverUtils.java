@@ -209,13 +209,6 @@ public class WebDriverUtils {
      */
     public WebDriver driver;
 
-    /**
-     * This is used by the method {@link #normalize(java.lang.String) } to improve the performance of the normalization process.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-06
-     */
-    public static String tabber=null;
-    
     public Boolean defaultContentFocused=true;
     
     public static Integer screenShootCounter=1;
@@ -507,8 +500,8 @@ public class WebDriverUtils {
      /**
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided id. 
-     * This is a Bridge method of {@link #writeId(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
-     * that sets up {@code secsToWait} & {@code nestedFrameNamesStructure} as {@code null}.
+     * This is a Bridge method of {@link #writeId(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)}
+     * that sets up {@code secsToWait} and {@code nestedFrameNamesStructure} as {@code null}.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
@@ -599,7 +592,7 @@ public class WebDriverUtils {
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided name. 
      * This is a bridge method to {@link #writeName(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
-     * with {@code nestedFrameNamesStructure} & {@code secsToWait} as {@code null}.
+     * with {@code nestedFrameNamesStructure} and {@code secsToWait} as {@code null}.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
@@ -618,7 +611,7 @@ public class WebDriverUtils {
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided name. 
      * This is a bridge method to {@link #writeName(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
-     * with {@code nestedFrameNamesStructure} & {@code secsToWait} as {@code null}.
+     * with {@code nestedFrameNamesStructure} and {@code secsToWait} as {@code null}.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
@@ -859,7 +852,7 @@ public class WebDriverUtils {
     
     /**
      * It will obtain the containing (link) text inside of the [tag]element with the xpath specified. This is a bridge method that sets up the nestedFrameNamesStructure as null
-     * while calling the method {@link #textFromXpath(java.lang.String, java.util.Collection, java.lang.Integer) }
+     * while calling the method {@link #textFromXpath(java.lang.String, java.util.Collection)}
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param xpath	    the xpath to locate the element to obtain the text from.
@@ -1242,7 +1235,7 @@ public class WebDriverUtils {
      * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
      * <br>
      * This is a Bridge method and will only call the method 
-     * {@link #waitForElements(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } 
      * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} and {@code skipRetryWithoutWaiting} as {@code null};
      * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
@@ -1608,7 +1601,7 @@ public class WebDriverUtils {
      * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
      * <br>
      * This is a Bridge method and will only call the method 
-     * {@link #waitForElements(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
      * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} and {@code skipRetryWithoutWaiting} as {@code null};
      * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
@@ -1881,7 +1874,7 @@ public class WebDriverUtils {
 
     /**
      * Resets the focus to the default content on the page. if you need to access an element inside of a frame you will have to call 
-     * {@link #focus(java.util.Collection, java.lang.Integer) } or {@link #focusFrame(org.openqa.selenium.support.How, java.lang.String, java.lang.Integer) method again
+     * {@link #focus(java.util.Collection, java.lang.Integer)} or {@link #focusFrame(org.openqa.selenium.support.How, java.lang.String, java.lang.Integer)} method again
      * to obtain the element after calling this. This method also marks the focus as clean by setting {@link #defaultContentFocused} as <code>true</code>
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
@@ -2101,7 +2094,7 @@ public class WebDriverUtils {
 	notNullValidation(milisecs);
 	try{
 	    synchronized (driver){
-		driver.wait(milisecs);
+		Thread.sleep(milisecs);
 	    }
 	    log.trace("::wait(milisecs) - Finish: ");
 	}catch(Exception e){

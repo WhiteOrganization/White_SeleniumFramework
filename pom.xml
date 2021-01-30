@@ -5,7 +5,32 @@
     <artifactId>White_SeleniumFramework</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort to access many sections Selenium related.</description>
+    <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort 
+	to access many sections Selenium related.
+    </description>
+    
+    
+    <licenses>
+	<license>
+	    <name>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License</name>
+	    <url>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</url>
+	</license>
+    </licenses>
+    
+    <developers>
+	<developer>
+	    <name>Obed Vazquez</name>
+	    <email>obed.vazquez@gmail.com</email>
+	    <organization>White_Corp21</organization>
+	    <organizationUrl>http://white-sdev.whiteweb.tech</organizationUrl>
+	</developer>
+    </developers>
+    
+    <scm>
+	<connection>scm:git:git://git@github.com:white-sdev/White_SeleniumFramework.git</connection>
+	<developerConnection>scm:git:ssh://git@github.com:white-sdev/White_SeleniumFramework.git</developerConnection>
+	<url>https://github.com/white-sdev/White_SeleniumFramework/tree/master</url>
+    </scm>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -74,4 +99,74 @@
 	</dependency>
     </dependencies>
     
+    <distributionManagement>
+	<snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	</snapshotRepository>
+	<repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	</repository>
+    </distributionManagement>
+    
+    <build>
+	<plugins>
+	    <plugin>
+		<groupId>org.sonatype.plugins</groupId>
+		<artifactId>nexus-staging-maven-plugin</artifactId>
+		<version>1.6.7</version>
+		<extensions>true</extensions>
+		<configuration>
+		    <serverId>ossrh</serverId>
+		    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+		    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+		</configuration>
+	    </plugin>
+	    
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-source-plugin</artifactId>
+		<version>2.2.1</version>
+		<executions>
+		    <execution>
+			<id>attach-sources</id>
+			<goals>
+			    <goal>jar-no-fork</goal>
+			</goals>
+		    </execution>
+		</executions>
+	    </plugin>
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-javadoc-plugin</artifactId>
+		<version>2.9.1</version>
+		<configuration>
+		    <detectJavaApiLink>false</detectJavaApiLink>
+		</configuration>
+		<executions>
+		    <execution>
+			<id>attach-javadocs</id>
+			<goals>
+			    <goal>jar</goal>
+			</goals>
+		    </execution>
+		</executions>
+	    </plugin>
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-gpg-plugin</artifactId>
+		<version>1.5</version>
+		<executions>
+		    <execution>
+			<id>sign-artifacts</id>
+			<phase>verify</phase>
+			<goals>
+			    <goal>sign</goal>
+			</goals>
+		    </execution>
+		</executions>
+	    </plugin>
+	</plugins>
+    </build>
 </project>
