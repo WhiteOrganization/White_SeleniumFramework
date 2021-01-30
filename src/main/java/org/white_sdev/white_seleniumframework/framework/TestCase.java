@@ -163,7 +163,6 @@
 
 package org.white_sdev.white_seleniumframework.framework;
 
-import lombok.extern.slf4j.Slf4j;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
@@ -184,18 +183,17 @@ public interface TestCase {
     public final PrintStream SYSTEM_ERR=System.err;
     
     public default void performTest(Class<WebDriver> driverClass) throws Exception{
+	WebDriver driver=null;
 	try{
-	    WebDriver driver=initialize(driverClass);
-	    try{
-		test(driver);
-		if(getQuitOnFinish())driver.quit();
-		setQuitOnFinish(true);
-	    }catch(Exception ex){
-		if(Boolean.parseBoolean(getProperty("close-on-error"))) driver.quit();
-		throw new White_SeleniumFrameworkException("An Error has ocurred while executing a test case",ex);
-	    }
+	    driver=initialize(driverClass);
+	}catch(Exception ex){ throw new White_SeleniumFrameworkException("An Error has ocurred while initializing the test case execution",ex); }
+	
+	try{
+	    test(new WebDriverUtils(driver));
+	    if(getQuitOnFinish())driver.quit();
 	}catch(Exception ex){
-	    throw new White_SeleniumFrameworkException("An Error has ocurred while permorming the test case execution",ex);
+	    if(getQuitOnFinish()) driver.quit();
+	    throw new White_SeleniumFrameworkException("An Error has ocurred while executing a test case",ex);
 	}
     }
 
@@ -215,7 +213,7 @@ public interface TestCase {
 	}
     }
 
-    public abstract void test(WebDriver driver) throws Exception;
+    public abstract void test(WebDriverUtils utils) throws Exception;
     
     public abstract String getTestFullName();
 
@@ -255,6 +253,12 @@ public interface TestCase {
 	System.setErr(SYSTEM_ERR);
     }
     
-    public void setQuitOnFinish(Boolean shouldQuitOnFish);
-    public Boolean getQuitOnFinish();
+    public default Boolean getQuitOnFinish(){
+	try{
+	    return Boolean.parseBoolean(getProperty("close-on-error"));
+	}catch(Exception e){
+	    SYSTEM_ERR.println("Exception ocurred when retrieving property close-on-error from properties files");
+	    return true;
+	}
+    }
 }

@@ -166,6 +166,7 @@ package org.white_sdev.white_seleniumframework.framework;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -184,9 +185,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
-//import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
+import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
 /**
  * 
@@ -220,34 +222,12 @@ public class WebDriverUtils {
     
     public Actions action = null;
     
+    public Integer defaultSecsToWaitForElements=null;
+    
 //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Methods">
     
-    /**
-     * A simple implementation to visualize more organized method signatures in the {@link org.slf4j.Logger logs}.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-06
-     * @param methodSignature	This is the method signature to normalize with the number of tabs configured in the properties
-     * @return			The signature normalized with the same number of characters (filled with tabs) than the rest of the normalized methods.
-     */
-    public String normalize(String methodSignature){
-	try{
-	    if(tabber==null){
-		String numberOfTabsConfigured=getProperty("normalized-logger-tabs");
-		Integer spaces=8*(numberOfTabsConfigured!=null?Integer.parseInt(numberOfTabsConfigured):7);
-		Integer tabs=(spaces-(getClass().getSimpleName().length()+" - ".length()+methodSignature.length()))/8;
-		tabber=methodSignature;
-		for(int i=0;i<tabs;i++){
-		    tabber+="\t";
-		}
-	    }
-	    return tabber; 
-	}catch(Exception ex){
-	    throw new White_SeleniumFrameworkException("An error has ocurred while configuring the class logger. Impossible to configure the number of tabs required to log.",ex);
-	}
-    }
-
     /**
      * Default Constructor
      *
@@ -257,6 +237,26 @@ public class WebDriverUtils {
      */
     public WebDriverUtils(WebDriver driver) {
 	this.driver = driver;
+    }
+
+    public Integer getDefaultSecondsToWaitForElements() {
+	log.trace("::getDefaultSecondsToWaitForElements() - Start: ");
+	try {
+	    
+	    if(defaultSecsToWaitForElements==null){
+		try{
+		    String propertiesSecs=getProperty("default-explicit-wait");
+		    defaultSecsToWaitForElements=propertiesSecs!=null?Integer.parseInt(propertiesSecs):null;
+		}catch(Exception ex){
+		    log.error("::getDefaultSecondsToWaitForElements(): Imposible to obtain the default seconds to wait from the properties files. Defaulting to 0");
+		}
+	    }
+	    log.trace("::getDefaultSecondsToWaitForElements() - Finish: ");
+	    return defaultSecsToWaitForElements!=null?defaultSecsToWaitForElements:0;
+	    
+	} catch (Exception e) {
+	    throw new White_SeleniumFrameworkException("Impossible to Obtain the default seconds to wait when looking for elements.", e);
+	}
     }
 
     //<editor-fold defaultstate="collapsed" desc="Actions">
@@ -278,15 +278,6 @@ public class WebDriverUtils {
 	clickName( name, nestedFrameNamesStructure, null);
     }
     
-    public void clickClass(String css) {
-	clickClass(css, null, null);
-    }
-
-    public void clickClass(String css, Collection<String> nestedFrameNamesStructure) {
-	clickClass( css, nestedFrameNamesStructure, null);
-    }
-    
-    
     public void clickXpath(String xpath) {
 	clickXpath(xpath, null, null);
     }
@@ -298,55 +289,10 @@ public class WebDriverUtils {
     
     
     
-    public void writeId(String id, String keys) {
-	writeId(id, keys, null, null);
-    }
-
-    public void writeId(String id, String keys, Collection<String> nestedFrameNamesStructure){
-	 writeId(id,keys,nestedFrameNamesStructure,null);
-    }
-    
-    /**
-     * No framesets!
-     * @param name
-     * @param keys
-     * @param nestedFrameNamesStructure 
-     */
-    public void writeName(String name, String keys,Collection<String> nestedFrameNamesStructure){
-	writeName(name,keys,nestedFrameNamesStructure,null);
-    }
-    
-    public void writeName(String name, String keys) {
-	writeName(name, keys, null, null);
-    }
-
-    public void writeCSS(String css, String keys) {
-	writeCSS(css, keys, null);
-    }
-
-    public void writeTag(String keys) {
-	writeTag("input", keys, null);
-    }
-
-    public void writeTag(String tagName, String keys) {
-	writeTag(tagName, keys, null);
-    }
-
-    public void writeXPath(String xpath, String keys) {
-	writeXPath(xpath, keys, null);
-    }
-
-    public String textFromXpath(String xpath) {
-	return textFromXpath(xpath, null, null);
-    }
-    
-    public String textFromXpath(String xpath, Collection<String> nestedFrameNamesStructure) {
-	return textFromXpath( xpath, nestedFrameNamesStructure, null);
-    }
-    
 //</editor-fold>
     
-    
+	//<editor-fold defaultstate="collapsed" desc="Click">
+
     public void clickId(String id, Integer secsToWait){
 	clickId( id, null, secsToWait);
     }
@@ -400,32 +346,46 @@ public class WebDriverUtils {
 	}
     }
 
-    public void clickClass(String css, Integer secsToWait) {
-	clickName( css, null, secsToWait);
+    
+    public void clickClass(String cssClass) {
+	clickClass(cssClass,null,null);
     }
     
-    public void clickClass(String css,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
+    public void clickClass(String css, Collection<String> nestedFrameNamesStructure) {
+	clickClass( css, nestedFrameNamesStructure, null);
+    }
+    
+    public void clickClass(String cssClass, Integer secsToWait) {
+	clickClass(cssClass,null,secsToWait);
+    }
+    
+    public void clickClass(String cssClass,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
 	log.trace("clickClass(css,frameNamesStructure,secsToWait) - Start","Clicking.");
-	if (css == null) return;
+	if (cssClass == null) return;
 	try {
 	    
 	    if(nestedFrameNamesStructure!=null) focus(nestedFrameNamesStructure,secsToWait);
-	    click(By.className(css), secsToWait);
+	    click(By.className(cssClass), secsToWait);
 
 	    log.trace("::clickClass(css,frameNamesStructure,secsToWait) - Finish","Clicked.");
 	} catch (Exception ex) {
-	    if(!defaultContentFocused && (nestedFrameNamesStructure==null || nestedFrameNamesStructure.isEmpty())){ //is dirty and wasn't me who got it dirty?
-		try{
-		    log.warn("clickClass(css,frameNamesStructure,secsToWait)"," Couln't click the element, switching to the main frame and trying again.");
-		    driver.switchTo().defaultContent();
-		    defaultContentFocused=true;
-		    clickClass(css,secsToWait);
-		    return;
-		}catch(Exception ex2){}//couln't handle it, throw of exception couln't be avoided.
-	    }
-	    throw new White_SeleniumFrameworkException("Unable to click the Button or Link with class name:" + css, ex);
+	    throw new White_SeleniumFrameworkException("Unable to click the Button or Link with class name:" + cssClass, ex);
 	}
     }
+    
+    public void clickClass(String cssClass, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	log.trace("clickClass(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Clicking.");
+	try {
+	    
+	    WebElement element=getElementBy(By.className(cssClass),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    element.click();
+	    log.trace("::clickClass(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Clicked.");
+	    
+	} catch (Exception ex) {
+	    throw new White_SeleniumFrameworkException("Unable to click the Button or Link with class name: " + cssClass, ex);
+	}
+    }
+    
 
     /**
      * Clicks the element once it founds it by waiting for it to show up and obtaining it from the page with the provided xpath. 
@@ -434,8 +394,8 @@ public class WebDriverUtils {
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param xpath			the xpath to locate the element to write to.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
      */
     public void clickXpath(String xpath, Integer secsToWait) {
 	clickXpath( xpath, null, secsToWait);
@@ -450,8 +410,8 @@ public class WebDriverUtils {
      * @param xpath			the xpath to locate the element to write to.
      * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
      *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
      */
     public void clickXpath(String xpath,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
 	log.trace("clickXpath(xpath,frameNamesStructure,secsToWait) - Start","Clicking.");
@@ -476,6 +436,18 @@ public class WebDriverUtils {
 	}
     }
 
+    public void clickLinkText(String linkText){
+	clickLinkText(linkText,null, null, null, null);
+    }
+    
+    public void clickLinkText(String linkText, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	click(By.linkText(linkText),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+    }
+    
+    public void click(By locator){
+	log.trace("click(locator) - Start: Bridging.");
+	click(locator,null,null,null,null);
+    }
     
     /**
      * clicks the element once it founds it by waiting for it to show up and obtaining it from the page with the provided {@link By locator}. 
@@ -486,48 +458,99 @@ public class WebDriverUtils {
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param locator	    the {@link By} object to locate the element to click.
-     * @param secsToWait    the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
      */
     public void click(By locator, Integer secsToWait) {
-	log.trace("clickId(name,secsToWait) - Start","Clicking.");
-	if (locator == null) return;
-	try {
-	    Integer previousTabsCount = driver.getWindowHandles().size();
-	    WebElement buttonOrLink = getElementBy(locator, secsToWait);
-	    buttonOrLink.click();
-	    
-	    if( previousTabsCount<driver.getWindowHandles().size()){
-		log.warn("clickId(name,secsToWait)","A known bug has ocurred (when a button is clicked an unwanted tab is oppened) proceding to fix it (close the tab).");
-		driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL + "W");
-		//new Actions(driver).keyDown(Keys.TAB).sendKeys("w").perform();
-		// if there is just 1 tab:
-//		driver.switchTo().window(handles[1]);
-//		driver.close();
-//		driver.switchTo().window(handles[0]);
-	    }
-	    
-	    log.trace("clickId(name,secsToWait) - Finish","Clicked.");
-	    
-	} catch (Exception ex) {
-	    throw new White_SeleniumFrameworkException("Unable to click the Button or Link with locator:" + locator, ex);
-	}
+	log.trace("click(locator,secsToWait) - Start: Bridging.");
+	click(locator,null,null,secsToWait,null);
     }
 
+    public void click(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::click(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: ");
+	try{
+	    getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting).click();
+	}catch(Exception ex){
+	    throw new White_SeleniumFrameworkException("Unable to click the element",ex);
+	}
+    }
     
+    public void clickText(String text){
+	clickText(text,null,null,null,null);
+    }
     
+    public void clickText(String text, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	try{
+	    WebElement element=getElementByText(text,relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    element.click();
+	}catch(Exception ex){
+	    throw new White_SeleniumFrameworkException("Unable to click the element",ex);
+	}
+    }
     
+    //</editor-fold>
+    
+	//<editor-fold defaultstate="collapsed" desc="Write">
+
+    public void writeTag(String keys) {
+	writeTag("input", keys, null);
+    }
+
+    public void writeTag(String tagName, String keys) {
+	writeTag(tagName, keys, null);
+    }
+
+    public void writeXPath(String xpath, String keys) {
+	writeXPath(xpath, keys, null);
+    }
+
      /**
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided id. 
-     * This is a Bridge method of {@link #writeId(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} that sets up nestedFrameNamesStructure as null.
+     * This is a Bridge method of {@link #writeId(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
+     * that sets up {@code secsToWait} & {@code nestedFrameNamesStructure} as {@code null}.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param id			the id to locate the element to write to.
      * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
+     */
+    public void writeId(String id, String keys) {
+	writeId(id, keys, null, null);
+    }
+
+     /**
+     * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
+     * with the provided id. 
+     * This is a Bridge method of {@link #writeId(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
+     * that sets up {@code secsToWait} as {@code null}.
+     *
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param id			the id to locate the element to write to.
+     * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
+     * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
+     */
+    public void writeId(String id, String keys, Collection<String> nestedFrameNamesStructure){
+	 writeId(id,keys,nestedFrameNamesStructure,null);
+    }
+    
+     /**
+     * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
+     * with the provided id. 
+     * This is a Bridge method of {@link #writeId(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
+     * that sets up {@code nestedFrameNamesStructure} as {@code null}.
+     *
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param id			the id to locate the element to write to.
+     * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeId(String id, String keys, Integer secsToWait){
 	 writeId(id,keys,null,secsToWait);
@@ -544,8 +567,9 @@ public class WebDriverUtils {
      * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
      * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
      *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeId(String id, String keys,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
 	log.trace("writeId(id,keys,frameNamesStructure,secsToWait) - Start","writing.");
@@ -574,16 +598,54 @@ public class WebDriverUtils {
     /**
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided name. 
-     * This is a Bridge method of {@link #writeName(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} that sets up nestedFrameNamesStructure as null.
+     * This is a bridge method to {@link #writeName(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
+     * with {@code nestedFrameNamesStructure} & {@code secsToWait} as {@code null}.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param name			the name to locate the element to write to.
      * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
+     */
+    public void writeName(String name, String keys,Collection<String> nestedFrameNamesStructure){
+	log.trace("writeName(name,keys,nestedFrameNamesStructure) - Start: Bridging");
+	writeName(name,keys,nestedFrameNamesStructure,null);
+    }
+    
+    /**
+     * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
+     * with the provided name. 
+     * This is a bridge method to {@link #writeName(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} 
+     * with {@code nestedFrameNamesStructure} & {@code secsToWait} as {@code null}.
+     *
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param name			the name to locate the element to write to.
+     * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
+     */
+    public void writeName(String name, String keys) {
+	log.trace("writeName(name,keys) - Start: Bridging");
+	writeName(name, keys, null, null);
+    }
+
+    /**
+     * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
+     * with the provided name. 
+     * This is a bridge method to {@link #writeName(java.lang.String, java.lang.String, java.util.Collection, java.lang.Integer)} with {@code nestedFrameNamesStructure} as {@code null}.
+     *
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param name			the name to locate the element to write to.
+     * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeName(String name, String keys, Integer secsToWait){
+	log.trace("writeName(name,keys,secsToWait) - Start: Bridging");
 	writeName(name, keys,null, secsToWait);
     }
     
@@ -598,8 +660,8 @@ public class WebDriverUtils {
      * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
      * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
      *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
      */
     public void writeName(String name, String keys,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
 	log.trace("writeName(name,keys,frameNamesStructure,secsToWait) - Start","writing.");
@@ -645,14 +707,31 @@ public class WebDriverUtils {
     /**
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided CSS class. 
+     * This is a bridge method to {@link #writeCSS(java.lang.String, java.lang.String, java.lang.Integer) } with {@code secsToWait} as {@code null}.
+     *
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param css	    the CSS class to locate the element to write to.
+     * @param keys	    The keys or {@link String text} to send to the element (usually an input) on the page.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
+     */
+    public void writeCSS(String css, String keys) {
+	log.trace("writeCSS(css,keys) - Start: Bridging");
+	writeCSS(css,keys,null);
+    }
+    
+    /**
+     * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
+     * with the provided CSS class. 
      * This is a bridge method to {@link #write(org.openqa.selenium.By, java.lang.String, java.lang.Integer) } in a way setting up the {@link By#tagName(java.lang.String)} element.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param css	    the CSS class to locate the element to write to.
      * @param keys	    The keys or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait    the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeCSS(String css, String keys, Integer secsToWait) {
 	log.trace("writeCSS(css,keys,secsToWait) - Start","writing.");
@@ -674,8 +753,9 @@ public class WebDriverUtils {
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param keys			The keys or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait		the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *					default-explicit-wait property) if null.
+     * @param secsToWait		the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeTag(String keys, Integer secsToWait) {
 	writeTag("input", keys, secsToWait);
@@ -690,8 +770,9 @@ public class WebDriverUtils {
      * @since 2019-03-02
      * @param tagName	    the tag to locate the element to write to.
      * @param keys	    The keys or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait    the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeTag(String tagName, String keys, Integer secsToWait) {
 	log.trace("::writeTag(css,keys,secsToWait) - Start","writing.");
@@ -707,15 +788,16 @@ public class WebDriverUtils {
 
     /**
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
-     * with the provided xpath. 
+     * with the provided {@code xPath}. 
      * This is a bridge method to {@link #write(org.openqa.selenium.By, java.lang.String, java.lang.Integer) } in a way setting up the {@link By#tagName(java.lang.String)} element.
      *
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
-     * @param xpath	    the xpath to locate the element to write to.
+     * @param xpath	    The {@code xPath} to locate the element to write to.
      * @param keys	    The keys or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait    the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void writeXPath(String xpath, String keys, Integer secsToWait) {
 	log.trace("::writeXPath(css,keys,secsToWait) - Start","writing.");
@@ -730,6 +812,9 @@ public class WebDriverUtils {
 
     }
 
+    
+    
+    
     /**
      * Writes (sends) the given keys ({@link String text}) to the element once it founds it by waiting for it to show up and obtaining it from the page 
      * with the provided {@link By locator}. 
@@ -742,8 +827,9 @@ public class WebDriverUtils {
      * @since 2019-03-02
      * @param locator	    the {@link By} object to locate the element to obtain the text from.
      * @param keys	    The key or {@link String text} to send to the element (usually an input) on the page.
-     * @param secsToWait    the seconds to wait for the element to show up in the page; uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
     public void write(By locator, String keys, Integer secsToWait) {
 	log.trace("::write(input,keys,secsToWait) - Start","Clicking.");
@@ -761,71 +847,73 @@ public class WebDriverUtils {
 
     }
     
+    //</editor-fold>
+    
+    public String textFromXpath(String xpath) {
+	return getTextFromXpath(xpath, null, null,null,null);
+    }
+    
+    public String textFromXpath(String xpath, Collection<String> nestedFrameNamesStructure) {
+	return getTextFromXpath( xpath, nestedFrameNamesStructure,null, null,null);
+    }
+    
     /**
      * It will obtain the containing (link) text inside of the [tag]element with the xpath specified. This is a bridge method that sets up the nestedFrameNamesStructure as null
      * while calling the method {@link #textFromXpath(java.lang.String, java.util.Collection, java.lang.Integer) }
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param xpath	    the xpath to locate the element to obtain the text from.
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
      * @return		    The text of the found element with the {@link By locator}
      */
-    public String textFromXpath(String xpath, Integer secsToWait) {
-	return textFromXpath( xpath, null, secsToWait);
+    public String getTextFromXpath(String xpath, Integer secsToWait) {
+	return getTextFromXpath( xpath, null,null, secsToWait,null);
     }
     
     /**
-     * It will obtain the containing (link) text inside of the [tag]element with the xpath specified.
+     * It will obtain the containing (link) text inside of the [tag]element with the {@code xPath} specified.
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
-     * @param xpath	    the xpath to locate the element to obtain the text from.
+     * @param xpath	    The {@code xPath} to locate the element to obtain the text from.
      * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
      *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
      * @return		    The text of the found element with the {@link By locator}
      */
-    public String textFromXpath(String xpath,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
-	log.trace("::textFromXpath(xpath,frameNamesStructure,secsToWait) - Start","Getting text from element.");
-	if (xpath == null) throw new IllegalArgumentException("The provided Xpath can't be null");
-	try {
-	    
-	    if(nestedFrameNamesStructure!=null) focus(nestedFrameNamesStructure,secsToWait);
-	    String text=text(By.xpath(xpath), secsToWait);
-	    log.trace("::textFromXpath(xpath,frameNamesStructure,secsToWait) - Finish","Text Obtained.");
-	    return text;
-	    
-	} catch (Exception ex) {
-	    if(!defaultContentFocused && (nestedFrameNamesStructure==null || nestedFrameNamesStructure.isEmpty())){ //is dirty and wasn't me who got it dirty?
-		try{
-		    log.warn("textFromXpath(xpath,frameNamesStructure,secsToWait)","Couln't get text from the element, switching to the main frame and trying again.");
-		    driver.switchTo().defaultContent();
-		    defaultContentFocused=true;
-		    String text=textFromXpath(xpath,secsToWait);
-		    return text;
-		}catch(Exception ex2){}//couln't handle it, throw of exception couln't be avoided.
-	    }
-	    throw new White_SeleniumFrameworkException("Unable to get text from element with xpath:" + xpath, ex);
+    public String getTextFromXpath(String xpath,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
+	log.trace("::textFromXpath(xpath,frameNamesStructure,secsToWait) - Start: Bridging.");
+	return getTextFromXpath( xpath, nestedFrameNamesStructure,null, secsToWait,null);
+    }
+    
+    public String getTextFromXpath(String xpath, Collection<String> nestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	try{
+	    return getTextFrom(By.xpath(xpath),nestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	}catch(Exception ex){
+	    throw new White_SeleniumFrameworkException("Unable to obtain text from element with xPath: " + xpath, ex);
 	}
     }
-
+	    
+    
+    
     /**
-     * It will obtain the containing (link) text inside of the [tag]element with the {@link By locator} specified.
+     * Will obtain the containing text inside of the element with the {@link By locator} specified.
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param locator	    the {@link By} object to locate the element to obtain the text from.
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
      * @return		    The text of the found element with the {@link By locator}
+     * @throws White_SeleniumFrameworkException When a generic error is found.
      */
-    public String text(By locator, Integer secsToWait) {
+    public String getTextFrom(By locator, Integer secsToWait) {
 	log.trace("::text(locator,secsToWait) - Start","Getting text from element.");
 	try {
 	    if (locator == null) return null;
 
 	    WebElement label = getElementBy(locator, secsToWait);
-	    String text=label.getText();
+	    String text=label.getText(); 
 	    log.trace("::text(locator,secsToWait) - Finish","Text Obtained.");
 	    return text;
 
@@ -834,14 +922,86 @@ public class WebDriverUtils {
 	}
 
     }
+
+    /**
+     * Will obtain the containing text inside of the element with the {@link By locator} specified; If the {@code nestedFrameNamesStructure} parameter is provided 
+     * this Method will try to focus on the last frame specified in the {@code structure} and then attempt to obtain the element's text. If the first attempt resulted in 
+     * {@code null} or threw an exception it will attempt to get the element without the {@code nestedFrameNamesStructure} if the parameter {@code retryInCaseOfError} is true
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param locator			The {@link By} object to locate the element to obtain the text from.
+     * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. Will not switch of focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @param secsToWait		The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting	Should the method try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					{code false} if {@code null}
+     * @return	    A {@link String} with the text inside the found element with the given {@link By locator} or {@code null} if the element with that locator was not found.
+     * @throws White_SeleniumFrameworkException When a generic error is found.
+     */
+    public String getTextFrom(By locator, Collection<String> nestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getTextFrom(locator, nestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Getting text from element.");
+	
+	try {
+	    
+	    WebElement label = getElementBy(locator, nestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    return label.getText(); 
+	    
+	} catch (Exception ex) {
+	    throw new White_SeleniumFrameworkException("Unable to obtain text from element with locator: " + locator, ex);
+	}
+    }
     
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="View Element getters">
+    //<editor-fold defaultstate="collapsed" desc="getElementBySpecific() Methods">
+    
+	//<editor-fold defaultstate="collapsed" desc="Single">
+
+    /**
+     * Obtains an element from the page by its {@code CSS class} name. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
+     * it uses to accomplish this {@link #wait() }.
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param name	    the name to locate the element to obtain
+     * @return		    The found element with the name
+     * @throws White_SeleniumFrameworkException in case the element is not found.
+     */
+    public WebElement getElementByClassName(String name) {
+	log.trace("::getElementByClassName(name) - Start: Bridging.");
+	return getElementByClassName(name,null);
+    }
+    
+    /**
+     * Obtains an element from the page by its {@code CSS class} name. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
+     * it uses to accomplish this {@link #wait() }.
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param name	    the name to locate the element to obtain
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @return		    The found element with the name
+     * @throws White_SeleniumFrameworkException in case the element is not found.
+     */
+    public WebElement getElementByClassName(String name, Integer secsToWait) {
+	log.trace("::getElementByName(name,secsToWait) - Start","retrieving element.");
+	if (name == null) return null;
+	try {
+	    return getElementBy(By.className(name), secsToWait);
+	} catch (Exception ex) {
+	    log.debug("::getElementByName(name,secsToWait): Unable to obtain element by name: {}",name);
+	    return null;
+	}
+    }
+    
     /**
      * Obtains an element from the page by its name. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
-     * it uses to accomplish this {@link #wait() }. This is a bridge method that will set the seconds to wait as null while calling the method 
-     * {@link #getElementByName(java.lang.String, java.lang.Integer) }
+     * it uses to accomplish this {@link #wait() }. This is a bridge method that will set the seconds to waitFor as null while calling the method 
+ {@link #getElementByName(java.lang.String, java.lang.Integer) }
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param name	    the name to locate the element to obtain
@@ -858,8 +1018,8 @@ public class WebDriverUtils {
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param name	    the name to locate the element to obtain
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
      * @return		    The found element with the name
      */
     public WebElement getElementByName(String name, Integer secsToWait) {
@@ -880,17 +1040,31 @@ public class WebDriverUtils {
     }
 
     /**
+     * Obtains an element from the page by its tag. 
+     * This is a bridge method that will call the {@link #getElementByTag(java.lang.String, java.lang.Integer)} method with the parameter {@code secondsToWait} as {@code null}.
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param tagName	    the tag to locate the element to obtain
+     * @return		    The found element with the tag
+     */
+    public WebElement getElementByTag(String tagName) {
+	log.trace("::getElementByTag(tagName) - Bridging:");
+	return getElementByTag(tagName, null);
+
+    }
+
+    /**
      * Obtains an element from the page by its tag. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
      * it uses to accomplish this {@link #wait() }.
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
      * @param tagName	    the tag to locate the element to obtain
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
      * @return		    The found element with the tag
      */
     public WebElement getElementByTag(String tagName, Integer secsToWait) {
-	log.trace("::getElementByTag(tagName) - Start","retrieving element.");
+	log.trace("::getElementByTag(tagName,secsToWait) - Start","retrieving element.");
 	if (tagName == null) return null;
 	try {
 
@@ -902,17 +1076,31 @@ public class WebDriverUtils {
 	    throw new White_SeleniumFrameworkException("Impossible to obtain the element with the Tag provided", ex);
 	}
 
-    } // this method will not be used locally
+    }
 
     /**
-     * Obtains an element from the page by its css class name. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
-     * it uses to accomplish this {@link #wait() }.
+     * Obtains an element from the page by its {@code CSS}. For example {@code By.cssSelector("input[name='first_name']")}.
+     * This is a bridge method that will call the {@link #getElementByCSS(java.lang.String, java.lang.Integer) } method with the parameter {@code secondsToWait} as {@code null}.
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
-     * @param css	    the css class name to locate the element to obtain
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		    The found element with the css class name
+     * @param css	    the {@code CSS} class name to locate the element to obtain
+     * @return		    The found element with the {@code CSS} specified.
+     */
+    public WebElement getElementByCSS(String css) {
+	log.trace("::getElementByCSS(css,secsToWait) - Start: Bridging");
+	return getElementByCSS(css,null);
+    }
+    
+    /**
+     * Obtains an element from the page by its {@code CSS}.  For example {@code By.cssSelector("input[name='first_name']")}.
+ It will waitFor the seconds specified for the element to show up, how it waits is specified in the method it uses to accomplish this {@link #wait() }.
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2019-03-02
+     * @param css	    the {@code CSS} class name to locate the element to obtain
+     * @param secsToWait    the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @return		    The found element with the {@code CSS} specified.
      */
     public WebElement getElementByCSS(String css, Integer secsToWait) {
 	log.trace("::getElementByCSS(css,secsToWait) - Start","retrieving element.");
@@ -924,31 +1112,31 @@ public class WebDriverUtils {
 	}
 	log.trace("::getElementByCSS(css,secsToWait) - Finish","returning element.");
 	return webElement;
-    } // this method will not be used locally
+    }
 
     /**
-     * Obtains an element from the page by its xpath. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
-     * it uses to accomplish this {@link #wait() }.
-     * This is a bridge method that will set the seconds to wait as null while calling the method.
+     * Obtains an element from the page by its {@code xPath}. 
+     * This is a bridge method that will call the {@link #getElementByXPath(java.lang.String, java.lang.Integer)} method with the parameter {@code secondsToWait} as {@code null}.
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
-     * @param xpath	    the xpath to locate the element to obtain
-     * @return		    The found element with the xpath
+     * @param xpath	    The {@code xPath} to locate the element to obtain.
+     * @return		    The found element with the {@code xPath} provided.
      * @see WebDriverUtils#getElementByXPath(java.lang.String, java.lang.Integer) 
      */
     public WebElement getElementByXPath(String xpath) {
-	return getElementByXPath(xpath,null);
+	return getElementByXPath(xpath,null, null, null, null);
     }
     
     /**
-     * Obtains an element from the page by its xpath. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
+     * Obtains an element from the page by its {@code xPath}. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
      * it uses to accomplish this {@link #wait() }.
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
      * @since 2019-03-02
-     * @param xpath	    the xpath to locate the element to obtain
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		    The found element with the xpath
+     * @param xpath	    The {@code xPath} to locate the element to obtain
+     * @param secsToWait    The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @return		    The found element with the {@code xPath} provided.
      */
     public WebElement getElementByXPath(String xpath, Integer secsToWait) {
 	log.trace("::getElementByXPath(xpath,secsToWait) - Start","retrieving element.");
@@ -960,233 +1148,737 @@ public class WebDriverUtils {
 	}
 	log.trace("::getElementByXPath(xpath,secsToWait) - Finish","returning element.");
 	return webElement;
-    } // this method will not be used locally
+    } 
 
+    public WebElement getElementByXPath(String xpath, Boolean skipRetryWithoutWaiting){
+	log.trace("::getElementByXPath(xpath, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Bridging - retrieving element with xpath.");
+	return getElementBy(By.xpath(xpath),null, null, null, skipRetryWithoutWaiting);
+	
+    }
+    
+    public WebElement getElementByXPath(String xpath, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	log.trace("::getElementByXPath(xpath, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Bridging - retrieving element with xpath.");
+	return getElementBy(By.xpath(xpath),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+    }
+    
+    public WebElement getElementByText(String text){
+	log.trace("getElementsByText(text) - Start: Bridging.");
+	return getElementByText(text, null, null, null, null);
+    }
+    
+    public WebElement getElementByText(String text, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	log.trace("getElementByText(text, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: ");
+	try {
+	    
+	    WebElement element=getElementBy(By.xpath("//*[text() = '"+text+"']"),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    log.trace("::getElementByText(text, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: ");
+	    
+	    return element;
+	    
+	} catch (Exception ex) {
+	    throw new White_SeleniumFrameworkException("Unable to obtain element with text: " + text, ex);
+	}
+    }
+    
+    //</editor-fold>
+
+	//<editor-fold defaultstate="collapsed" desc="Multiple">
+
+    public List<WebElement> getElementsByClassName(String cssClass){
+	log.trace("getElementsByClassName(cssClass) - Start: Clicking.");
+	return getElementsByClassName(cssClass,null,null,null,null);
+    }
+    
+    public List<WebElement> getElementsByClassName(String cssClass, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	log.trace("getElementsByClassName(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Clicking.");
+	try {
+	    
+	    List<WebElement> elements=getElementsBy(By.className(cssClass),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    log.trace("::getElementsByClassName(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Clicked.");
+	    
+	    return elements;
+	    
+	} catch (Exception ex) {
+	    throw new White_SeleniumFrameworkException("Unable to obtain element with class name: " + cssClass, ex);
+	}
+    }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="getElementsBy() Methods">
+	//<editor-fold defaultstate="collapsed" desc="Single Element">
     /**
-     * Obtains an element from the page by its {@link By locator}. It will wait the seconds specified for the element to show up, how it waits is specified in the method 
-     * it uses to accomplish this {@link #wait() }.
+     * Will check for at least one element with the specified {@link By} locator until is present on the page's DOM, 
+     * obtain all coincidences with the locator, and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * If you need to specify a range of time to wait for your element to show up in the page's DOM, you can call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.lang.Integer)} 
+     * <br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param locator	    the {@link By} object to locate the element to obtain
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		    The found element with the {@link By locator}
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public WebElement getElementBy(By locator) {
+	log.trace("::getElementBy(locator) - Start: Bridging");
+	return getElementBy(locator, null, null, null, null);
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <br>
+     * This is a Bridge method and will only call the method 
+     * {@link #waitForElements(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param secsToWait		The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
      */
     public WebElement getElementBy(By locator, Integer secsToWait) {
-	log.trace("::getElementBy(locator,secsToWait) - Start","Rerieving Element.");
-	if (locator == null) return null;
-
-	WebElement element = null;
-	try {
-
-	   element = waitFor(locator, secsToWait);
-	    //element = driver.findElement(locator);
-
-	} catch (Exception ex) {
-	    throw new White_SeleniumFrameworkException("Impossible to obtain the element with locator: " + locator, ex);
-	}
-	log.trace("::getElementBy(locator,secsToWait) - Finish","Returning Element.");
-	return element;
-
+	log.trace("::getElementBy(locator, secsToWait) - Start: Bridging");
+	return getElementBy(locator, null, null, secsToWait, null);
     }
-
-//</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="Waits">
     /**
-     * This will wait for an element to show up and return it looking for it with its id. This is a bridge method that will set the seconds 
-     * to wat as null while calling the method.
-     * {@link #waitForId(java.lang.String, java.lang.Integer) }
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} parameter absolute instead of relative, you can skip this operation by 
+     * calling the method {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} and setting
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} as {@code null};
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param id	The name to look for the element with it.
-     * @return		The element as {@link WebElement} or null in case it is not found
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param secsToWait		The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting	In case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
      */
-    public WebElement waitForId(String id) {
-	return waitForId(id, null);
+    public WebElement getElementBy(By locator, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getElementBy(locator, secsToWait, skipRetryWithoutWaiting) - Start: Bridging");
+	return getElementBy(locator, null, null, secsToWait, skipRetryWithoutWaiting);
     }
-
+    
     /**
-     * This will wait for an element to show up and return it looking for it with its id.
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the elements as a {@link List}; This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by 
+     * calling the method {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} and setting
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * Most of the methods on this class will call this method to obtain the elements they want to manipulate, so this method defines the rules that will have to interact with them.
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameter {@code skypRetryWithNoFrames} as {@code null};
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param id	    The id to look for the element with it.
-     * @param secs    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		    The element as {@link WebElement} or null in case it is not found
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
      */
-    public WebElement waitForId(String id, Integer secs) {
-	return waitFor(By.id(id), secs);
+    public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getElementBy(locator, relativeNestedFrameNamesStructure, secsToWait, skipRetryWithoutWaiting) - Start: Bridging");
+	return getElementBy(locator, relativeNestedFrameNamesStructure, null, secsToWait, skipRetryWithoutWaiting);
     }
-
+    
     /**
-     * This will wait for an element to show up and return it looking for it with its name. This is a bridge method that will set the seconds 
-     * to wat as null while calling the method.
-     * {@link #waitForName(java.lang.String, java.lang.Integer) }
+     * Will check for at least one element with the specified {@link By} locator is present on the page's DOM, 
+     * obtain all coincidences with the locator, and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by 
+     * calling the method {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} and setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code secsToWait} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param name	The name to look for the element with it.
-     * @return		The element as {@link WebElement} or null in case it is not found
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
      */
-    public WebElement waitForName(String name) {
-	return waitForName(name, null);
+    public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure) {
+	log.trace("::getElementBy(locator, relativeNestedFrameNamesStructure) - Start: Bridging");
+	return getElementBy(locator, relativeNestedFrameNamesStructure, null, null, null);
     }
-
+    
     /**
-     * This will wait for an element to show up and return it looking for it with its name.
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM, 
+     * obtain all coincidences with the locator,  and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code secsToWait} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param name	    The name to look for the element with it.
-     * @param secs    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		    The element as {@link WebElement} or null in case it is not found
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
      */
-    public WebElement waitForName(String name, Integer secs) {
-	return waitFor(By.name(name), secs);
+    public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames) {
+	log.trace("::getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWitNoFrames) - Start: Bridging");
+	return getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, null, null);
     }
-
+    
     /**
-     * This will wait for an element to show up and return it looking for it with its CSS class name. This is a bridge method that will set the seconds 
-     * to wat as null while calling the method.
-     * {@link #waitForTag(java.lang.String, java.lang.Integer) }
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+ and then attempt to obtain the element.
+ The method will waitFor for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameter {@code skipRetryWithoutWaiting} as {@code null};
+     * 
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param css	The CSS class name to look for the element with it.
-     * @return		The element as {@link WebElement} or null in case it is not found
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @param secsToWait		The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
      */
-    public WebElement waitForCSS(String css) {
-	return waitForCSS(css, null);
-    }
-
-    /**
-     * This will wait for an element to show up and return it looking for it with its CSS class name.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param css	    The CSS class name to look for the element with it.
-     * @param secsToWait    the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		    The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitForCSS(String css, Integer secsToWait) {
-	return waitFor(By.cssSelector(css));
-    }
-
-    /**
-     * This will wait for an element to show up and return it looking for it with its tag. This is a bridge method that will set the seconds to wait as null while calling the method 
-     * {@link #waitForTag(java.lang.String, java.lang.Integer) }
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param tagName	The tag to look for the element with it.
-     * @return		The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitForTag(String tagName) {
-	return waitForTag(tagName, null);
-    }
-
-    /**
-     * This will wait for an element to show up and return it looking for it with its tag.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param tagName	The tag to look for the element with it.
-     * @param secs	the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitForTag(String tagName, Integer secs) {
-	return waitFor(By.tagName(tagName), secs);
-    }
-
-    /**
-     * This will wait for an element to show up and return it looking for it with its xpath. This is a bridge method that will set the seconds to wait as null while calling the method 
-     * {@link #waitForXPath(java.lang.String, java.lang.Integer) }
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param xpath	The xpath to look for the element with it.
-     * @return		The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitForXPath(String xpath) {
-	return waitForXPath(xpath, null);
-    }
-
-    /**
-     * This will wait for an element to show up and return it looking for it with its xpath.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param xpath	The xpath to look for the element with it.
-     * @param secsToWait	the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitForXPath(String xpath, Integer secsToWait) {
-	return waitFor(By.xpath(xpath), secsToWait);
-    }
-
-    /**
-     * This will wait for an element to show up and return it. This is a bridge method that will set the seconds to wait as null while calling the method 
-     * {@link #waitFor(org.openqa.selenium.By, java.lang.Integer) }.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param locator	the {@link By} object to locate the element to obtain
-     * @return		The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitFor(By locator) { //no local method uses this
-	return waitFor(locator, null);
-
-    }
-
-    /**
-     * This will wait for an element to show up and return it.
-     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
-     * @since 2019-03-02
-     * @param locator	the {@link By} object to locate the element to obtain
-     * @param secs	the seconds to wait for the element to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null.
-     * @return		The element as {@link WebElement} or null in case it is not found
-     */
-    public WebElement waitFor(By locator, Integer secs) {
-	log.trace("::waitFor(locator,secs) - Start","preparing wait.");
+    public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait) {
+	log.trace("::getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWitNoFrames, secsToWait) - Start: Bridging");
+	return getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, null);
 	
-	if (secs == null) {
-	    String propertiesSecs=getProperty("default-explicit-wait");
-	    Integer newSecs=propertiesSecs!=null?Integer.parseInt(propertiesSecs):null;
-	    secs = newSecs!=null?newSecs:0;
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the first element as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; If an exception is thrown this will retry the operation looking for a single element calling method
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } If you don't want this to happen
+     * you can call directly that method instead of this one.
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+ and then attempt to obtain the element.
+ The method will waitFor for at least one element for the specified {@code secsToWait} but if it finds at least one element it will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * The main difference between the method 
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } and this is the call to the method
+     * {@link WebDriver#findElement(org.openqa.selenium.By) } vs {@link WebDriver#findElements(org.openqa.selenium.By) } and
+     * {@link WebDriverWait#until(java.util.function.Function) } on a single and multiple instances.
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @param secsToWait		The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+					default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Preparing wait.");
+	WebElement element=null;
+	try{
+	    List<WebElement> elements= getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    if(elements!=null){
+		if(elements.size()>1) log.warn("::getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): "
+			    + "There were more elements with the same locator, make sure you are getting the one you want.");
+		element=elements.get(0);
+	    }
+	    return element;
+	}catch(Exception ex){
+	    try{
+		
+		element=getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+		return element;
+	    }catch(Exception ex2){
+		throw new White_SeleniumFrameworkException("Error while waiting for the element to show up with locator:" + locator, ex);
+	    }
 	}
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that the element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain it, and return it as a {@link WebElement}; 
+     * This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element it will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * The main difference between the method 
+     * {@link #getSingleForcedElementBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean) } and this is the call to the method
+     * {@link WebDriver#findElement(org.openqa.selenium.By) } vs {@link WebDriver#findElements(org.openqa.selenium.By) } and
+     * {@link WebDriverWait#until(java.util.function.Function) } on a single and multiple instances.
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public WebElement getSingleForcedElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWitNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Preparing wait.");
+	
 	if (locator == null) return null;
-	WebElement element;
+	if (secsToWait == null) secsToWait=getDefaultSecondsToWaitForElements();
+	
+	//I'm not sure if the first implementation works every time, so temporarily will leave this both on false, this will impacts performance but increase the chance to get elements.
+	if(skipRetryWithoutWaiting==null) skipRetryWithoutWaiting=false; 
+	if(skypRetryWithNoFrames==null) skypRetryWithNoFrames=false;
+	
+	WebElement element=null;
 	try {
-
+	    
+	    if(relativeNestedFrameNamesStructure!=null) focus(relativeNestedFrameNamesStructure,secsToWait);
 	    //I do not understand how to use this yet
 	    //WebElement myDynamicElement = 
-	    if(secs==0){//no wait = normal find.
-		element=driver.findElement(locator);
-	    }else{
-		element= (new WebDriverWait(driver, secs)).until(ExpectedConditions.presenceOfElementLocated(locator));
-	    }
 	    
+	    //core
+	    element=secsToWait==0?driver.findElement(locator) //no waitFor = normal find.
+		    : (new WebDriverWait(driver, secsToWait)).until(ExpectedConditions.presenceOfElementLocated(locator));
 	    
-	    log.trace("::waitFor(locator,secs) - Finish","waiting is over.");
+	    log.trace("::getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish","waiting is over.");
 	    return element;
 	    //isElementVisible with visibilityOfElementLocated OR visibilityOf
-
-
+	    
 	} catch(TimeoutException ex){
-	    log.warn("waitFor(locator,secs) - The element ["+locator+"] Never showed up. Trying without waiting.");
+	    
+	    log.warn("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): The element ["+locator+"] Never showed up.");
 	    try{
-		element= driver.findElement(locator);
-		return element;
+		if(!skipRetryWithoutWaiting){
+		    log.warn("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Trying without waiting.");
+		    element= driver.findElement(locator);
+		    return element;
+		}else {
+		    log.warn("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Skiping retry-without-waiting.");
+		    throw ex;
+		}
 	    }catch(Exception ex2){
 		throw new White_SeleniumFrameworkException("Error while looking for the element with locator ["+locator+"]", ex);
 	    }
 	    
 	    
-	    
 	}catch (Exception ex) {
-	    throw new White_SeleniumFrameworkException("Error while waiting for the element with locator:" + locator, ex);
+	    log.debug("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Couln't obtain the element with locator:{}",locator);
+	    
+//	    if(skypRetryWithNoFrames || defaultContentFocused || (relativeNestedFrameNamesStructure!=null && !relativeNestedFrameNamesStructure.isEmpty()) ) //caller wants to skip, or main is already focused, or it was my fault that is dirty
+	    if(!skypRetryWithNoFrames && !defaultContentFocused && (relativeNestedFrameNamesStructure==null || relativeNestedFrameNamesStructure.isEmpty())){ //is dirty and wasn't me who got it dirty?
+		log.debug("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): I'll eat the exception and try again. Suppressed Exception: {}",ex);
+	    }else{
+		log.debug("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Skiping-retry-Wit No Frames Won't try again.");
+		throw new White_SeleniumFrameworkException("Error while waiting for the elements to show up with locator:" + locator, ex);
+	    }
+	    
+	} // exception ocurred Retring with no frames
+	
+	if(element==null && !skypRetryWithNoFrames && !defaultContentFocused && (relativeNestedFrameNamesStructure==null || relativeNestedFrameNamesStructure.isEmpty())){ //didn't get it & is dirty and wasn't me who got it dirty?
+	    log.debug("getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Switching to the main frame and trying again.");
+	    try{
+		
+		driver.switchTo().defaultContent();
+		defaultContentFocused=true; //to not dirty
+		
+		log.trace("::getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Using Recursion");
+		element= getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, true, secsToWait, skipRetryWithoutWaiting);
+		
+	    }catch(Exception ex){
+		throw new White_SeleniumFrameworkException("Error while waiting for the element with locator:" + locator, ex);
+	    } //returns null if the "if" couldn't solve the problem.
 	}
+	
+	return element;
+	
     }
 
-//</editor-fold>
+    //</editor-fold>
+
+	//<editor-fold defaultstate="collapsed" desc="Multiple Elements">
+    /**
+     * Will check for at least one element with the specified {@link By} locator until is present on the page's DOM, 
+     * obtain all coincidences with the locator, and return the elements as a {@link List}; 
+     * This does not necessarily mean that the element(s are/)is visible.
+     * If you need to specify a range of time to wait for your element to show up in the page's DOM, you can call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.lang.Integer)} 
+     * <br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator) {
+	log.trace("::getElementsBy(locator) - Start: Bridging");
+	return getElementsBy(locator, null, null, null, null);
+    }
     
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the elements as a {@link List}; 
+     * This does not necessarily mean that the element is visible.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <br>
+     * This is a Bridge method and will only call the method 
+     * {@link #waitForElements(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Integer secsToWait) {
+	log.trace("::getElementsBy(locator, secsToWait) - Start: Bridging");
+	return getElementsBy(locator, null, null, secsToWait, null);
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the elements as a {@link List}; 
+     * This does not necessarily mean that the element is visible.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by 
+     * calling the method {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} and setting
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code skypRetryWithNoFrames} and {@code relativeNestedFrameNamesStructure} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getElementsBy(locator, secsToWait, skipRetryWithoutWaiting) - Start: Bridging");
+	return getElementsBy(locator, null, null, secsToWait, skipRetryWithoutWaiting);
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the elements as a {@link List}; This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by 
+     * calling the method {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} and setting
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * Most of the methods on this class will call this method to obtain the elements they want to manipulate, so this method defines the rules that will have to interact with them.
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameter {@code skypRetryWithNoFrames} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure, secsToWait, skipRetryWithoutWaiting) - Start: Bridging");
+	return getElementsBy(locator, relativeNestedFrameNamesStructure, null, secsToWait, skipRetryWithoutWaiting);
+    }
+    
+    /**
+     * Will check for at least one element with the specified {@link By} locator is present on the page's DOM, 
+     * obtain all coincidences with the locator, and return the elements as a {@link List}; This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by 
+     * calling the method {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} and setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code secsToWait} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure) {
+	log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure) - Start: Bridging");
+	return getElementsBy(locator, relativeNestedFrameNamesStructure, null, null, null);
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM, 
+     * obtain all coincidences with the locator, and return the elements as a {@link List}; This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameters {@code secsToWait} and {@code skipRetryWithoutWaiting} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames) {
+	log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWitNoFrames) - Start: Bridging");
+	return getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, null, null);
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the elements as a {@link List}; This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * This is a Bridge method and will only call the method 
+     * {@link #getElementsBy(org.openqa.selenium.By, java.util.Collection, java.lang.Boolean, java.lang.Integer, java.lang.Boolean)} 
+     * with the parameter {@code skipRetryWithoutWaiting} as {@code null};
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait) {
+	log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWitNoFrames, secsToWait) - Start: Bridging");
+	return getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, null);
+	
+    }
+    
+    /**
+     * Will waitFor as an expectation for checking that at least one element with the specified {@link By} locator is present on the page's DOM
+     * with the specified amount of seconds, obtain all coincidences with the locator, and return the elements as a {@link List}; This does not necessarily mean that the element is visible; 
+     * If the {@code relativeNestedFrameNamesStructure} parameter is provided this method will try to focus on the last frame specified in this structure
+     * and then attempt to obtain the element.
+     * The method will wait for at least one element for the specified {@code secsToWait} but if it finds at least one element will return it immediately.
+     * <p>If there is an error, the method will, by default, try to get the element again but changing the focus to the main content 
+     * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting 
+     * the {@code skypRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error. 
+     * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.</p><br>
+     * Most of the methods on this class will call this method to obtain the elements they want to manipulate, so this method defines the rules that will have to interact with them.
+     * 
+     * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+     * @since 2021-01-29
+     * @param locator			The {@link By} locator to search for the element to obtain.
+     * @param relativeNestedFrameNamesStructure	Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
+     *					outer frame and ending with the frame where the element is contained. the method will not switch the focus if {@code null}.
+     * @param skypRetryWithNoFrames	Whether the method should try again without the Nested Frames Structure on the second time in case of an error on the first attempt. 
+     *					Setting this to false will cause a change of focus for your driver to the main frame in case of an error.
+     *					{code false} if {@code null}
+     * @param secsToWait	the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null.
+     * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
+     * @return		The element as {@link WebElement} or {@code null} in case it is not found.
+     * @throws White_SeleniumFrameworkException When an error is found.
+     */
+    public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
+	log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWitNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Preparing wait.");
+	
+	if (locator == null) return null;
+	if (secsToWait == null) secsToWait=getDefaultSecondsToWaitForElements();
+	
+	//I'm not sure if the first implementation works every time, so temporarily will leave this both on false, this will impacts performance but increase the chance to get elements.
+	if(skipRetryWithoutWaiting==null) skipRetryWithoutWaiting=false; 
+	if(skypRetryWithNoFrames==null) skypRetryWithNoFrames=false;
+	
+	List<WebElement> elements=null;
+	try {
+	    
+	    if(relativeNestedFrameNamesStructure!=null) focus(relativeNestedFrameNamesStructure,secsToWait);
+	    //I do not understand how to use this yet
+	    //WebElement myDynamicElement = 
+	    
+	    //core
+	    elements=secsToWait==0?driver.findElements(locator) //no waitFor = normal find.
+		    : (new WebDriverWait(driver, secsToWait)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+	    
+	    log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish","waiting is over.");
+	    return elements;
+	    //isElementVisible with visibilityOfElementLocated OR visibilityOf
+	    
+	} catch(TimeoutException ex){
+	    
+	    log.warn("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): The element ["+locator+"] Never showed up.");
+	    try{
+		if(!skipRetryWithoutWaiting){
+		    log.warn("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Trying without waiting.");
+		    elements= driver.findElements(locator);
+		    return elements;
+		}else {
+		    log.warn("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Skiping retry-without-waiting.");
+		    throw ex;
+		}
+	    }catch(Exception ex2){
+		throw new White_SeleniumFrameworkException("Error while looking for the element with locator ["+locator+"]", ex);
+	    }
+	    
+	    
+	}catch (Exception ex) {
+	    log.debug("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Couln't obtain the element.");
+	    
+//	    if(skypRetryWithNoFrames || defaultContentFocused || (relativeNestedFrameNamesStructure!=null && !relativeNestedFrameNamesStructure.isEmpty()) ) //caller wants to skip, or main is already focused, or it was my fault that is dirty
+	    if(!skypRetryWithNoFrames && !defaultContentFocused && (relativeNestedFrameNamesStructure==null || relativeNestedFrameNamesStructure.isEmpty())){ //is dirty and wasn't me who got it dirty?
+		log.debug("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): I'll eat the exception and try again. Suppressed Exception: {}",ex);
+	    }else{
+		log.debug("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Skiping-retry-Wit No Frames Won't try again.");
+		throw new White_SeleniumFrameworkException("Error while waiting for the elements to show up with locator:" + locator, ex);
+	    }
+	    
+	} // exception ocurred Retring with no frames
+	
+	if(elements==null && !skypRetryWithNoFrames && !defaultContentFocused && (relativeNestedFrameNamesStructure==null || relativeNestedFrameNamesStructure.isEmpty())){ //didn't get it & is dirty and wasn't me who got it dirty?
+	    log.debug("getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): Switching to the main frame and trying again.");
+	    try{
+		
+		driver.switchTo().defaultContent();
+		defaultContentFocused=true; //to not dirty
+		
+		log.trace("::getElementsBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Using Recursion");
+		elements= getElementsBy(locator, relativeNestedFrameNamesStructure, true, secsToWait, skipRetryWithoutWaiting);
+		
+	    }catch(Exception ex){
+		throw new White_SeleniumFrameworkException("Error while waiting for the element with locator:" + locator, ex);
+	    } //returns null if the "if" couldn't solve the problem.
+	}
+	
+	return elements;
+	
+    }
+
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Utils">
+
     /**
      * Resets the focus to the default content on the page. if you need to access an element inside of a frame you will have to call 
      * {@link #focus(java.util.Collection, java.lang.Integer) } or {@link #focusFrame(org.openqa.selenium.support.How, java.lang.String, java.lang.Integer) method again
@@ -1226,8 +1918,8 @@ public class WebDriverUtils {
      * @since 2019-03-02
      * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the 
      *					outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
-     * @param secsToWait    the seconds to wait for the frame to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null. The focus switch seems to take some time ignoring the wait in case it fails to find the frame.
+     * @param secsToWait    the seconds to waitFor for the frame to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null. The focus switch seems to take some time ignoring the waitFor in case it fails to find the frame.
      */
     public void focus(Collection<String> nestedFrameNamesStructure, Integer secsToWait){
 	log.trace("::focus(frameNamesStructure,secsToWait) - Start","looking for focus.");
@@ -1239,11 +1931,7 @@ public class WebDriverUtils {
 		log.trace("::focus(frameNamesStructure,secsToWait) - Finish","No frames provided, the focus was not modified.");
 		return;
 	    }
-	    if (secsToWait == null) {
-		String propertiesSecs=getProperty("default-explicit-wait");
-		Integer newSecs=propertiesSecs!=null?Integer.parseInt(propertiesSecs):null;
-		secsToWait = (newSecs!=null)?newSecs:0;
-	    }
+	    if (secsToWait == null) secsToWait=getDefaultSecondsToWaitForElements();
 	    
 	    //process
 	    defaultContentFocused=false;//dirty
@@ -1299,8 +1987,8 @@ public class WebDriverUtils {
      * @since 2019-03-02
      * @param how	    {@link How} must be specified as ID or NAME; this is supposed to be specified although it will go ahead and try with ID if not (logs a warn).
      * @param frameNameOrId The Name or Id of the frame/iframe; does nothing if null.
-     * @param secsToWait    the seconds to wait for the frame to show up in the page, uses the app default (specified in .properties with 
-     *			    default-explicit-wait property) if null. The focus switch seems to take some time ignoring the wait in case it fails to find the frame.
+     * @param secsToWait    the seconds to waitFor for the frame to show up in the page, uses the app default (specified in .properties with 
+			    default-explicit-waitFor property) if null. The focus switch seems to take some time ignoring the waitFor in case it fails to find the frame.
      */
     public void focusFrame(How how,String frameNameOrId,Integer secsToWait){
 	log.trace("::focusFrame(how,frameNameOrId,secsToWait) - Start","changing focus to new frame.");
@@ -1348,6 +2036,11 @@ public class WebDriverUtils {
 	}
     }
     
+    public void highlight(WebElement element){
+	JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) driver;
+	javaScriptExecutor.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
+    }
+    
     /**
      * Assuming there is an alert popping up on your page this will just accept (click OK button) on it.
      * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
@@ -1366,6 +2059,60 @@ public class WebDriverUtils {
 	}
     }
     
+    public void pageDown() {
+	log.trace("::pageDown() - Start: ");
+	try {
+	    
+	    pressKey(Keys.PAGE_DOWN);
+	    log.trace("::pageDown() - Finish: ");
+	    
+	} catch (Exception e) {
+	    throw new White_SeleniumFrameworkException("Impossible to complete the operation due to an unknown internal error.", e);
+	}
+    }
+    
+    public void pageUp() {
+	log.trace("::pageUp() - Start: ");
+	try {
+	    
+	    pressKey(Keys.PAGE_UP);
+	    log.trace("::pageUp() - Finish: ");
+	    
+	} catch (Exception e) {
+	    throw new White_SeleniumFrameworkException("Impossible to complete the operation due to an unknown internal error.", e);
+	}
+    }
+    
+    public void pressKey(org.openqa.selenium.Keys key){
+	log.trace("::pressKey(key) - Start: ");
+	try {
+	    
+	    if(action==null) action = new Actions(driver);
+	    action.sendKeys(key).build().perform();
+	    log.trace("::pressKey(key) - Finish: Key pressed");
+	    
+	} catch (Exception e) {
+	    throw new White_SeleniumFrameworkException("Impossible to complete the operation due to an unknown internal error.", e);
+	}
+    }
+    
+    public void waitFor(Long milisecs){
+	log.trace("::wait(milisecs) - Start: ");
+	notNullValidation(milisecs);
+	try{
+	    synchronized (driver){
+		driver.wait(milisecs);
+	    }
+	    log.trace("::wait(milisecs) - Finish: ");
+	}catch(Exception e){
+	    throw new White_SeleniumFrameworkException("Unable to pause the thread due to an unknown internal error.", e);
+	}
+	
+    }
+
+    
+	//<editor-fold defaultstate="collapsed" desc="PrntScrn">
+
     public String takeScreenShot(){
 	return takeScreenShot((String)null);
     }
@@ -1393,8 +2140,10 @@ public class WebDriverUtils {
 	    throw new White_SeleniumFrameworkException("Unable to take a screenshot", ex);
 	}
     }
+    //</editor-fold>
     
-    
+	//<editor-fold defaultstate="collapsed" desc="WebExplorer in use">
+
     public boolean isEdgeBeingTested() {
 	return driver instanceof EdgeDriver;
     }
@@ -1416,26 +2165,9 @@ public class WebDriverUtils {
 	WebDriverUtils.screenShootCounter++;
 	return fileName;
     }
-//</editor-fold>
-
-    public void pageDown() {
-	log.trace("::pageDown(parameter) - Start: ");
-	try {
-	    
-	    if(action==null) action = new Actions(driver);
-	    action.sendKeys(Keys.PAGE_DOWN).build().perform();
-	    
-	    log.trace("::pageDown(parameter) - Finish: ");
-	    
-	} catch (Exception e) {
-	    throw new RuntimeException("Impossible to complete the operation due to an unknown internal error.", e);
-	}
-    }
+    //</editor-fold>
+    //</editor-fold>
     
-    public void wait(Long milisecs) throws InterruptedException{
-	synchronized (driver){
-	    driver.wait(milisecs);
-	}
-    }
+//</editor-fold>
 
 }

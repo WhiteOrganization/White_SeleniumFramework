@@ -166,8 +166,6 @@
 package org.white_sdev.white_seleniumframework.exceptions;
 
 //import lombok.extern.slf4j.Slf4j;
-//import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
-
 /**
  * Main Exception class of the App. Used mainly to encapsulate other {@link Exception Exceptions} and declare useful information 
  * on the errors found exclusively inside the library.

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.white_sdev</groupId>
+    <groupId>com.github.white-sdev</groupId>
     <artifactId>White_SeleniumFramework</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>A Selenium Framework that will help to execute tests and functions faster and reduce the effort to access many sections Selenium related.</description>
+    <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort to access many sections Selenium related.</description>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,7 +64,7 @@
 	<dependency>
 	    <groupId>com.github.white-sdev</groupId>
 	    <artifactId>White_Validations</artifactId>
-	    <version>1.0.1</version>
+	    <version>3.0.0</version>
 	    <exclusions>
 	     <exclusion>
 	      <groupId>org.slf4j</groupId>
