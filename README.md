@@ -5,7 +5,8 @@ A Selenium Framework that will help to execute tests and functions faster and re
 
 ### What is this repository for? ###
 
-* Quick summary
+* Quick summary.
+
 The framework will help you structure your classes and give you some EXTRA tools to automate your scenarios faster.
 For example instead of doing:
 ```java
@@ -31,13 +32,15 @@ The framework will force the structure of your classes to be ordered and encoura
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version
-0.1.0
+* Version.
+
+0.1.0 - 
 This is still in development and some methods are being constantly added as they are used. Please help us requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
 
-* Summary of set up
+* Summary of set up.
+
 look for the library on maven (["white-sdev + White_SeleniumFramework"](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework)) and import the library into your project
 by including it in your POM. [0.1.0 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.0)
 ```XML
@@ -52,8 +55,8 @@ by including it in your POM. [0.1.0 version](https://mvnrepository.com/artifact/
 
 
 Alternatively you can manually import the .jar file into your project.
-* Configuration
-the code:
+* Configuration.
+
 Define your test cases or scenario classes by implementing TestCase in classes extending from TestCase 
 ```java
 public class LoginApp implements TestCase{
@@ -65,7 +68,7 @@ To run the scenarios you need to register your TestCases under TestSuite and the
 ```
 	TestSuite.registerTest(new LoginApp());
 	TestSuite.registerTest(new MyTestCase());
-	    TestSuite.launchTests();
+	TestSuite.launchTests();
 ```
 
 Some useful configuration you can establish on your project context [src/main/resources/<yourfile>.properties on maven projects]
@@ -86,7 +89,8 @@ You can just copy paste this into your project or edit it
 The library uses org.bitbucket.white_sdev.PropertiesManager dependencies to read your properties files.
 
 
-* Dependencies
+* Dependencies.
+
 this library uses 
 - lombok to log errors and general logs.
 	- Slf4j
@@ -101,17 +105,22 @@ No need for those. Some working projects using this library are:
 
 ### Contribution guidelines ###
 
-* Writing tests
+* Writing tests.
+
 Please do. Unit testing is not setup at the moment
-* Code review
+* Code review.
+
 Request if needed
-* Other guidelines
+* Other guidelines.
+
 Ask for the code standard to use as guidelines and reflect them in here.
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
+* Repo owner or admin.
+
 owner - current main developer - obed.vazquez@gmail.com
-* Other community or team contact
+* Other community or team contact.
+
 Please contact me if you want to help, I'm developing and mantaining and supporting in general this project on my own with no help or support of anyone and any tip, comment, change or help in general is well received.
 
