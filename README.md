@@ -10,23 +10,23 @@ A Selenium Framework that will help to execute tests and functions faster and re
 The framework will help you structure your classes and give you some EXTRA tools to automate your scenarios faster.
 For example instead of doing:
 ```java
-		List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']");
-		if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
-			WebElement firstButton=divSimulatesButtons.get(0);
-			firstButton.click();
-		}else{
-			throw RuntimeException("Button not found");
-		}
+List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']");
+if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
+	WebElement firstButton=divSimulatesButtons.get(0);
+	firstButton.click();
+}else{
+	throw new RuntimeException("Button not found");
+}
 ```
 to click on the first element, you can do :
 ```java
-		util.clickText(text);
+util.clickText(text);
 ```
 and will perform the same.
 
 The framework will force the structure of your classes to be ordered and encourage the use of its utility but you can still use WebDriver methods by taking it from the util.
 ```java
-		WebDriver webDriver=util.driver;
+WebDriver webDriver=util.driver;
 ```
 
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
@@ -44,12 +44,12 @@ This is still in development and some methods are being constantly added as they
 look for the library on maven (["white-sdev + White_SeleniumFramework"](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework)) and import the library into your project
 by including it in your POM. [0.1.0 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.0)
 ```XML
-<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
-<dependency>
-    <groupId>com.github.white-sdev</groupId>
-    <artifactId>White_SeleniumFramework</artifactId>
-    <version>0.1.0</version>
-</dependency>
+	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
+	<dependency>
+    	<groupId>com.github.white-sdev</groupId>
+    	<artifactId>White_SeleniumFramework</artifactId>
+    	<version>0.1.0</version>
+	</dependency>
 ```
 
 
