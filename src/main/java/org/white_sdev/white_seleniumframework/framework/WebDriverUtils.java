@@ -1451,7 +1451,7 @@ public class WebDriverUtils {
 	    if(elements!=null){
 		if(elements.size()>1) log.warn("::getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): "
 			    + "There were more elements with the same locator, make sure you are getting the one you want.");
-		element=elements.get(0);
+		if(elements.size()>0) element=elements.get(0);
 	    }
 	    return element;
 	}catch(Exception ex){
@@ -2006,7 +2006,7 @@ public class WebDriverUtils {
 	    defaultContentFocused=false;//dirty
 	    String attribute=how.equals(How.ID)?"id":"name";
 	    try{
-		var wait = (new WebDriverWait(driver, secsToWait));
+		WebDriverWait wait = (new WebDriverWait(driver, secsToWait));
 		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameNameOrId));
 		log.debug("focusFrame(how,frameNameOrId,secsToWait)","FOCUS switched to :"+frameNameOrId);
 	    }catch(Exception ex){

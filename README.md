@@ -54,12 +54,6 @@ by including it in your POM. [0.1.0 version](https://mvnrepository.com/artifact/
 Alternatively you can manually import the .jar file into your project.
 * Configuration
 the code:
-```java
-  import static org.white_sdev.white_validations.parameters.ParameterValidator.*;
-```
-will import all validations into your workspace (Classes).
-
-
 Define your test cases or scenario classes by implementing TestCase in classes extending from TestCase 
 ```java
 public class LoginApp implements TestCase{
@@ -69,8 +63,8 @@ public class LoginApp implements TestCase{
 
 To run the scenarios you need to register your TestCases under TestSuite and then run them any time you need.
 ```
-		TestSuite.registerTest(new LoginApp());
-		TestSuite.registerTest(new MyTestCase());
+	TestSuite.registerTest(new LoginApp());
+	TestSuite.registerTest(new MyTestCase());
 	    TestSuite.launchTests();
 ```
 
