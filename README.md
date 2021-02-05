@@ -46,9 +46,9 @@ by including it in your POM. [0.1.0 version](https://mvnrepository.com/artifact/
 ```XML
 	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
 	<dependency>
-    	<groupId>com.github.white-sdev</groupId>
-    	<artifactId>White_SeleniumFramework</artifactId>
-    	<version>0.1.0</version>
+    		<groupId>com.github.white-sdev</groupId>
+    		<artifactId>White_SeleniumFramework</artifactId>
+    		<version>0.1.0</version>
 	</dependency>
 ```
 

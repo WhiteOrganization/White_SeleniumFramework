@@ -271,14 +271,6 @@ public class WebDriverUtils {
 	clickName( name, nestedFrameNamesStructure, null);
     }
     
-    public void clickXpath(String xpath) {
-	clickXpath(xpath, null, null);
-    }
-
-    public void clickXpath(String xpath, Collection<String> nestedFrameNamesStructure) {
-	clickXpath( xpath, nestedFrameNamesStructure, null);
-    }
-    
     
     
     
@@ -379,7 +371,18 @@ public class WebDriverUtils {
 	}
     }
     
+    public void clickXpath(String xpath) {
+	clickXpath(xpath, null, null);
+    }
+    
+    public void scrollAndClickXpath(String xpath) {
+	clickXpath(xpath, null, null, null, null,null);
+    }
 
+    public void clickXpath(String xpath, Collection<String> nestedFrameNamesStructure) {
+	clickXpath( xpath, nestedFrameNamesStructure, null);
+    }
+    
     /**
      * Clicks the element once it founds it by waiting for it to show up and obtaining it from the page with the provided xpath. 
      * This is a bridge method to {@link #clickXpath(java.lang.String, java.util.Collection, java.lang.Integer) } it sets up the nestedFrameNamesStructure as null.
@@ -407,26 +410,12 @@ public class WebDriverUtils {
 					default-explicit-waitFor property) if null.
      */
     public void clickXpath(String xpath,Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
-	log.trace("clickXpath(xpath,frameNamesStructure,secsToWait) - Start","Clicking.");
-	if (xpath == null) return;
-	try {
-
-	    if(nestedFrameNamesStructure!=null) focus(nestedFrameNamesStructure,secsToWait);
-	    click(By.xpath(xpath), secsToWait);
-
-	    log.trace("::clickXpath(xpath,frameNamesStructure,secsToWait) - Finish","Clicked.");
-	} catch (Exception ex) {
-	    if(!defaultContentFocused && (nestedFrameNamesStructure==null || nestedFrameNamesStructure.isEmpty())){ //is dirty and wasn't me who got it dirty?
-		try{
-		    log.warn("clickClass(css,frameNamesStructure,secsToWait)","Couln't click the element, switching to the main frame and trying again.");
-		    driver.switchTo().defaultContent();
-		    defaultContentFocused=true;
-		    clickXpath(xpath,secsToWait);
-		    return;
-		}catch(Exception ex2){}//couln't handle it, throw of exception couln't be avoided.
-	    }
-	    throw new White_SeleniumFrameworkException("Unable to click the Button or Link with xpath:" + xpath, ex);
-	}
+	log.trace("clickXpath(xpath,frameNamesStructure,secsToWait) - Start: Bridging.");
+	click(By.xpath(xpath), nestedFrameNamesStructure, null, secsToWait,null,null);
+    }
+    
+    public void clickXpath(String xpath, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting, Boolean scrollToElement) {
+	click(By.xpath(xpath), relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting,scrollToElement);
     }
 
     public void clickLinkText(String linkText){
@@ -434,12 +423,25 @@ public class WebDriverUtils {
     }
     
     public void clickLinkText(String linkText, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
-	click(By.linkText(linkText),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	click(By.linkText(linkText),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting,null);
+    }
+    
+    public void clickText(String text){
+	clickText(text,null,null,null,null);
+    }
+    
+    public void clickText(String text, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	try{
+	    WebElement element=getElementByText(text,relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    element.click();
+	}catch(Exception ex){
+	    throw new White_SeleniumFrameworkException("Unable to click the element",ex);
+	}
     }
     
     public void click(By locator){
 	log.trace("click(locator) - Start: Bridging.");
-	click(locator,null,null,null,null);
+	click(locator,null,null,null,null,null);
     }
     
     /**
@@ -456,31 +458,48 @@ public class WebDriverUtils {
      */
     public void click(By locator, Integer secsToWait) {
 	log.trace("click(locator,secsToWait) - Start: Bridging.");
-	click(locator,null,null,secsToWait,null);
+	click(locator,null,null,secsToWait,null,null);
     }
 
-    public void click(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
-	log.trace("::click(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: ");
+    public void click(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting, Boolean scrollToElement) {
+	log.trace("::click(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting,scrollToElement) - Start: ");
+	if(scrollToElement==null) scrollToElement=false;
 	try{
-	    getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting).click();
+	    WebElement element=getElementBy(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    if(element!=null){
+		if(scrollToElement) scrollToElement(element);
+		element.click();
+		log.trace("::click(locator, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting,scrollToElement) - Finish: clicked");
+	    }else{
+		throw new White_SeleniumFrameworkException("Element to click on not fond");
+	    }
 	}catch(Exception ex){
 	    throw new White_SeleniumFrameworkException("Unable to click the element",ex);
 	}
     }
     
-    public void clickText(String text){
-	clickText(text,null,null,null,null);
-    }
-    
-    public void clickText(String text, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+    /**
+     * Scrolls to the given element.  
+     * It is required for you to obtain the element on the page first.
+     * 
+     * @author <a href='mailto:obed.vazquez@gmail.com'>Obed Vazquez</a>
+     * @since 2021-02-01
+     * @param element {@link WebElement} to perform the operation with.
+     * @throws IllegalArgumentException - if the provided parameter is null.
+     */
+    public WebElement scrollToElement(WebElement element) {
+	log.trace("::scrollToElement(element) - Start: ");
+	notNullValidation(element);
 	try{
-	    WebElement element=getElementByText(text,relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
-	    element.click();
-	}catch(Exception ex){
-	    throw new White_SeleniumFrameworkException("Unable to click the element",ex);
-	}
+	    
+	     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
+	    log.trace("::scrollToElement(element) - Finish: ");
+	     return element;
+	     
+	} catch (Exception e) {
+            throw new RuntimeException("Impossible to complete the operation due to an unknown internal error.", e);
+        }
     }
-    
     //</editor-fold>
     
 	//<editor-fold defaultstate="collapsed" desc="Write">
@@ -1178,21 +1197,40 @@ public class WebDriverUtils {
 	//<editor-fold defaultstate="collapsed" desc="Multiple">
 
     public List<WebElement> getElementsByClassName(String cssClass){
-	log.trace("getElementsByClassName(cssClass) - Start: Clicking.");
+	log.trace("getElementsByClassName(cssClass) - Start: Bridging.");
 	return getElementsByClassName(cssClass,null,null,null,null);
     }
     
     public List<WebElement> getElementsByClassName(String cssClass, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
-	log.trace("getElementsByClassName(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Clicking.");
+	log.trace("getElementsByClassName(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: Obtaining elements.");
 	try {
 	    
 	    List<WebElement> elements=getElementsBy(By.className(cssClass),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
-	    log.trace("::getElementsByClassName(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Clicked.");
+	    log.trace("::getElementsByClassName(cssClass, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Obtained.");
 	    
 	    return elements;
 	    
 	} catch (Exception ex) {
-	    throw new White_SeleniumFrameworkException("Unable to obtain element with class name: " + cssClass, ex);
+	    throw new White_SeleniumFrameworkException("Unable to obtain elements with class name: " + cssClass, ex);
+	}
+    }
+    
+    public List<WebElement> getElementsByXpath(String xPath){
+	log.trace("getElementsByXpath(xPath) - Start: Bridging.");
+	return getElementsByXpath(xPath,null,null,null,null);
+    }
+    
+    public List<WebElement> getElementsByXpath(String xPath, Collection<String> relativeNestedFrameNamesStructure, Boolean skypRetryWithNoFrames, Integer secsToWait, Boolean skipRetryWithoutWaiting){
+	log.trace("getElementsByXpath(xPath, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: .");
+	try {
+	    
+	    List<WebElement> elements=getElementsBy(By.xpath(xPath),relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+	    log.trace("::getElementsByXpath(xPath, relativeNestedFrameNamesStructure, skypRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: Obtained.");
+	    
+	    return elements;
+	    
+	} catch (Exception ex) {
+	    throw new White_SeleniumFrameworkException("Unable to obtain elements with xpath name: " + xPath, ex);
 	}
     }
     
@@ -2030,8 +2068,14 @@ public class WebDriverUtils {
     }
     
     public void highlight(WebElement element){
-	JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) driver;
-	javaScriptExecutor.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
+	log.trace("::highlight(element) - Start: ");
+	try{
+	    JavascriptExecutor javaScriptExecutor = (JavascriptExecutor) driver;
+	    javaScriptExecutor.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
+	    log.trace("::highlight(element) - Finish: Highlighted");
+	}catch(Exception e){
+	    throw new White_SeleniumFrameworkException("Impossible to highlight the element",e);
+	}
     }
     
     /**
@@ -2060,7 +2104,7 @@ public class WebDriverUtils {
 	    log.trace("::pageDown() - Finish: ");
 	    
 	} catch (Exception e) {
-	    throw new White_SeleniumFrameworkException("Impossible to complete the operation due to an unknown internal error.", e);
+	    throw new White_SeleniumFrameworkException("Impossible to page down.", e);
 	}
     }
     
@@ -2072,7 +2116,30 @@ public class WebDriverUtils {
 	    log.trace("::pageUp() - Finish: ");
 	    
 	} catch (Exception e) {
-	    throw new White_SeleniumFrameworkException("Impossible to complete the operation due to an unknown internal error.", e);
+	    throw new White_SeleniumFrameworkException("Impossible to page up in the page.", e);
+	}
+    }
+    
+    public void scrollToTop(){
+	log.trace("::scrollToTop() - Start: ");
+	try {
+	    
+//	    WebElement element = driver.findElement(By.tagName("header"));
+//	    JavascriptExecutor js = (JavascriptExecutor) driver;
+//	    js.executeScript("arguments[0].scrollIntoView();", element);
+	    ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, -document.body.scrollHeight)");
+	    
+	    log.trace("::scrollToTop() - Finish: ");
+	    
+	} catch (Exception e) {
+	    try{
+		log.trace("::scrollToTop(): Error when scrolling to top, trying to page up there (50). ");
+		for (int i = 0; i < 20; i++) {
+		    pageUp();
+		}
+	    }catch(Exception e2){
+		throw new White_SeleniumFrameworkException("Error when trying again", new White_SeleniumFrameworkException("Impossible to scroll to top of the page. Was the header found?", e));
+	    }
 	}
     }
     
@@ -2085,7 +2152,7 @@ public class WebDriverUtils {
 	    log.trace("::pressKey(key) - Finish: Key pressed");
 	    
 	} catch (Exception e) {
-	    throw new White_SeleniumFrameworkException("Impossible to complete the operation due to an unknown internal error.", e);
+	    throw new White_SeleniumFrameworkException("Impossible to press the Key: ["+key+"].", e);
 	}
     }
     
@@ -2093,9 +2160,7 @@ public class WebDriverUtils {
 	log.trace("::wait(milisecs) - Start: ");
 	notNullValidation(milisecs);
 	try{
-	    synchronized (driver){
-		Thread.sleep(milisecs);
-	    }
+	    Thread.sleep(milisecs);
 	    log.trace("::wait(milisecs) - Finish: ");
 	}catch(Exception e){
 	    throw new White_SeleniumFrameworkException("Unable to pause the thread due to an unknown internal error.", e);
@@ -2103,7 +2168,6 @@ public class WebDriverUtils {
 	
     }
 
-    
 	//<editor-fold defaultstate="collapsed" desc="PrntScrn">
 
     public String takeScreenShot(){

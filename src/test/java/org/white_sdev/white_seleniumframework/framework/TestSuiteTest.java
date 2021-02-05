@@ -1,11 +1,11 @@
 /*
- *  Filename:  TestSuite.java
- *  Creation Date:  Dec 6, 2020
+ *  Filename:  TestSuiteTest.java
+ *  Creation Date:  Feb 1, 2021
  *  Purpose:   
  *  Author:    Obed Vazquez
  *  E-mail:    obed.vazquez@gmail.com
  * 
- *  Web Version:https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *  Online Version:https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
  *  *** ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL (CC BY-NC-SA 4.0) ***
  * 
  * By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this 
@@ -160,130 +160,61 @@
  * 
  * Creative Commons may be contacted at creativecommons.org.
  */
-
-
-
 package org.white_sdev.white_seleniumframework.framework;
 
-import io.github.bonigarcia.wdm.config.DriverManagerType;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.opera.OperaDriver;
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
-import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.white_sdev.propertiesmanager.model.service.PropertiesManager;
 
 /**
- * 
+ *
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
- * @since Dec 6, 2020
  */
-@Slf4j
-public class TestSuite {
-    
-    //TODO OV: Generate documentation
-    public static List<TestCase> tests = new ArrayList<>();
+public class TestSuiteTest {
 
-    public static void registerTest(TestCase testCase) {
-	registerTests((Boolean)null,testCase);
-    }
-    
-    public static void registerTests(Set<TestCase> testCases) {
-	registerTests(null,testCases);
-    }
-    
-    public static void registerTests(TestCase...testCases) {
-	log.trace("::registerTests(...testCases) - Finish: Bridging ");
-	registerTests((Boolean)null,testCases);
-    }
-    
-    public static void registerTests(Boolean startFresh,TestCase...testCases) {
-	log.trace("::registerTests(...testCases) - Start: ");
-	Set newTC=null;
-	try{
-	    newTC=new HashSet<>();
-	    newTC.addAll(Arrays.asList(testCases));
-	    log.debug("::registerTests(...testCases): Tests transformed into a Set");
-	}catch(Exception ex){
-	    throw new White_SeleniumFrameworkException("Impossible to transform testCases into a Set to add to the TestCase queue.");
+    public static Boolean flag = false;
+
+    public class DummyTest implements TestCase {
+
+	@Override
+	public void test(WebDriverUtils utils) throws Exception {
+	    flag=!flag;
 	}
-	log.trace("::registerTests(...testCases) - Finish: Bridging ");
-	registerTests(startFresh,newTC);
-    }
-    
-    public static void registerTests(Boolean startFresh,Set<TestCase> testCases){
-	log.trace("::registerTest(startFresh,testCases) - Start: Adding tests for further excecution.");
-	if(startFresh==null) startFresh=true;
-	try{
-	    if(tests==null || startFresh) cleanTests();
-	    if(testCases==null) return;
-	    testCases.forEach((testCase)->{
-		tests.add(testCase);
-	    });
-	log.trace("::registerTest(startFresh,testCases) - Finish: Tests added to the queue.");
-	}catch(Exception ex){
-	    throw new White_SeleniumFrameworkException("Impossible to add tests to the queue for further excecution",ex);
+
+	@Override
+	public String getTestFullName() {
+	    return "Dummy Test";
 	}
-    }
-    
-    
-    public static void cleanTests(){
-	tests = new ArrayList<>();
-    }
-    
-    public void testSuite() throws Exception {
-	runSetUp();
-	for (Map.Entry<Class<?  extends WebDriver>, Boolean> driverEntry : getDrivers().entrySet()) {
-	    if (driverEntry.getValue()) {
-		executeTests(driverEntry.getKey());
-	    }
-	}
+
     }
 
-    public static void launchTests() throws Exception {
-	log.info("::launchTests() - Start: Launching Tests");
-	new TestSuite().testSuite();
-	log.info("::launchTests() - Finish: All tests were excecuted successfully");
+    @Before
+    public void setUp() throws Exception {
+	PropertiesManager.loadCustomProperty("run.tests.chrome", "true");
+	PropertiesManager.loadCustomProperty("run.tests.ie", "false");
+	PropertiesManager.loadCustomProperty("run.tests.edge", "false");
+	PropertiesManager.loadCustomProperty("run.tests.firefox", "false");
+	PropertiesManager.loadCustomProperty("run.tests.opera", "false");
+	PropertiesManager.loadCustomProperty("close-on-error", "true");
+
     }
 
-    private void runSetUp() {
-	WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
-	WebDriverManager.getInstance(DriverManagerType.EDGE).setup();
-	WebDriverManager.getInstance(DriverManagerType.IEXPLORER).setup();
-    }
-
-    public HashMap<Class<?  extends WebDriver>, Boolean> getDrivers() throws IOException {
-	HashMap<Class<?  extends WebDriver>, Boolean> drivers;
-	drivers = new LinkedHashMap<Class<?  extends WebDriver>, Boolean>() {{
-		put(ChromeDriver.class, Boolean.parseBoolean(getProperty("run.tests.chrome")) );
-		put(InternetExplorerDriver.class, Boolean.parseBoolean(getProperty("run.tests.ie")));
-		put(EdgeDriver.class, Boolean.parseBoolean(getProperty("run.tests.edge")));
-		put(FirefoxDriver.class, Boolean.parseBoolean(getProperty("run.tests.firefox")));
-		put(OperaDriver.class, Boolean.parseBoolean(getProperty("run.tests.opera")));
-	}};
-
-	return drivers;
-    }
-
-    private void executeTests(Class driver) throws Exception {
-	log.trace("::executeTests(driver) - Start: ");
-	for (TestCase test : tests) {
-	    log.info("::executeTests(driver): Excecuting [{}] test case over [{}]",test.getTestFullName(),driver.getSimpleName());
-	    test.performTest(driver);
-	    log.info("::executeTests(driver): Test case [{}] Excecuted successfully over [{}]",test.getTestFullName(),driver.getSimpleName());
+    /**
+     * Test of registerTest method, of class TestSuite.
+     */
+    @Test
+    public void testRegisterTest() {
+	try {
+	    flag = false;
+	    TestSuite.registerTests(new DummyTest());
+	    TestSuite.launchTests();
+	    assert(flag);
+	    TestSuite.registerTests(new DummyTest(), new DummyTest());
+	    TestSuite.launchTests();
+	    assert(flag);
+	} catch (Exception ex) {
+	    fail("Execution threw an Exception :" + ex);
 	}
     }
 
