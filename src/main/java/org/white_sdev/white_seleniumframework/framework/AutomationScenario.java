@@ -1,11 +1,11 @@
 /*
- *  Filename:  TestSuiteTest.java
- *  Creation Date:  Feb 1, 2021
+ *  Filename:  AutomationScenario.java
+ *  Creation Date:  Dec 6, 2020
  *  Purpose:   
  *  Author:    Obed Vazquez
  *  E-mail:    obed.vazquez@gmail.com
  * 
- *  Online Version:https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *  Web Version:https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
  *  *** ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL (CC BY-NC-SA 4.0) ***
  * 
  * By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this 
@@ -160,62 +160,124 @@
  * 
  * Creative Commons may be contacted at creativecommons.org.
  */
+
 package org.white_sdev.white_seleniumframework.framework;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.white_sdev.propertiesmanager.model.service.PropertiesManager;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.*;
+import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
+import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
 /**
- *
+ * 
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+ * @since Dec 6, 2020
  */
-public class TestSuiteTest {
 
-    public static Boolean flag = false;
-
-    public class DummyTest implements AutomationScenario {
-
-	@Override
-	public void run(WebDriverUtils utils) throws Exception {
-	    flag=!flag;
-	}
-
-	@Override
-	public String getTestFullName() {
-	    return "Dummy Test";
-	}
-
-    }
-
-    @Before
-    public void setUp() throws Exception {
-	PropertiesManager.loadCustomProperty("run.tests.chrome", "true");
-	PropertiesManager.loadCustomProperty("run.tests.ie", "false");
-	PropertiesManager.loadCustomProperty("run.tests.edge", "false");
-	PropertiesManager.loadCustomProperty("run.tests.firefox", "false");
-	PropertiesManager.loadCustomProperty("run.tests.opera", "false");
-	PropertiesManager.loadCustomProperty("close-on-error", "true");
-
-    }
-
-    /**
-     * Test of registerTest method, of class AutomationSuite.
-     */
-    @Test
-    public void testRegisterTest() {
-	try {
-	    flag = false;
-	    AutomationSuite.registerTests(new DummyTest());
-	    AutomationSuite.launchTests();
-	    assert(flag);
-	    AutomationSuite.registerTests(new DummyTest(), new DummyTest());
-	    AutomationSuite.launchTests();
-	    assert(flag);
-	} catch (Exception ex) {
-	    fail("Execution threw an Exception :" + ex);
+public interface AutomationScenario {
+    
+    public final PrintStream SYSTEM_OUT=System.out;
+    public final PrintStream SYSTEM_ERR=System.err;
+    
+    public default void performTest(WebDriverElements webDriverElements) throws Exception{
+	WebDriver driver=null;
+	try{
+	    driver=initialize(webDriverElements);
+	}catch(Exception ex){ throw new White_SeleniumFrameworkException("An Error has ocurred while initializing the test case execution",ex); }
+	
+	try{
+	    run(new WebDriverUtils(driver));
+	    if(getQuitOnFinish())driver.quit();
+	}catch(Exception ex){
+	    if(getQuitOnFinish()) driver.quit();
+	    throw new White_SeleniumFrameworkException("An Error has ocurred while executing a test case",ex);
 	}
     }
 
+    public default WebDriver initialize(WebDriverElements webDriverElements) throws Exception{
+	notNullValidation(webDriverElements);
+	disableLogs();
+	try{
+	    WebDriver driver=null;
+	    if(this instanceof SilentAutomationScenario){
+		if(ChromeOptions.class.equals(webDriverElements.silentOptionsClazz)){
+		    driver=webDriverElements.driverClazz.getConstructor(new Class[]{webDriverElements.silentOptionsClazz}).newInstance(webDriverElements.silentOptions);
+		}else{
+		    throw new UnsupportedOperationException("WebExplorer not supported yet for Silent execution.");
+		}
+	    }else{
+		try{
+		    driver= webDriverElements.driverClazz.getDeclaredConstructor().newInstance();	
+		}catch(java.lang.reflect.InvocationTargetException ex){
+		    throw new White_SeleniumFrameworkException("Impossible to Instanciate WebDriver",ex);
+		}catch(java.lang.NoSuchMethodError ex){
+		    throw new White_SeleniumFrameworkException("Impossible to Instanciate WebDriver, thrown often due to dependency versions compatibility issues. "
+			    + "Check if one of your dependencies is using guava or other selenium/webdriver dependencies different version. \n"+ex.getMessage());
+		}
+	    }
+	    String wait=getProperty("implicit-wait");
+	    if(wait!=null) driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(wait)));
+	    if(Boolean.valueOf(getProperty("maximize-on-open"))) driver.manage().window().maximize();
+	    enableLogs();
+	    return driver;
+	}catch(Exception ex){
+	    enableLogs();
+	    throw new White_SeleniumFrameworkException("Error initializing the Driver",ex);
+	}
+    }
+
+    public abstract void run(WebDriverUtils utils) throws Exception;
+    
+    public abstract String getTestFullName();
+
+    public default void disableLogs() {
+	System.setOut(
+	    new PrintStream(new OutputStream() { 
+		@Override
+		public  void    close() {}
+		@Override
+		public  void    flush() {}
+		@Override
+		public  void    write(byte[] b) {}
+		@Override
+		public  void    write(byte[] b, int off, int len) {}
+		@Override
+		public  void    write(int b) {}
+
+	    }));
+	System.setErr(
+	    new PrintStream(new OutputStream() { 
+		@Override
+		public  void    close() {}
+		@Override
+		public  void    flush() {}
+		@Override
+		public  void    write(byte[] b) {}
+		@Override
+		public  void    write(byte[] b, int off, int len) {}
+		@Override
+		public  void    write(int b) {}
+
+	    }));
+    }
+
+    public default void enableLogs() {
+	System.setOut(SYSTEM_OUT);
+	System.setErr(SYSTEM_ERR);
+    }
+    
+    public default Boolean getQuitOnFinish(){
+	try{
+	    return Boolean.parseBoolean(getProperty("close-on-error"));
+	}catch(Exception e){
+	    SYSTEM_ERR.println("Exception ocurred when retrieving property close-on-error from properties files");
+	    return true;
+	}
+    }
 }

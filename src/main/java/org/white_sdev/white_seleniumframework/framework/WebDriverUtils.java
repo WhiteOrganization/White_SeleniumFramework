@@ -1909,7 +1909,29 @@ public class WebDriverUtils {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Utils">
+    
+    /**
+     * Opens the provided URL in the already loaded {@link WebDriver WebExplorer} .  ;
+     * This is effectively a bridge method that uses the {@link WebDriver#get(java.lang.String) } method.
+     * 
+     * @author <a href='mailto:obed.vazquez@gmail.com'>Obed Vazquez</a>
+     * @since 2021-02-08
+     * @param url {@link String} to perform the operation with.
+     * @throws IllegalArgumentException - if the provided parameter is null.
+     */
+    public void openURL(String url) {
+	log.trace("::openURL(url) - Start: ");
+	notNullValidation(url);
+	try{
+	    
+	    driver.get(url);
 
+	    log.trace("::openURL(url) - Finish: ");
+	} catch (Exception e) {
+            throw new RuntimeException("Impossible to openURL "+url, e);
+        }
+    }
+    
     /**
      * Resets the focus to the default content on the page. if you need to access an element inside of a frame you will have to call 
      * {@link #focus(java.util.Collection, java.lang.Integer)} or {@link #focusFrame(org.openqa.selenium.support.How, java.lang.String, java.lang.Integer)} method again
@@ -2174,7 +2196,7 @@ public class WebDriverUtils {
 	return takeScreenShot((String)null);
     }
     
-    public String takeScreenShot(TestCase tc){
+    public String takeScreenShot(AutomationScenario tc){
 	String screenShotFileName="["+driver.getClass().getSimpleName()+"] "+tc.getTestFullName()+".png";
 	return takeScreenShot(screenShotFileName);
     }

@@ -22,7 +22,7 @@ to click on the first element, you can do :
 ```java
 util.clickText(text);
 ```
-and will perform the same.
+and will perform the same action.
 
 The framework will force the structure of your classes to be ordered and encourage the use of its utility but you can still use WebDriver methods by taking it from the util.
 ```java
@@ -34,7 +34,7 @@ The framework will also take care of the entire configuration of the Drivers, yo
 
 * Version.
 
-0.1.0 - 
+0.1.2 - 
 This is still in development and some methods are being constantly added as they are used. Please help us requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
@@ -42,13 +42,13 @@ This is still in development and some methods are being constantly added as they
 * Summary of set up.
 
 look for the library on maven (["white-sdev + White_SeleniumFramework"](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework)) and import the library into your project
-by including it in your POM. [0.1.0 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.0)
+by including it in your POM. [0.1.2 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.2)
 ```XML
 	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
     		<artifactId>White_SeleniumFramework</artifactId>
-    		<version>0.1.0</version>
+    		<version>0.1.2</version>
 	</dependency>
 ```
 

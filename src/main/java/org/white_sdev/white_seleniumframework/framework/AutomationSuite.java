@@ -1,5 +1,5 @@
 /*
- *  Filename:  TestCase.java
+ *  Filename:  AutomationSuite.java
  *  Creation Date:  Dec 6, 2020
  *  Purpose:   
  *  Author:    Obed Vazquez
@@ -161,104 +161,112 @@
  * Creative Commons may be contacted at creativecommons.org.
  */
 
+
+
 package org.white_sdev.white_seleniumframework.framework;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.concurrent.TimeUnit;
-import org.openqa.selenium.WebDriver;
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.*;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
-import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
 /**
  * 
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
  * @since Dec 6, 2020
  */
+@Slf4j
+public class AutomationSuite {
+    
+    //TODO OV: Generate documentation
+    public static List<AutomationScenario> tests = new ArrayList<>();
 
-public interface TestCase {
+    public static void registerTest(AutomationScenario testCase) {
+	registerTests((Boolean)null,testCase);
+    }
     
-    public final PrintStream SYSTEM_OUT=System.out;
-    public final PrintStream SYSTEM_ERR=System.err;
+    public static void registerTests(Set<AutomationScenario> testCases) {
+	registerTests(null,testCases);
+    }
     
-    public default void performTest(Class<WebDriver> driverClass) throws Exception{
-	WebDriver driver=null;
+    public static void registerTests(AutomationScenario...testCases) {
+	log.trace("::registerTests(...testCases) - Finish: Bridging ");
+	registerTests((Boolean)null,testCases);
+    }
+    
+    public static void registerTests(Boolean startFresh,AutomationScenario...testCases) {
+	log.trace("::registerTests(...testCases) - Start: ");
+	Set newTC=null;
 	try{
-	    driver=initialize(driverClass);
-	}catch(Exception ex){ throw new White_SeleniumFrameworkException("An Error has ocurred while initializing the test case execution",ex); }
-	
-	try{
-	    test(new WebDriverUtils(driver));
-	    if(getQuitOnFinish())driver.quit();
+	    newTC=new HashSet<>();
+	    newTC.addAll(Arrays.asList(testCases));
+	    log.debug("::registerTests(...testCases): Tests transformed into a Set");
 	}catch(Exception ex){
-	    if(getQuitOnFinish()) driver.quit();
-	    throw new White_SeleniumFrameworkException("An Error has ocurred while executing a test case",ex);
+	    throw new White_SeleniumFrameworkException("Impossible to transform testCases into a Set to add to the TestCase queue.");
 	}
+	log.trace("::registerTests(...testCases) - Finish: Bridging ");
+	registerTests(startFresh,newTC);
     }
-
-    public default WebDriver initialize(Class<WebDriver> driverClass) throws Exception{
-	notNullValidation(driverClass);
-	disableLogs();
+    
+    public static void registerTests(Boolean startFresh,Set<AutomationScenario> testCases){
+	log.trace("::registerTest(startFresh,testCases) - Start: Adding tests for further excecution.");
+	if(startFresh==null) startFresh=true;
 	try{
-	    WebDriver driver= driverClass.getDeclaredConstructor().newInstance();	
-	    String wait=getProperty("implicit-wait");
-	    if(wait!=null) driver.manage().timeouts().implicitlyWait(Long.parseLong(wait), TimeUnit.SECONDS);
-	    if(Boolean.valueOf(getProperty("maximize-on-open"))) driver.manage().window().maximize();
-	    enableLogs();
-	    return driver;
+	    if(tests==null || startFresh) cleanTests();
+	    if(testCases==null) return;
+	    testCases.forEach((testCase)->{
+		tests.add(testCase);
+	    });
+	log.trace("::registerTest(startFresh,testCases) - Finish: Tests added to the queue.");
 	}catch(Exception ex){
-	    enableLogs();
-	    throw new White_SeleniumFrameworkException("Error initializing the Driver",ex);
+	    throw new White_SeleniumFrameworkException("Impossible to add tests to the queue for further excecution",ex);
+	}
+    }
+    
+    
+    public static void cleanTests(){
+	tests = new ArrayList<>();
+    }
+    
+    public void testSuite() throws Exception {
+	log.trace("::testSuite() - Start: ");
+	try {
+	    runSetUp();
+	    ArrayList<WebDriverElements> allWebDriversElements;
+	    allWebDriversElements=WebDriverElements.allWebDriversElements;	
+	    for (WebDriverElements webDriverElements : allWebDriversElements) 
+		if (webDriverElements.activated)    executeTests(webDriverElements);
+	    log.trace("::testSuite() - Finish: All Automation Scenario where executed");
+	} catch (Exception e) {
+	    throw new White_SeleniumFrameworkException("Impossible to execute Automation Suite",e);
 	}
     }
 
-    public abstract void test(WebDriverUtils utils) throws Exception;
-    
-    public abstract String getTestFullName();
-
-    public default void disableLogs() {
-	System.setOut(
-	    new PrintStream(new OutputStream() { 
-		@Override
-		public  void    close() {}
-		@Override
-		public  void    flush() {}
-		@Override
-		public  void    write(byte[] b) {}
-		@Override
-		public  void    write(byte[] b, int off, int len) {}
-		@Override
-		public  void    write(int b) {}
-
-	    }));
-	System.setErr(
-	    new PrintStream(new OutputStream() { 
-		@Override
-		public  void    close() {}
-		@Override
-		public  void    flush() {}
-		@Override
-		public  void    write(byte[] b) {}
-		@Override
-		public  void    write(byte[] b, int off, int len) {}
-		@Override
-		public  void    write(int b) {}
-
-	    }));
+    public static void launchTests() throws Exception {
+	log.info("::launchTests() - Start: Launching Tests");
+	new AutomationSuite().testSuite();
+	log.info("::launchTests() - Finish: All tests were excecuted successfully");
     }
 
-    public default void enableLogs() {
-	System.setOut(SYSTEM_OUT);
-	System.setErr(SYSTEM_ERR);
+    private void runSetUp() {
+	WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
+	WebDriverManager.getInstance(DriverManagerType.EDGE).setup();
+	WebDriverManager.getInstance(DriverManagerType.IEXPLORER).setup();
     }
-    
-    public default Boolean getQuitOnFinish(){
-	try{
-	    return Boolean.parseBoolean(getProperty("close-on-error"));
-	}catch(Exception e){
-	    SYSTEM_ERR.println("Exception ocurred when retrieving property close-on-error from properties files");
-	    return true;
+
+
+    private void executeTests(WebDriverElements webDriverElements) throws Exception {
+	log.trace("::executeTests(driver) - Start: ");
+	for (AutomationScenario test : tests) {
+	    log.info("::executeTests(driver): Excecuting [{}] test case over [{}]",test.getTestFullName(),webDriverElements.driverClazz.getSimpleName());
+	    test.performTest(webDriverElements);
+	    log.info("::executeTests(driver): Test case [{}] Excecuted successfully over [{}]",test.getTestFullName(),webDriverElements.driverClazz.getSimpleName());
 	}
     }
+
 }
