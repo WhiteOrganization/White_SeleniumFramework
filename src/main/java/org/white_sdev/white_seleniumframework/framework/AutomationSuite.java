@@ -186,20 +186,20 @@ public class AutomationSuite {
     //TODO OV: Generate documentation
     public static List<AutomationScenario> tests = new ArrayList<>();
 
-    public static void registerTest(AutomationScenario testCase) {
-	registerTests((Boolean)null,testCase);
+    public static void registerAutomationScenario(AutomationScenario testCase) {
+	AutomationSuite.registerAutomationScenario((Boolean)null,testCase);
     }
     
-    public static void registerTests(Set<AutomationScenario> testCases) {
-	registerTests(null,testCases);
+    public static void registerAutomationScenario(Set<AutomationScenario> testCases) {
+	registerAutomationScenario(null,testCases);
     }
     
-    public static void registerTests(AutomationScenario...testCases) {
+    public static void registerAutomationScenario(AutomationScenario...testCases) {
 	log.trace("::registerTests(...testCases) - Finish: Bridging ");
-	registerTests((Boolean)null,testCases);
+	AutomationSuite.registerAutomationScenario((Boolean)null,testCases);
     }
     
-    public static void registerTests(Boolean startFresh,AutomationScenario...testCases) {
+    public static void registerAutomationScenario(Boolean startFresh,AutomationScenario...testCases) {
 	log.trace("::registerTests(...testCases) - Start: ");
 	Set newTC=null;
 	try{
@@ -210,10 +210,10 @@ public class AutomationSuite {
 	    throw new White_SeleniumFrameworkException("Impossible to transform testCases into a Set to add to the TestCase queue.");
 	}
 	log.trace("::registerTests(...testCases) - Finish: Bridging ");
-	registerTests(startFresh,newTC);
+	registerAutomationScenario(startFresh,newTC);
     }
     
-    public static void registerTests(Boolean startFresh,Set<AutomationScenario> testCases){
+    public static void registerAutomationScenario(Boolean startFresh,Set<AutomationScenario> testCases){
 	log.trace("::registerTest(startFresh,testCases) - Start: Adding tests for further excecution.");
 	if(startFresh==null) startFresh=true;
 	try{
@@ -247,7 +247,7 @@ public class AutomationSuite {
 	}
     }
 
-    public static void launchTests() throws Exception {
+    public static void launchExecutions() throws Exception {
 	log.info("::launchTests() - Start: Launching Tests");
 	new AutomationSuite().testSuite();
 	log.info("::launchTests() - Finish: All tests were excecuted successfully");

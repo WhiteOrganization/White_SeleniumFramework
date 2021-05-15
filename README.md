@@ -8,7 +8,7 @@ A Selenium Framework that will help to execute tests and functions faster and re
 * Quick summary.
 
 The framework will help you structure your classes and give you some EXTRA tools to automate your scenarios faster.
-For example instead of doing:
+For example instead of doing this to click on the first element:
 ```java
 List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']");
 if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
@@ -18,7 +18,8 @@ if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
 	throw new RuntimeException("Button not found");
 }
 ```
-to click on the first element, you can do :
+
+You can instead do :
 ```java
 util.clickText(text);
 ```
@@ -34,7 +35,7 @@ The framework will also take care of the entire configuration of the Drivers, yo
 
 * Version.
 
-0.1.2 - 
+0.1.3 - 
 This is still in development and some methods are being constantly added as they are used. Please help us requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
@@ -42,13 +43,13 @@ This is still in development and some methods are being constantly added as they
 * Summary of set up.
 
 look for the library on maven (["white-sdev + White_SeleniumFramework"](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework)) and import the library into your project
-by including it in your POM. [0.1.2 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.2)
+by including it in your POM. [0.1.3 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.3)
 ```XML
 	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
     		<artifactId>White_SeleniumFramework</artifactId>
-    		<version>0.1.2</version>
+    		<version>0.1.3</version>
 	</dependency>
 ```
 
@@ -59,19 +60,19 @@ Alternatively you can manually import the .jar file into your project.
 
 Define your test cases or scenario classes by implementing TestCase in classes extending from TestCase 
 ```java
-public class LoginApp implements TestCase{
+public class LoginApp implements AutomationScenario{
 	//...
 }
 ```
 
 To run the scenarios you need to register your TestCases under TestSuite and then run them any time you need.
 ```
-	TestSuite.registerTest(new LoginApp());
-	TestSuite.registerTest(new MyTestCase());
-	TestSuite.launchTests();
+	AutomationSuite.registerAutomationScenario(new LoginApp());
+	AutomationSuite.registerAutomationScenario(new MyTestCase());
+	AutomationSuite.launchExecutions();
 ```
 
-Some useful configuration you can establish on your project context [src/main/resources/<yourfile>.properties on maven projects]
+Some useful configuration you can establish on your project context [src/main/resources/<yourFileName>.properties on maven projects]
 ```
 run.tests.chrome=true
 run.tests.ie=true
@@ -86,7 +87,6 @@ close-on-error=false
 mywebsite.url=mywebsite.mydomain.com
 ```
 You can just copy paste this into your project or edit it
-The library uses org.bitbucket.white_sdev.PropertiesManager dependencies to read your properties files.
 
 
 * Dependencies.
@@ -107,7 +107,7 @@ No need for those. Some working projects using this library are:
 
 * Writing tests.
 
-Please do. Unit testing is not setup at the moment
+Please do. Only some basic Unit testing is setup at the moment
 * Code review.
 
 Request if needed

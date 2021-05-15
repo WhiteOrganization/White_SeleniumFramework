@@ -201,17 +201,17 @@ public class TestSuiteTest {
     }
 
     /**
-     * Test of registerTest method, of class AutomationSuite.
+     * Test of registerAutomationScenario method, of class AutomationSuite.
      */
     @Test
     public void testRegisterTest() {
 	try {
 	    flag = false;
-	    AutomationSuite.registerTests(new DummyTest());
-	    AutomationSuite.launchTests();
+	    AutomationSuite.registerAutomationScenario(new DummyTest());
+	    AutomationSuite.launchExecutions();
 	    assert(flag);
-	    AutomationSuite.registerTests(new DummyTest(), new DummyTest());
-	    AutomationSuite.launchTests();
+	    AutomationSuite.registerAutomationScenario(new DummyTest(), new DummyTest());
+	    AutomationSuite.launchExecutions();
 	    assert(flag);
 	} catch (Exception ex) {
 	    fail("Execution threw an Exception :" + ex);
