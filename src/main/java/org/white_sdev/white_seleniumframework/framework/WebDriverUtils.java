@@ -479,12 +479,12 @@ public class WebDriverUtils {
     }
     
     /**
-     * Scrolls to the given element.  
-     * It is required for you to obtain the element on the page first.
+     * Scrolls to the given element.It is required for you to obtain the element on the page first.
      * 
      * @author <a href='mailto:obed.vazquez@gmail.com'>Obed Vazquez</a>
      * @since 2021-02-01
      * @param element {@link WebElement} to perform the operation with.
+     * @return	The same {@link WebElement} provided by the caller to scroll to.
      * @throws IllegalArgumentException - if the provided parameter is null.
      */
     public WebElement scrollToElement(WebElement element) {
