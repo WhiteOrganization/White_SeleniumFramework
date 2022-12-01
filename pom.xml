@@ -4,13 +4,24 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.white-sdev</groupId>
     <artifactId>White_SeleniumFramework</artifactId>
-    <version>0.1.4</version>
+    <version>0.2.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort
         to access many sections Selenium related.
     </description>
     <url>https://github.com/white-sdev/White_SeleniumFramework</url>
 
+    <properties>
+        <!--region Configure Java version & Main full package and class name -->
+        <!-- WARNING: add release scope if 1.9 and older versions are used at build/plugins/plugin/[maven-compiler-plugin]/configuration-->
+        <java.version>8</java.version>
+        <main.class>org.white_sdev.template.logger_db_runnable_template.LoggerDbRunnableTemplate</main.class>
+        <!--endregion-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
 
     <licenses>
         <license>
@@ -33,19 +44,6 @@
         <developerConnection>scm:git:ssh://git@github.com:white-sdev/White_SeleniumFramework.git</developerConnection>
         <url>https://github.com/white-sdev/White_SeleniumFramework/tree/master</url>
     </scm>
-
-    <properties>
-        <!--region Configure Java version & Main full package and class name -->
-        <!-- WARNING: add release scope if 1.9 and older versions are used at build/plugins/plugin/[maven-compiler-plugin]/configuration-->
-        <java.version>8</java.version>
-        <main.class>org.white_sdev.template.logger_db_runnable_template.LoggerDbRunnableTemplate</main.class>
-        <!--endregion-->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-    </properties>
-
 
     <distributionManagement>
         <repository>
