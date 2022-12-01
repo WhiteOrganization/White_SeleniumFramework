@@ -9,8 +9,8 @@ A Selenium Framework that will help to execute tests and functions faster and re
 
 The framework will help you structure your classes and give you some EXTRA tools to automate your scenarios faster.
 For example instead of doing this to click on the first element:
-```java
-List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']");
+```
+List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']"));
 if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
 	WebElement firstButton=divSimulatesButtons.get(0);
 	firstButton.click();
@@ -20,13 +20,13 @@ if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
 ```
 
 You can instead do :
-```java
+```
 util.clickText(text);
 ```
 and will perform the same action.
 
 The framework will force the structure of your classes to be ordered and encourage the use of its utility but you can still use WebDriver methods by taking it from the util.
-```java
+```
 WebDriver webDriver=util.driver;
 ```
 
@@ -35,7 +35,7 @@ The framework will also take care of the entire configuration of the Drivers, yo
 
 * Version.
 
-0.1.3 - 
+0.1.4 - 
 This is still in development and some methods are being constantly added as they are used. Please help us requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
@@ -49,7 +49,7 @@ by including it in your POM. [0.1.3 version](https://mvnrepository.com/artifact/
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
     		<artifactId>White_SeleniumFramework</artifactId>
-    		<version>0.1.3</version>
+    		<version>0.1.4</version>
 	</dependency>
 ```
 
@@ -86,7 +86,7 @@ close-on-error=false
 #my custom websites
 mywebsite.url=mywebsite.mydomain.com
 ```
-You can just copy paste this into your project or edit it
+You can just copy and paste this into your project or edit it
 
 
 * Dependencies.
@@ -122,5 +122,5 @@ Ask for the code standard to use as guidelines and reflect them in here.
 owner - current main developer - obed.vazquez@gmail.com
 * Other community or team contact.
 
-Please contact me if you want to help, I'm developing and mantaining and supporting in general this project on my own with no help or support of anyone and any tip, comment, change or help in general is well received.
+Please contact me if you want to help, I'm developing and maintaining and supporting in general this project on my own with no help or support of anyone and any tip, comment, change or help in general is well received.
 
