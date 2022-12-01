@@ -9,7 +9,7 @@ A Selenium Framework that will help to execute tests and functions faster and re
 
 The framework will help you structure your classes and give you some EXTRA tools to automate your scenarios faster.
 For example instead of doing this to click on the first element:
-```
+```java
 List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']"));
 if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
 	WebElement firstButton=divSimulatesButtons.get(0);
@@ -25,7 +25,7 @@ util.clickText(text);
 ```
 and will perform the same action.
 
-The framework will force the structure of your classes to be ordered and encourage the use of its utility but you can still use WebDriver methods by taking it from the util.
+The framework will force the structure of your classes to be ordered and encourage the use of its utility, but you can still use WebDriver methods by taking it from the util.
 ```
 WebDriver webDriver=util.driver;
 ```
@@ -35,8 +35,8 @@ The framework will also take care of the entire configuration of the Drivers, yo
 
 * Version.
 
-0.1.4 - 
-This is still in development and some methods are being constantly added as they are used. Please help us requesting those you need or need more detailed documentation.
+0.1.4 -
+This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
 
@@ -58,7 +58,7 @@ by including it in your POM. [0.1.3 version](https://mvnrepository.com/artifact/
 Alternatively you can manually import the .jar file into your project.
 * Configuration.
 
-Define your test cases or scenario classes by implementing TestCase in classes extending from TestCase 
+Define your test cases or scenario classes by implementing TestCase in classes extending from TestCase
 ```java
 public class LoginApp implements AutomationScenario{
 	//...
@@ -66,7 +66,7 @@ public class LoginApp implements AutomationScenario{
 ```
 
 To run the scenarios you need to register your TestCases under TestSuite and then run them any time you need.
-```
+```java
 	AutomationSuite.registerAutomationScenario(new LoginApp());
 	AutomationSuite.registerAutomationScenario(new MyTestCase());
 	AutomationSuite.launchExecutions();
@@ -91,23 +91,23 @@ You can just copy and paste this into your project or edit it
 
 * Dependencies.
 
-this library uses 
+this library uses
 - lombok to log errors and general logs.
 	- Slf4j
 - PropertiesManager to obtain the default properties values.
 - White_Validations to validate parameters.
 
 * Database configuration
-None
+  None
 * Deployment instructions
-No need for those. Some working projects using this library are:
+  No need for those. Some working projects using this library are:
 - [White_LoLPicker](https://github.com/white-sdev/White_LoLPicker)
 
 ### Contribution guidelines ###
 
 * Writing tests.
 
-Please do. Only some basic Unit testing is setup at the moment
+Please do. Only some basic Unit testing is set up at the moment
 * Code review.
 
 Request if needed
