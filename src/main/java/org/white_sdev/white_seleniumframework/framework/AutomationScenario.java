@@ -14,15 +14,25 @@ import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFramework
 import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
 /**
+ * This represents every Automation Case from which the user can inherit and will be provided with the framework resources and functionality.
+ *
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
- * @since Dec 6, 2020
  */
 
 public interface AutomationScenario {
-	
+	/**
+	 * Local variable to hold on the System property.
+	 */
 	PrintStream SYSTEM_OUT = System.out;
+	/**
+	 * Local variable to hold on the System property.
+	 */
 	PrintStream SYSTEM_ERR = System.err;
 	
+	/**
+	 * Will execute the scenario with all {@link WebDriver}s provided.
+	 * @param webDriverElements {@link WebDriverElements} instance with the configuration of the {@link WebDriver}s loaded in it.
+	 */
 	default void executeScenario(WebDriverElements webDriverElements) {
 		WebDriver driver;
 		try {
@@ -39,6 +49,11 @@ public interface AutomationScenario {
 		}
 	}
 	
+	/**
+	 * It will initialize the Scenario with the provided properties from the user.
+	 * @param webDriverElements	Configurations of the {@link WebDriver}s
+	 * @return
+	 */
 	default WebDriver initialize(WebDriverElements webDriverElements) {
 		notNullValidation(webDriverElements);
 		disableLogs();
@@ -77,8 +92,16 @@ public interface AutomationScenario {
 	
 	void run(WebDriverUtils utils) throws Exception;
 	
+	/**
+	 * Will obtain the Scenario descriptive name.
+	 * This could be a detailed definition of the scenario or just a {@code getClass().getCanonicalName()}.
+	 * @return a {@link String} representation the name of the {@link AutomationScenario}
+	 */
 	String getScenarioFullName();
 	
+	/**
+	 * Will <i>temporarily</i> disable any logs to the {@link System#out}.
+	 */
 	default void disableLogs() {
 		System.setOut(
 				new PrintStream(new OutputStream() {
@@ -118,11 +141,18 @@ public interface AutomationScenario {
 				}));
 	}
 	
+	/**
+	 * Will re-enable logs if they have been disabled by this instance.
+	 */
 	default void enableLogs() {
 		System.setOut(SYSTEM_OUT);
 		System.setErr(SYSTEM_ERR);
 	}
 	
+	/**
+	 * Retrieves if the framework should automatically close the Web Explorer after each scenario is executed.
+	 * @return if the Web Browser was closed successfully
+	 */
 	default Boolean getQuitOnFinish() {
 		try {
 			return Boolean.parseBoolean(getProperty("close-on-error"));
