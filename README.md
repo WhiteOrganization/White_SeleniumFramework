@@ -35,21 +35,21 @@ The framework will also take care of the entire configuration of the Drivers, yo
 
 * Version.
 
-0.1.4 -
+0.2.0 -
 This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
 
 * Summary of set up.
 
-look for the library on maven (["white-sdev + White_SeleniumFramework"](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework)) and import the library into your project
-by including it in your POM. [0.1.3 version](https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework/0.1.3)
+look for the library on maven ([" White_SeleniumFramework"](https://github.com/orgs/WhiteOrganization/packages)) and import the library into your project
+by including it in your POM. [0.2.0 version](https://github.com/orgs/WhiteOrganization/packages)
 ```XML
 	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
     		<artifactId>White_SeleniumFramework</artifactId>
-    		<version>0.1.4</version>
+    		<version>0.2.0</version>
 	</dependency>
 ```
 
