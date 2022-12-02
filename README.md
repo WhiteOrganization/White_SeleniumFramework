@@ -33,26 +33,34 @@ WebDriver webDriver=util.driver;
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version.
+* Version: [0.2.1-SNAPSHOT](https://github.com/orgs/WhiteOrganization/packages) 
 
-0.2.0 -
-This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
+    This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
 ### How do I get set up? ###
 
 * Summary of set up.
 
-look for the library on maven ([" White_SeleniumFramework"](https://github.com/orgs/WhiteOrganization/packages)) and import the library into your project
-by including it in your POM. [0.2.0 version](https://github.com/orgs/WhiteOrganization/packages)
+look for the library on maven ([" White_SeleniumFramework"](https://github.com/orgs/WhiteOrganization/packages)) and [import the library into your project
+by including it in your POM](<url>https://maven.pkg.github.com/whiteorganization/white_seleniumframework</url>).
 ```XML
 	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
     		<artifactId>white-selenium-framework</artifactId>
-    		<version>0.2.0</version>
+    		<version>0.2.1-SNAPSHOT</version>
 	</dependency>
 ```
-
+and [including the repository in your project POM](https://maven.pkg.github.com/whiteorganization/white_seleniumframework) or in your [maven configurations (settings.xml)](https://maven.apache.org/settings.html)
+```XML
+	<repositories>
+	    <repository>
+            <id>github</id>
+            <name>GitHub Maven WhiteOrganization White_SeleniumFramework Repository</name>
+            <url>https://maven.pkg.github.com/whiteorganization/white_seleniumframework</url>
+	    </repository>
+	</repositories>
+```
 
 
 Alternatively you can manually import the .jar file into your project.
