@@ -33,7 +33,7 @@ WebDriver webDriver=util.driver;
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version: [0.2.2](https://github.com/orgs/WhiteOrganization/packages) 
+* Version: [0.2.3-SNAPSHOT](https://github.com/orgs/WhiteOrganization/packages) 
 
     This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
@@ -48,7 +48,7 @@ by including it in your POM](<url>https://maven.pkg.github.com/whiteorganization
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
     		<artifactId>white-selenium-framework</artifactId>
-    		<version>0.2.2</version>
+    		<version>0.2.3-SNAPSHOT</version>
 	</dependency>
 ```
 and [including the repository in your project POM](https://maven.pkg.github.com/whiteorganization/white_seleniumframework) or in your [maven configurations (settings.xml)](https://maven.apache.org/settings.html)
