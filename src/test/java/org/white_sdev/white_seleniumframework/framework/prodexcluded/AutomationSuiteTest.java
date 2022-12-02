@@ -1,4 +1,4 @@
-package org.white_sdev.white_seleniumframework.framework;
+package org.white_sdev.white_seleniumframework.framework.prodexcluded;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.white_sdev.propertiesmanager.model.service.PropertiesManager;
+import org.white_sdev.white_seleniumframework.framework.AutomationScenario;
+import org.white_sdev.white_seleniumframework.framework.AutomationSuite;
+import org.white_sdev.white_seleniumframework.framework.WebDriverUtils;
 
 /**
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>

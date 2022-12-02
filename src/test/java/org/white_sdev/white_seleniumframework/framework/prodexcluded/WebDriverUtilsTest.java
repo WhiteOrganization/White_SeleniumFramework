@@ -1,9 +1,8 @@
-package org.white_sdev.white_seleniumframework.framework;
+package org.white_sdev.white_seleniumframework.framework.prodexcluded;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.openqa.selenium.WebDriver;
 import org.white_sdev.propertiesmanager.model.service.PropertiesManager;
+import org.white_sdev.white_seleniumframework.framework.AutomationScenario;
+import org.white_sdev.white_seleniumframework.framework.AutomationSuite;
+import org.white_sdev.white_seleniumframework.framework.WebDriverUtils;
 
 public class WebDriverUtilsTest {
 	
@@ -41,7 +43,6 @@ public class WebDriverUtilsTest {
 	}
 	
 	@Test
-	@Disabled
 	public void tripleQuittingTest() {
 		AutomationSuite.registerAutomationScenario(new DoubleQuitting());
 		AutomationSuite.launchExecutions();
