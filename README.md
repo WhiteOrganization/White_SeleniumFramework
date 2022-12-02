@@ -48,7 +48,7 @@ by including it in your POM. [0.2.0 version](https://github.com/orgs/WhiteOrgani
 	<!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
 	<dependency>
     		<groupId>com.github.white-sdev</groupId>
-    		<artifactId>White_SeleniumFramework</artifactId>
+    		<artifactId>white-selenium-framework</artifactId>
     		<version>0.2.0</version>
 	</dependency>
 ```
