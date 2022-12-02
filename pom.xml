@@ -9,7 +9,7 @@
     <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort
         to access many sections Selenium related.
     </description>
-    <url>https://github.com/white-sdev/White_SeleniumFramework</url>
+    <url>https://github.com/WhiteOrganization/White_SeleniumFramework</url>
 
     <properties>
         <!--region Configure Java version & Main full package and class name -->
@@ -35,8 +35,8 @@
         <developer>
             <name>Obed Vazquez</name>
             <email>obed.vazquez@gmail.com</email>
-            <organization>White_Corp21</organization>
-            <organizationUrl>http://white-sdev.whiteweb.tech</organizationUrl>
+            <organization>WhiteOrganization</organization>
+            <organizationUrl>https://github.com/WhiteOrganization/</organizationUrl>
         </developer>
     </developers>
 
