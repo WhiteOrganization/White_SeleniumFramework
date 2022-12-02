@@ -1,18 +1,17 @@
 package org.white_sdev.white_seleniumframework.framework;
 
-//import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
-import lombok.AllArgsConstructor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.opera.OperaDriver;
 
 import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
 
@@ -22,14 +21,14 @@ import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.ge
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
  * @since Feb 9, 2021
  */
-//@Slf4j
+@Slf4j
 //@AllArgsConstructor
 public class WebDriverElements {
 	public static final String RUN_CHROME = getProperty("run.tests.chrome");
 	public static final String RUN_IE = getProperty("run.tests.ie");
 	public static final String RUN_EDGE = getProperty("run.tests.edge");
 	public static final String RUN_FIREFOX = getProperty("run.tests.firefox");
-	public static final String RUN_OPERA = getProperty("run.tests.opera");
+	public static final String RUN_HEADLESS = getProperty("run.tests.browserless");
 	
 	public static WebDriverElements CHROME = new WebDriverElements(
 			ChromeDriver.class,
@@ -51,16 +50,17 @@ public class WebDriverElements {
 			RUN_FIREFOX == null || Boolean.parseBoolean(RUN_FIREFOX),
 			null);
 	
-	public static WebDriverElements OPERA = new WebDriverElements(
-			OperaDriver.class,
-			RUN_OPERA == null || Boolean.parseBoolean(RUN_OPERA),
+	public static WebDriverElements HEADLESS = new WebDriverElements(
+			HtmlUnitDriver.class,
+			RUN_HEADLESS == null || Boolean.parseBoolean(RUN_HEADLESS),
 			null);
+	
 	public static ArrayList<WebDriverElements> allWebDriversElements = new ArrayList<WebDriverElements>() {{
 		add(CHROME);
 		add(INTERNET_EXPLORER);
 		add(EDGE);
 		add(FIRE_FOX);
-		add(OPERA);
+		add(HEADLESS);
 	}};
 	
 	Class<? extends WebDriver> driverClazz;

@@ -1,10 +1,12 @@
 package org.white_sdev.white_seleniumframework.framework;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jetty.websocket.api.Session;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -185,7 +187,7 @@ public class WebDriverUtils {
 	}
 	
 	public void clickClass(String cssClass, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
-		String logID="::clickClass(cssClass, nestedFrameNamesStructure, secsToWait): ";
+		String logID = "::clickClass(cssClass, nestedFrameNamesStructure, secsToWait): ";
 		log.trace("{}Start - Clicking", logID);
 		if (cssClass == null) return;
 		try {
@@ -557,8 +559,8 @@ public class WebDriverUtils {
 						defaultContentFocused = true;
 						writeName(name, keys, secsToWait);
 						return;
-					}else{
-						throw new White_SeleniumFrameworkException("Impossible to write text on the element with name: "+name,ex);
+					} else {
+						throw new White_SeleniumFrameworkException("Impossible to write text on the element with name: " + name, ex);
 					}
 				}
 			}
@@ -602,7 +604,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void writeCSS(String css, String keys, Integer secsToWait) {
-		String logID="::writeCSS(css, keys, secsToWait): ";
+		String logID = "::writeCSS(css, keys, secsToWait): ";
 		log.trace("{}Start - writing.", logID);
 		if (css == null) return;
 		try {
@@ -645,7 +647,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void writeTag(String tagName, String keys, Integer secsToWait) {
-		String logID="::writeTag(tagName, keys, secsToWait): ";
+		String logID = "::writeTag(tagName, keys, secsToWait): ";
 		log.trace("{}Start - writing", logID);
 		if (tagName == null) return;
 		try {
@@ -672,7 +674,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void writeXPath(String xpath, String keys, Integer secsToWait) {
-		String logID="::writeXPath([xpath, keys, secsToWait]): ";
+		String logID = "::writeXPath([xpath, keys, secsToWait]): ";
 		log.trace("{}Start writing", logID);
 		if (xpath == null) return;
 		try {
@@ -703,7 +705,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void write(By locator, String keys, Integer secsToWait) {
-		String logID="::write(locator, keys, secsToWait): ";
+		String logID = "::write(locator, keys, secsToWait): ";
 		log.trace("{}Start - Clicking", logID);
 		try {
 			if (locator == null) return;
@@ -784,7 +786,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public String getTextFrom(By locator, Integer secsToWait) {
-		String logID="::getTextFrom(locator, secsToWait): ";
+		String logID = "::getTextFrom(locator, secsToWait): ";
 		log.trace("{}Start - Getting text from element.", logID);
 		try {
 			if (locator == null) return null;
@@ -873,7 +875,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByClassName(String name, Integer secsToWait) {
-		String logID="::getElementByClassName(name, secsToWait): ";
+		String logID = "::getElementByClassName(name, secsToWait): ";
 		log.trace("{}Start - retrieving element", logID);
 		if (name == null) return null;
 		try {
@@ -911,7 +913,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByName(String name, Integer secsToWait) {
-		String logID="::getElementByName(name, secsToWait): ";
+		String logID = "::getElementByName(name, secsToWait): ";
 		log.trace("{}Start - retrieving element", logID);
 		if (name == null) return null;
 		WebElement element;
@@ -956,7 +958,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByTag(String tagName, Integer secsToWait) {
-		String logID="::getElementByTag(tagName, secsToWait): ";
+		String logID = "::getElementByTag(tagName, secsToWait): ";
 		log.trace("{}Start - retrieving element", logID);
 		if (tagName == null) return null;
 		try {
@@ -998,7 +1000,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByCSS(String css, Integer secsToWait) {
-		String logID="::getElementByCSS(css, secsToWait): ";
+		String logID = "::getElementByCSS(css, secsToWait): ";
 		log.trace("{}Start - retrieving element", logID);
 		WebElement webElement;
 		try {
@@ -1037,7 +1039,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByXPath(String xpath, Integer secsToWait) {
-		String logID="::getElementByXPath(xpath, secsToWait): ";
+		String logID = "::getElementByXPath(xpath, secsToWait): ";
 		log.trace("{}Start - retrieving element", logID);
 		WebElement webElement;
 		try {
@@ -1470,7 +1472,7 @@ public class WebDriverUtils {
 	 */
 	public WebElement getSingleForcedElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
 											   Boolean skipRetryWithoutWaiting) {
-		String logID="::getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): ";
+		String logID = "::getSingleForcedElementBy(locator, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting): ";
 		log.trace("{}Start Preparing wait.", logID);
 		
 		if (locator == null) return null;
@@ -1490,7 +1492,7 @@ public class WebDriverUtils {
 			
 			//core
 			element = secsToWait == 0 ? driver.findElement(locator) //no waitFor = normal find.
-					: (new WebDriverWait(driver, secsToWait)).until(ExpectedConditions.presenceOfElementLocated(locator));
+					: (new WebDriverWait(driver, Duration.ofSeconds(secsToWait))).until(ExpectedConditions.presenceOfElementLocated(locator));
 			
 			log.trace("{}Finish - waiting is over", logID);
 			return element;
@@ -1784,7 +1786,7 @@ public class WebDriverUtils {
 	 */
 	public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
 										  Boolean skipRetryWithoutWaiting) {
-		String logID="::getElementsBy([locator, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting]): ";
+		String logID = "::getElementsBy([locator, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting]): ";
 		log.trace("{}Start - Preparing wait", logID);
 		
 		if (locator == null) return null;
@@ -1804,7 +1806,7 @@ public class WebDriverUtils {
 			
 			//core
 			elements = secsToWait == 0 ? driver.findElements(locator) //no waitFor = normal find.
-					: (new WebDriverWait(driver, secsToWait)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+					: (new WebDriverWait(driver, Duration.ofSeconds(secsToWait))).until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
 			
 			log.trace("{}Finish - waiting is over", logID);
 			return elements;
@@ -1836,7 +1838,6 @@ public class WebDriverUtils {
 			}
 			
 		} // exception occurred Retrying with no frames
-		
 		
 		// skipRetryWithNoFrames always true. Didn't get it & is dirty and wasn't me who got it dirty?
 		if (elements == null && !defaultContentFocused && (relativeNestedFrameNamesStructure == null || relativeNestedFrameNamesStructure.isEmpty())) {
@@ -1896,7 +1897,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void frameReloading() {
-		String logID="::frameReloading(): ";
+		String logID = "::frameReloading(): ";
 		log.trace("{}Start - Resting focus", logID);
 		try {
 			driver.switchTo().defaultContent();
@@ -2000,7 +2001,8 @@ public class WebDriverUtils {
 	 * a bug has being identified in Google Chrome and because of it some frames/iframes can't be obtained with traditional method so an alternative method is used
 	 * in those cases it might take more time to focus, but it will ensure that the frames/iframes are being obtained correctly.
 	 *
-	 * @param how           {@link How} must be specified as ID or NAME; this is supposed to be specified, although it will go ahead and try with ID if not (logs a `WARN`).
+	 * @param how           {@link How} must be specified as ID or NAME; this is supposed to be specified, although it will go ahead and try with ID if not (logs a
+	 *                      `WARN`).
 	 * @param frameNameOrId The Name or `ID` of the frame/iframe; does nothing if null.
 	 * @param secsToWait    the seconds to waitFor for the frame to show up in the page, uses the app default (specified in .properties with
 	 *                      default-explicit-waitFor property) if null. The focus switch seems to take some time ignoring the waitFor in case it fails to find the frame.
@@ -2008,7 +2010,7 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void focusFrame(How how, String frameNameOrId, Integer secsToWait) {
-		String logID="::focusFrame(how, frameNameOrId, secsToWait): ";
+		String logID = "::focusFrame(how, frameNameOrId, secsToWait): ";
 		log.trace("{}Start - changing focus to new frame", logID);
 		
 		try {
@@ -2031,7 +2033,7 @@ public class WebDriverUtils {
 			defaultContentFocused = false;//dirty
 			String attribute = how.equals(How.ID) ? "id" : "name";
 			try {
-				WebDriverWait wait = (new WebDriverWait(driver, secsToWait));
+				WebDriverWait wait = (new WebDriverWait(driver, Duration.ofSeconds(secsToWait)));
 				wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameNameOrId));
 				log.debug("{}FOCUS switched to: {}", logID, frameNameOrId);
 			} catch (Exception ex) {
@@ -2072,10 +2074,10 @@ public class WebDriverUtils {
 	 * @since 2019-03-02
 	 */
 	public void acceptAlert() {
-		String logID="::acceptAlert(): ";
+		String logID = "::acceptAlert(): ";
 		log.trace("{}Start - Accepting alert", logID);
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, 2);
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
 			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 			//Alert alert = driver.switchTo().alert();
 			alert.accept();
@@ -2173,7 +2175,7 @@ public class WebDriverUtils {
 	}
 	
 	public String takeScreenShot(String screenShotFileName) {
-		String logID="::takeScreenShot(screenShotFileName): ";
+		String logID = "::takeScreenShot(screenShotFileName): ";
 		log.trace("{}Start - Taking a Screenshot", logID);
 		try {
 			if (screenShotFileName == null) screenShotFileName = getDefaultScreenShotFileName();
@@ -2202,8 +2204,12 @@ public class WebDriverUtils {
 	public void closeExplorer() {
 		String logID = "::quit([]): ";
 		log.trace("{}Start - Closing WebBrowser", logID);
-		driver.close();
-		log.trace("{}Finish", logID);
+		try {
+			driver.close();
+			log.trace("{}Finish", logID);
+		} catch (org.openqa.selenium.NoSuchSessionException ex) {
+			log.error(logID + "Are you trying to close an already closed Web Browser? Ignoring command. ", ex);
+		}
 	}
 	
 	public void restartWebExplorer() {
