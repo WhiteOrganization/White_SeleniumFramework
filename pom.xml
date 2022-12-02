@@ -14,7 +14,6 @@
         <!--region Configure Java version & Main full package and class name -->
         <!-- WARNING: add release scope if 1.9 and older versions are used at build/plugins/plugin/[maven-compiler-plugin]/configuration-->
         <java.version>8</java.version>
-        <main.class>org.white_sdev.template.logger_db_runnable_template.LoggerDbRunnableTemplate</main.class>
         <!--endregion-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -159,6 +158,39 @@
         <!-- endregion testing -->
 
     </dependencies>
+
+    <!-- region PROD Profile -->
+    <!-- Here used only to exclude Failing tests on production -->
+    <profiles>
+        <profile>
+            <id>prod-exclusions</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>PROD</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- region Maven is able to run JUnit5 Tests -->
+                    <!-- This requires junit-jupiter-engine [in junit-jupiter] dependency! -->
+                    <!-- This will run everything that Starts or ends with Test[(Case)|s]{0-1}. -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.0.0-M7</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>org.white_sdev.white_seleniumframework.framework.prodexcluded.**</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <!-- endregion -->
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <!-- endregion PROD Profile -->
 
     <build>
         <plugins>
