@@ -11,6 +11,7 @@ import java.util.Set;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.WebDriver;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 
 /**
@@ -53,7 +54,7 @@ public class AutomationSuite {
 	}
 	
 	public static void registerAutomationScenario(Boolean startFresh, Set<AutomationScenario> automationScenarios) {
-		String logID="::registerAutomationScenario(startFresh, automationScenarios): ";
+		String logID = "::registerAutomationScenario(startFresh, automationScenarios): ";
 		log.trace("{}Start - Adding scenarios for further execution.", logID);
 		if (startFresh == null) startFresh = true;
 		try {
@@ -72,7 +73,7 @@ public class AutomationSuite {
 	}
 	
 	public void executeSuite() {
-		String logID="::executeSuite([]): ";
+		String logID = "::executeSuite([]): ";
 		log.trace("{}Start ", logID);
 		try {
 			runSetUp();
@@ -87,21 +88,22 @@ public class AutomationSuite {
 	}
 	
 	public static void launchExecutions() {
-		String logID="::launchExecutions([]): ";
+		String logID = "::launchExecutions([]): ";
 		log.trace("{}Start - Launching AutomationScenarios", logID);
 		new AutomationSuite().executeSuite();
 		log.trace("{}Finish - All scenarios were executed successfully", logID);
 	}
 	
 	private void runSetUp() {
-		WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
-		WebDriverManager.getInstance(DriverManagerType.EDGE).setup();
-		WebDriverManager.getInstance(DriverManagerType.IEXPLORER).setup();
+		String logID = "::runSetUp([]): ";
+		log.trace("{}Start - Executing All WebDriver initial configurations for the platform to be ready", logID);
+		for (DriverManagerType type : DriverManagerType.class.getEnumConstants())
+			WebDriverManager.getInstance(type).setup();
 	}
 	
 	@SneakyThrows
 	private void executeScenarios(WebDriverElements webDriverElements) {
-		String logID="::executeScenarios(webDriverElements): ";
+		String logID = "::executeScenarios(webDriverElements): ";
 		log.trace("{}Start ", logID);
 		for (AutomationScenario automationScenario : automationScenarios) {
 			log.info("{}Executing [{}] automation scenarios over [{}]", logID, automationScenario.getScenarioFullName(), webDriverElements.driverClazz.getSimpleName());

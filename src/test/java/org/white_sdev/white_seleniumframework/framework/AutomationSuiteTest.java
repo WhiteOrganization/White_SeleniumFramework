@@ -30,13 +30,22 @@ public class AutomationSuiteTest {
 	
 	@BeforeAll
 	public static void setUp() {
-		PropertiesManager.loadCustomProperty("run.tests.chrome", "true");
+		PropertiesManager.loadCustomProperty("run.tests.chrome", "false");
 		PropertiesManager.loadCustomProperty("run.tests.ie", "false");
 		PropertiesManager.loadCustomProperty("run.tests.edge", "false");
 		PropertiesManager.loadCustomProperty("run.tests.firefox", "false");
 		PropertiesManager.loadCustomProperty("run.tests.opera", "false");
+		PropertiesManager.loadCustomProperty("run.tests.browserless", "true");
 		PropertiesManager.loadCustomProperty("close-on-error", "true");
 		
+	}
+	
+	@Test
+	public void singleAutomationScenarioRegistrationTest() {
+		flag = false;
+		AutomationSuite.registerAutomationScenario(new DummyTest());
+		AutomationSuite.launchExecutions();
+		assert (flag);
 	}
 	
 	/**

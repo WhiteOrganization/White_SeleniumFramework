@@ -9,7 +9,7 @@ A Selenium Framework that will help to execute tests and functions faster and re
 
 The framework will help you structure your classes and give you some EXTRA tools to automate your scenarios faster.
 For example instead of doing this to click on the first element:
-```java
+``` java
 List<WebElement> divSimulatesButtons=webDriver.findElements(By.xpath("//*[text() = '"+text+"']"));
 if(divSimulatesButtons !=null && divSimulatesButtons.size()>0){
 	WebElement firstButton=divSimulatesButtons.get(0);
@@ -66,7 +66,7 @@ public class LoginApp implements AutomationScenario{
 ```
 
 To run the scenarios you need to register your TestCases under TestSuite and then run them any time you need.
-```java
+``` java
 	AutomationSuite.registerAutomationScenario(new LoginApp());
 	AutomationSuite.registerAutomationScenario(new MyTestCase());
 	AutomationSuite.launchExecutions();
@@ -79,6 +79,7 @@ run.tests.ie=true
 run.tests.edge=true
 run.tests.firefox=true
 run.tests.opera=false
+run.tests.browserless=false
 default-explicit-wait=5
 maximize-on-open=true
 close-on-error=false

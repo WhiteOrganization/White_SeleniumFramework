@@ -52,7 +52,7 @@ public interface AutomationScenario {
 	/**
 	 * It will initialize the Scenario with the provided properties from the user.
 	 * @param webDriverElements	Configurations of the {@link WebDriver}s
-	 * @return
+	 * @return Preconfigured {@link WebDriver} with the indicated configurations by the {@link WebDriverElements} instance.
 	 */
 	default WebDriver initialize(WebDriverElements webDriverElements) {
 		notNullValidation(webDriverElements);
@@ -90,7 +90,7 @@ public interface AutomationScenario {
 		}
 	}
 	
-	void run(WebDriverUtils utils) throws Exception;
+	void run(WebDriverUtils utils);
 	
 	/**
 	 * Will obtain the Scenario descriptive name.
