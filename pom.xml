@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.whiteorganization</groupId>
     <artifactId>white-selenium-framework</artifactId>
-    <version>0.2.4-SNAPSHOT</version>
+    <version>0.2.4</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort
         to access many sections Selenium related.
@@ -50,7 +49,7 @@
         <connection>scm:git:https://github.com/${organization}/${repository.name}.git</connection>
         <developerConnection>scm:git:https://github.com/${organization}/${repository.name}.git</developerConnection>
         <url>https://github.com/${organization}/${repository.name}/tree/master</url>
-        <tag>${project.artifactId}</tag>
+        <tag>white-selenium-framework-0.2.4</tag>
     </scm>
     <!-- endregion Maven releases support -->
 
