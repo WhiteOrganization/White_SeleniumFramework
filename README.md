@@ -33,7 +33,7 @@ WebDriver webDriver=util.driver;
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version: [0.2.3](https://github.com/orgs/WhiteOrganization/packages) 
+* Version: [0.2.4](https://github.com/orgs/WhiteOrganization/packages) 
 
     This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
@@ -46,19 +46,40 @@ by including it in your POM](https://maven.pkg.github.com/whiteorganization/whit
 ```XML
 	<!-- https://jitpack.io/#WhiteOrganization/White_SeleniumFramework -->
 	<dependency>
-    		<groupId>com.github.white-sdev</groupId>
+    		<groupId>io.github.whiteorganization</groupId>
     		<artifactId>white-selenium-framework</artifactId>
-    		<version>0.2.3</version>
+    		<version>0.2.4</version>
 	</dependency>
 ```
-and [including the repository in your project POM](https://maven.pkg.github.com/whiteorganization/white_seleniumframework) or in your [maven configurations (settings.xml)](https://maven.apache.org/settings.html)
+If used on a long-term heavy-use project we recommend:
 ```XML
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
+<dependencies>
+	...
+	
+	<!--region White_SeleniumFramework + bonigarcia-webdriver-->
+        <!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
+        <dependency>
+            <groupId>io.github.whiteorganization</groupId>
+            <artifactId>white-selenium-framework</artifactId>
+            <version>0.2.4</version>
+            <!-- You need to manually import this library due to lack of maintenance on White_SeleniumFramework -->
+            <exclusions>
+                <exclusion>
+                    <groupId>io.github.bonigarcia</groupId>
+                    <artifactId>webdrivermanager</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <!--endregion White_SeleniumFramework + bonigarcia-webdriver-->
+	
+	...
+</dependencies>
 ```
 
 
@@ -81,15 +102,14 @@ To run the scenarios you need to register your TestCases under TestSuite and the
 
 Some useful configuration you can establish on your project context [src/main/resources/<yourFileName>.properties on maven projects]
 ```
-run.tests.chrome=true
-run.tests.ie=true
-run.tests.edge=true
-run.tests.firefox=true
-run.tests.opera=false
-run.tests.browserless=false
-default-explicit-wait=5
-maximize-on-open=true
-close-on-error=false
+white-selenium-framework.execute.web-driver.chrome=true
+white-selenium-framework.execute.web-driver.ie=true
+white-selenium-framework.execute.web-driver.edge=true
+white-selenium-framework.execute.web-driver.firefox=true
+white-selenium-framework.execute.web-driver.browserless=false
+white-selenium-framework.execute.default-explicit-wait=5
+white-selenium-framework.maximize-on-open=true
+white-selenium-framework.close-on-error=false
 
 #my custom websites
 mywebsite.url=mywebsite.mydomain.com
@@ -111,7 +131,26 @@ this library uses
   No need for those. Some working projects using this library are:
 - [White_LoLPicker](https://github.com/white-sdev/White_LoLPicker)
 
-### Contribution guidelines ###
+## How to Deploy?
+use [maven](https://spring.io/guides/gs/maven/) to release new version to any Dependency Repository.
+
+### GitHub and JitPack (Not working)
+You usually don't need to execute manually a release, configured GitHub actions will take care of the Build and release process.
+
+### Sonatype - Nexus - Maven Central Repository
+for SNAPSHOT's use:
+
+	mvn clean deploy -D target=sonatype
+For Releases use:
+
+	mvn versions:set -DnewVersion=1.x.x -D target=sonatype
+Followed by:
+
+	mvn clean deploy -D target=sonatype
+	mvn release:clean release:prepare -D target=sonatype
+	mvn release:perform -D target=sonatype
+
+## Contribution guidelines ###
 
 * Writing tests.
 
@@ -123,12 +162,15 @@ Request if needed
 
 Ask for the code standard to use as guidelines and reflect them in here.
 
-### Who do I talk to? ###
+## Who do I talk to?
 
-* Repo owner or admin.
+<table>
+<thead><tr><th><b>Role</b></th> <th><b>Contact</b></th></tr></thead>
+<tr><td>developer</td><td> <a href='mailto:obed.vazquez@gmail.com'>obed.vazquez@gmail.com</a></td></tr>
+<tr><td>developer</td><td> <a href='mailto:marcela.nunez@gmail.com'>marcela.nunez@gmail.com</a></td></tr>
+<tr><td>Supporters</td><td>we have supporters with knowledge on the setup process of the project only</td></tr>
+<tr><td>Community</td><td> send us a message in <a href='http://discord.whiteweb.tech'> our Discord Server</a></td></tr>
+</table>
 
-owner - current main developer - obed.vazquez@gmail.com
-* Other community or team contact.
-
-Please contact me if you want to help, I'm developing and maintaining and supporting in general this project on my own with no help or support of anyone and any tip, comment, change or help in general is well received.
-
+>Please contact us if you want to help, we are developing, maintaining and supporting this project
+on our own with no help or support of anyone and any tip, comment, change or help in general is well-received.

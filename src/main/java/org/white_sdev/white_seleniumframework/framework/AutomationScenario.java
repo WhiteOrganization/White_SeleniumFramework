@@ -3,15 +3,13 @@ package org.white_sdev.white_seleniumframework.framework;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.*;
-
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 
-import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
+import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.getProperty;
 
 /**
  * This represents every Automation Case from which the user can inherit and will be provided with the framework resources and functionality.
@@ -55,7 +53,7 @@ public interface AutomationScenario {
 	 * @return Preconfigured {@link WebDriver} with the indicated configurations by the {@link WebDriverElements} instance.
 	 */
 	default WebDriver initialize(WebDriverElements webDriverElements) {
-		notNullValidation(webDriverElements);
+		Objects.requireNonNull(webDriverElements);
 		disableLogs();
 		try {
 			WebDriver driver;
@@ -81,7 +79,7 @@ public interface AutomationScenario {
 			}
 			String wait = getProperty("implicit-wait");
 			if (wait != null) driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(wait)));
-			if (Boolean.parseBoolean(getProperty("maximize-on-open"))) driver.manage().window().maximize();
+			if (Boolean.parseBoolean(getProperty("white-selenium-framework.maximize-on-open"))) driver.manage().window().maximize();
 			enableLogs();
 			return driver;
 		} catch (Exception ex) {
@@ -102,6 +100,7 @@ public interface AutomationScenario {
 	/**
 	 * Will <i>temporarily</i> disable any logs to the {@link System#out}.
 	 */
+	@SuppressWarnings("all")
 	default void disableLogs() {
 		System.setOut(
 				new PrintStream(new OutputStream() {
@@ -155,9 +154,9 @@ public interface AutomationScenario {
 	 */
 	default Boolean getQuitOnFinish() {
 		try {
-			return Boolean.parseBoolean(getProperty("close-on-error"));
+			return Boolean.parseBoolean(getProperty("white-selenium-framework.close-on-error"));
 		} catch (Exception e) {
-			SYSTEM_ERR.println("Exception occurred when retrieving property close-on-error from properties files");
+			SYSTEM_ERR.println("Exception occurred when retrieving property white-selenium-framework.close-on-error from properties files");
 			return true;
 		}
 	}

@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.white_sdev.propertiesmanager.model.service.PropertiesManager;
 import org.white_sdev.white_seleniumframework.framework.AutomationScenario;
 import org.white_sdev.white_seleniumframework.framework.AutomationSuite;
 import org.white_sdev.white_seleniumframework.framework.WebDriverUtils;
+import org.white_sdev.white_seleniumframework.utils.PropertiesReader;
+
+import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.setProperty;
 
 /**
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
@@ -33,14 +35,12 @@ public class AutomationSuiteTest {
 	
 	@BeforeAll
 	public static void setUp() {
-		PropertiesManager.loadCustomProperty("run.tests.chrome", "false");
-		PropertiesManager.loadCustomProperty("run.tests.ie", "false");
-		PropertiesManager.loadCustomProperty("run.tests.edge", "false");
-		PropertiesManager.loadCustomProperty("run.tests.firefox", "false");
-		PropertiesManager.loadCustomProperty("run.tests.opera", "false");
-		PropertiesManager.loadCustomProperty("run.tests.browserless", "true");
-		PropertiesManager.loadCustomProperty("close-on-error", "true");
-		
+		setProperty("white-selenium-framework.execute.web-driver.chrome", "false");
+		setProperty("white-selenium-framework.execute.web-driver.ie", "false");
+		setProperty("white-selenium-framework.execute.web-driver.edge", "false");
+		setProperty("white-selenium-framework.execute.web-driver.firefox", "false");
+		setProperty("white-selenium-framework.execute.web-driver.browserless", "true");
+		setProperty("white-selenium-framework.close-on-error", "true");
 	}
 	
 	@Test

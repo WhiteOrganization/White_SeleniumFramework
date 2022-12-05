@@ -13,7 +13,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
+import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.getProperty;
 
 //import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
@@ -24,11 +24,11 @@ import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.ge
 @Slf4j
 //@AllArgsConstructor
 public class WebDriverElements {
-	public static final String RUN_CHROME = getProperty("run.tests.chrome");
-	public static final String RUN_IE = getProperty("run.tests.ie");
-	public static final String RUN_EDGE = getProperty("run.tests.edge");
-	public static final String RUN_FIREFOX = getProperty("run.tests.firefox");
-	public static final String RUN_HEADLESS = getProperty("run.tests.browserless");
+	public static final String RUN_CHROME = getProperty("white-selenium-framework.execute.web-driver.chrome");
+	public static final String RUN_IE = getProperty("white-selenium-framework.execute.web-driver.ie");
+	public static final String RUN_EDGE = getProperty("white-selenium-framework.execute.web-driver.edge");
+	public static final String RUN_FIREFOX = getProperty("white-selenium-framework.execute.web-driver.firefox");
+	public static final String RUN_HEADLESS = getProperty("white-selenium-framework.execute.web-driver.browserless");
 	
 	public static WebDriverElements CHROME = new WebDriverElements(
 			ChromeDriver.class,
