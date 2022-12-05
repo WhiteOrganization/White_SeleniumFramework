@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.white-sdev</groupId>
+    <groupId>io.github.whiteorganization</groupId>
     <artifactId>white-selenium-framework</artifactId>
     <version>0.2.4-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -11,17 +12,20 @@
     <url>https://github.com/WhiteOrganization/White_SeleniumFramework</url>
 
     <properties>
-        <!--region Configure Java version & Main full package and class name -->
+        <!--region Project Configurations FILL THESE-->
         <!-- WARNING: add release scope if 1.9 and older versions are used at build/plugins/plugin/[maven-compiler-plugin]/configuration-->
         <java.version>8</java.version>
+        <selenium.version>4.6.0</selenium.version>
+        <organization>WhiteOrganization</organization>
+        <repository.name>White_SeleniumFramework</repository.name>
         <!--endregion-->
+
+        <!-- region automated configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <selenium.version>4.6.0</selenium.version>
-        <organization>WhiteOrganization</organization>
-        <repository.name>White_SeleniumFramework</repository.name>
+        <!-- endregion automated configurations -->
     </properties>
 
     <licenses>
@@ -40,20 +44,12 @@
         </developer>
     </developers>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Maven ${organization} ${repository.name}. Repository</name>
-            <url>https://maven.pkg.github.com/whiteorganization/white_seleniumframework</url>
-        </repository>
-    </distributionManagement>
-
     <!-- region Maven releases support -->
     <!-- You also require Maven settings.xml configuration to authenticate when performing a `mvn release:prepare` -->
     <scm>
         <connection>scm:git:https://github.com/${organization}/${repository.name}.git</connection>
         <developerConnection>scm:git:https://github.com/${organization}/${repository.name}.git</developerConnection>
-        <url>https://github.com/${organization}/${repository.name}</url>
+        <url>https://github.com/${organization}/${repository.name}/tree/master</url>
         <tag>${project.artifactId}</tag>
     </scm>
     <!-- endregion Maven releases support -->
@@ -116,26 +112,6 @@
         </dependency>
         <!-- endregion -->
 
-        <!-- region custom -->
-        <dependency>
-            <groupId>org.bitbucket.white_sdev</groupId>
-            <artifactId>PropertiesManager</artifactId>
-            <version>1.0.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.white-sdev</groupId>
-            <artifactId>White_Validations</artifactId>
-            <version>3.0.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- endregion custom -->
-
         <!-- region UnitTesting -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -159,17 +135,24 @@
 
     </dependencies>
 
-    <!-- region PROD Profile -->
-    <!-- Here used only to exclude Failing tests on production -->
     <profiles>
+        <!-- region GitHub Profile -->
+        <!-- Here used only to exclude Failing tests on production -->
         <profile>
-            <id>prod-exclusions</id>
+            <id>github</id>
             <activation>
                 <property>
-                    <name>environment</name>
-                    <value>PROD</value>
+                    <name>target</name>
+                    <value>github</value>
                 </property>
             </activation>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Maven ${organization} ${repository.name}. Repository</name>
+                    <url>https://maven.pkg.github.com/whiteorganization/white_seleniumframework</url>
+                </repository>
+            </distributionManagement>
             <build>
                 <plugins>
                     <!-- region Maven is able to run JUnit5 Tests -->
@@ -189,8 +172,157 @@
                 </plugins>
             </build>
         </profile>
+        <!-- endregion GitHub Profile -->
+
+        <!-- region Sonatype Maven Central Profile -->
+        <profile>
+            <id>maven-central</id>
+            <activation>
+                <property>
+                    <name>target</name>
+                    <value>sonatype</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <!-- region Sonatype -->
+                <!-- You need to configure credentials for the organization ossrh in your maven settings to  deploy to the repo
+                    And add Sonatype servers with your credentials with access to the repository.
+                Steps:  https://central.sonatype.org/publish/publish-maven/#distribution-management-and-authentication -->
+                <!-- Template to add to settings.xml:
+            <servers>
+                <server>
+                    <id>ossrh</id>
+                    <username>{your-jira-id}</username>
+                    <password>{your-jira-pwd}</password>
+                </server>
+            </servers>
+            <mirrors>
+                <mirror>
+                    <id>maven-default-http-blocker</id>
+                    <mirrorOf>external:http:*</mirrorOf>
+                    <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
+                    <url>http://0.0.0.0/</url>
+                    <blocked>true</blocked>
+                </mirror>
+            </mirrors>
+            <profiles>
+
+                <profile>
+                    <id>ossrh</id>
+                    <activation>
+                        <activeByDefault>true</activeByDefault>
+                    </activation>
+                    <properties>
+                        <gpg.executable>gpg2</gpg.executable>
+                        <gpg.passphrase>{Your_gpg_key_passphrase}</gpg.passphrase>
+                    </properties>
+                </profile>
+                 Template to add to settings.xml -->
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <!-- endregion Sonatype -->
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <!-- region Sonatype Plugins -->
+                    <!-- region Maven Release Plugin -->
+                    <!-- we can now use `mvn release:clean release:prepare -D target=sonatype`
+                        followed by `mvn release:perform -D target=sonatype` -->
+                    <!-- https://central.sonatype.org/publish/publish-maven/#performing-a-release-deployment-with-the-maven-release-plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.3</version>
+                        <configuration>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>release</releaseProfiles>
+                            <goals>deploy</goals>
+                        </configuration>
+                    </plugin>
+                    <!-- endregion Maven Release Plugin -->
+
+                    <!-- region Sonatype Nexus Config -->
+                    <!-- https://central.sonatype.org/publish/publish-maven/#distribution-management-and-authentication -->
+                    <!-- https://central.sonatype.org/publish/publish-maven/#nexus-staging-maven-plugin-for-deployment-and-release -->
+                    <!-- for SNAPSHOT's use `mvn clean deploy -D target=sonatype` -->
+                    <!-- for Releases: use `mvn versions:set -DnewVersion=1.x.x -D target=sonatype`
+                        followed by `mvn clean deploy -D target=sonatype` -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <!-- endregion Sonatype Nexus Config -->
+
+                    <!-- region Sonatype SRC+Javadocs plugin -->
+                    <!-- https://central.sonatype.org/publish/publish-maven/#javadoc-and-sources-attachments
+                        The sources and Javadocs will be included in the deployment  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- endregion Sonatype SRC+Javadocs plugin -->
+
+                    <!-- region GPG Signed -->
+                    <!-- relies on the gpg command being installed and the GPG credentials in settings.xml
+                        https://central.sonatype.org/publish/publish-maven/#gpg-signed-components -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- endregion GPG Signed -->
+
+                    <!-- endregion Sonatype Plugins -->
+                </plugins>
+            </build>
+        </profile>
+        <!-- endregion Sonatype Maven Central Profile -->
     </profiles>
-    <!-- endregion PROD Profile -->
 
     <build>
         <plugins>

@@ -3,15 +3,13 @@ package org.white_sdev.white_seleniumframework.framework;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.*;
-
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 
-import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
+import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.getProperty;
 
 /**
  * This represents every Automation Case from which the user can inherit and will be provided with the framework resources and functionality.
@@ -55,7 +53,7 @@ public interface AutomationScenario {
 	 * @return Preconfigured {@link WebDriver} with the indicated configurations by the {@link WebDriverElements} instance.
 	 */
 	default WebDriver initialize(WebDriverElements webDriverElements) {
-		notNullValidation(webDriverElements);
+		Objects.requireNonNull(webDriverElements);
 		disableLogs();
 		try {
 			WebDriver driver;
@@ -102,6 +100,7 @@ public interface AutomationScenario {
 	/**
 	 * Will <i>temporarily</i> disable any logs to the {@link System#out}.
 	 */
+	@SuppressWarnings("all")
 	default void disableLogs() {
 		System.setOut(
 				new PrintStream(new OutputStream() {

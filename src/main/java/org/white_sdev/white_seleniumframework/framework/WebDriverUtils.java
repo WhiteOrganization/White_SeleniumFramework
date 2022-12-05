@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.websocket.api.Session;
@@ -23,14 +24,12 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
-
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 
-import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
+import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.getProperty;
 
 /**
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
@@ -340,7 +339,7 @@ public class WebDriverUtils {
 	 */
 	public WebElement scrollToElement(WebElement element) {
 		log.trace("::scrollToElement(element) - Start: ");
-		notNullValidation(element);
+		Objects.requireNonNull(element);
 		try {
 			
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
@@ -1875,7 +1874,7 @@ public class WebDriverUtils {
 	 */
 	public void openURL(String url) {
 		log.trace("::openURL(url) - Start: ");
-		notNullValidation(url);
+		Objects.requireNonNull(url);
 		try {
 			
 			driver.get(url);
@@ -2153,7 +2152,7 @@ public class WebDriverUtils {
 	
 	public void waitFor(Long milliseconds) {
 		log.trace("::wait(milliseconds) - Start: ");
-		notNullValidation(milliseconds);
+		Objects.requireNonNull(milliseconds);
 		try {
 			Thread.sleep(milliseconds);
 			log.trace("::wait(milliseconds) - Finish: ");

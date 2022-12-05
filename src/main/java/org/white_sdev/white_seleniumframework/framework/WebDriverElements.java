@@ -13,7 +13,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
-import static org.white_sdev.propertiesmanager.model.service.PropertyProvider.getProperty;
+import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.getProperty;
 
 //import static org.white_sdev.white_validations.parameters.ParameterValidator.notNullValidation;
 
