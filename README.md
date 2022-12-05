@@ -81,7 +81,19 @@ If used on a long-term heavy-use project we recommend:
 	...
 </dependencies>
 ```
-
+if you are pulling the artifact from Jitpack don't forget to specify the repositories:
+```XML
+	<repositories>
+	...
+	
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	
+	...
+	</repositories>
+```
 
 Alternatively you can manually import the .jar file into your project.
 * Configuration.
@@ -135,7 +147,10 @@ this library uses
 use [maven](https://spring.io/guides/gs/maven/) to release new version to any Dependency Repository.
 
 ### GitHub and JitPack (Not working)
-You usually don't need to execute manually a release, configured GitHub actions will take care of the Build and release process.
+You usually don't need to execute manually a release, configured GitHub actions will take care of the Build and 
+release process for SNAPSHOT's but in case of a version you can do
+
+	mvn release:clean release:prepare -D target=github
 
 ### Sonatype - Nexus - Maven Central Repository
 for SNAPSHOT's use:
