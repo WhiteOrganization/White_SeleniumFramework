@@ -79,7 +79,7 @@ public interface AutomationScenario {
 			}
 			String wait = getProperty("implicit-wait");
 			if (wait != null) driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(wait)));
-			if (Boolean.parseBoolean(getProperty("maximize-on-open"))) driver.manage().window().maximize();
+			if (Boolean.parseBoolean(getProperty("white-selenium-framework.maximize-on-open"))) driver.manage().window().maximize();
 			enableLogs();
 			return driver;
 		} catch (Exception ex) {
@@ -154,9 +154,9 @@ public interface AutomationScenario {
 	 */
 	default Boolean getQuitOnFinish() {
 		try {
-			return Boolean.parseBoolean(getProperty("close-on-error"));
+			return Boolean.parseBoolean(getProperty("white-selenium-framework.close-on-error"));
 		} catch (Exception e) {
-			SYSTEM_ERR.println("Exception occurred when retrieving property close-on-error from properties files");
+			SYSTEM_ERR.println("Exception occurred when retrieving property white-selenium-framework.close-on-error from properties files");
 			return true;
 		}
 	}

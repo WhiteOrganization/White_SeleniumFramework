@@ -133,6 +133,12 @@
         </dependency>
         <!-- endregion testing -->
 
+
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner-java8-extras</artifactId>
+            <version>1.0.12</version>
+        </dependency>
     </dependencies>
 
     <profiles>

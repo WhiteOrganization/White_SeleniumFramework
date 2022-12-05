@@ -33,7 +33,7 @@ WebDriver webDriver=util.driver;
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version: [0.2.3](https://github.com/orgs/WhiteOrganization/packages) 
+* Version: [0.2.4](https://github.com/orgs/WhiteOrganization/packages) 
 
     This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
@@ -46,11 +46,42 @@ by including it in your POM](https://maven.pkg.github.com/whiteorganization/whit
 ```XML
 	<!-- https://jitpack.io/#WhiteOrganization/White_SeleniumFramework -->
 	<dependency>
-    		<groupId>io.github.white-sdev</groupId>
+    		<groupId>io.github.whiteorganization</groupId>
     		<artifactId>white-selenium-framework</artifactId>
-    		<version>0.2.3</version>
+    		<version>0.2.4</version>
 	</dependency>
 ```
+If used on a long-term heavy-use project we recommend:
+```XML
+<dependencies>
+	...
+	
+	<!--region White_SeleniumFramework + bonigarcia-webdriver-->
+        <!-- https://mvnrepository.com/artifact/com.github.white-sdev/White_SeleniumFramework -->
+        <dependency>
+            <groupId>io.github.whiteorganization</groupId>
+            <artifactId>white-selenium-framework</artifactId>
+            <version>0.2.4</version>
+            <!-- You need to manually import this library due to lack of maintenance on White_SeleniumFramework -->
+            <exclusions>
+                <exclusion>
+                    <groupId>io.github.bonigarcia</groupId>
+                    <artifactId>webdrivermanager</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <!--endregion White_SeleniumFramework + bonigarcia-webdriver-->
+	
+	...
+</dependencies>
+```
+
 
 Alternatively you can manually import the .jar file into your project.
 * Configuration.
@@ -71,15 +102,14 @@ To run the scenarios you need to register your TestCases under TestSuite and the
 
 Some useful configuration you can establish on your project context [src/main/resources/<yourFileName>.properties on maven projects]
 ```
-run.tests.chrome=true
-run.tests.ie=true
-run.tests.edge=true
-run.tests.firefox=true
-run.tests.opera=false
-run.tests.browserless=false
-default-explicit-wait=5
-maximize-on-open=true
-close-on-error=false
+white-selenium-framework.execute.web-driver.chrome=true
+white-selenium-framework.execute.web-driver.ie=true
+white-selenium-framework.execute.web-driver.edge=true
+white-selenium-framework.execute.web-driver.firefox=true
+white-selenium-framework.execute.web-driver.browserless=false
+white-selenium-framework.execute.default-explicit-wait=5
+white-selenium-framework.maximize-on-open=true
+white-selenium-framework.close-on-error=false
 
 #my custom websites
 mywebsite.url=mywebsite.mydomain.com

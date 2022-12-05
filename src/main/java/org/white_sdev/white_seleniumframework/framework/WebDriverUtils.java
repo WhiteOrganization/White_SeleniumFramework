@@ -77,7 +77,7 @@ public class WebDriverUtils {
 			
 			if (defaultSecsToWaitForElements == null) {
 				try {
-					String propertiesSecs = getProperty("default-explicit-wait");
+					String propertiesSecs = getProperty("white-selenium-framework.execute.default-explicit-wait");
 					defaultSecsToWaitForElements = propertiesSecs != null ? Integer.parseInt(propertiesSecs) : null;
 				} catch (Exception ex) {
 					log.error("::getDefaultSecondsToWaitForElements(): Impossible to obtain the default seconds to wait from the properties files. Defaulting to 0");
@@ -2019,7 +2019,7 @@ public class WebDriverUtils {
 				return;
 			}
 			if (secsToWait == null) {
-				String propertiesSecs = getProperty("default-explicit-wait");
+				String propertiesSecs = getProperty("white-selenium-framework.execute.default-explicit-wait");
 				Integer newSecs = propertiesSecs != null ? Integer.parseInt(propertiesSecs) : null;
 				secsToWait = (newSecs != null) ? newSecs : 0;
 			}
