@@ -61,7 +61,7 @@ If used on a long-term heavy-use project we recommend:
         <dependency>
             <groupId>io.github.whiteorganization</groupId>
             <artifactId>white-selenium-framework</artifactId>
-            <version>0.2.4</version>
+            <version>0.2.5</version>
             <!-- You need to manually import this library due to lack of maintenance on White_SeleniumFramework -->
             <exclusions>
                 <exclusion>
