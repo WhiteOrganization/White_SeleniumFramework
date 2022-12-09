@@ -72,7 +72,7 @@ public class PropertiesReader {
 	 * compare to http://svn.terracotta.org/svn/tc/dso/tags/2.6.4/code/base/common/src/com/tc/util/runtime/Os.java
 	 * http://www.docjar.com/html/api/org/apache/commons/lang/SystemUtils.java.html
 	 *
-	 * @returns - the operating system detected
+	 * @return - the operating system detected
 	 */
 	public static OSType getOperatingSystemType() {
 		if (detectedOS == null) {
