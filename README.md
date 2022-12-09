@@ -33,7 +33,7 @@ WebDriver webDriver=util.driver;
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version: [0.2.4](https://github.com/orgs/WhiteOrganization/packages) 
+* Version: [0.2.5](https://github.com/orgs/WhiteOrganization/packages) 
 
     This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
@@ -48,7 +48,7 @@ by including it in your POM](https://maven.pkg.github.com/whiteorganization/whit
 	<dependency>
     		<groupId>io.github.whiteorganization</groupId>
     		<artifactId>white-selenium-framework</artifactId>
-    		<version>0.2.4</version>
+    		<version>0.2.5</version>
 	</dependency>
 ```
 If used on a long-term heavy-use project we recommend:
@@ -146,23 +146,23 @@ this library uses
 ## How to Deploy?
 use [maven](https://spring.io/guides/gs/maven/) to release new version to any Dependency Repository.
 
-### GitHub and JitPack (Not working)
+### GitHub and JitPack
 You usually don't need to execute manually a release, configured GitHub actions will take care of the Build and 
 release process for SNAPSHOT's but in case of a version you can do
 
 	mvn release:clean release:prepare -D target=github
 
-### Sonatype - Nexus - Maven Central Repository
+### Sonatype - Nexus - Maven Central Repository (Configuring)
 for SNAPSHOT's use:
 
 	mvn clean deploy -D target=sonatype
-For Releases use:
+	mvn release:clean release:prepare -D target=sonatype
+For Releases use version set if required:
 
 	mvn versions:set -DnewVersion=1.x.x -D target=sonatype
 Followed by:
 
 	mvn clean deploy -D target=sonatype
-	mvn release:clean release:prepare -D target=sonatype
 	mvn release:perform -D target=sonatype
 
 ## Contribution guidelines ###
