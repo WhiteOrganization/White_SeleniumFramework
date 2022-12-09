@@ -48,7 +48,7 @@
     <scm>
         <connection>scm:git:https://github.com/${organization}/${repository.name}.git</connection>
         <developerConnection>scm:git:https://github.com/${organization}/${repository.name}.git</developerConnection>
-        <url>https://github.com/${organization}/${repository.name}/tree/master</url>
+        <url>https://github.com/${organization}/${repository.name}/tree/main</url>
         <tag>${project.artifactId}</tag>
     </scm>
     <!-- endregion Maven releases support -->
@@ -262,7 +262,8 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <!-- Versions: https://search.maven.org/artifact/org.sonatype.plugins/nexus-staging-maven-plugin -->
+                        <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
