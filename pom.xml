@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.whiteorganization</groupId>
     <artifactId>white-selenium-framework</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort
         to access many sections Selenium related.
@@ -181,9 +181,6 @@
                     <value>sonatype</value>
                 </property>
             </activation>
-            <properties>
-                <additionalparam>-Xdoclint:none</additionalparam>
-            </properties>
             <distributionManagement>
                 <!-- region Sonatype -->
                 <!-- You need to configure credentials for the organization ossrh in your maven settings to  deploy to the repo
@@ -299,7 +296,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <additionalparam>-Xdoclint:all -Xdoclint:-missing</additionalparam>
+                            <additionalparam>-Xdoclint:all -Xdoclint:none</additionalparam>
                             <additionalJOptions>
                                 <additionalJOption>-Xdoclint:all</additionalJOption>
                                 <additionalJOption>-Xdoclint:-missing</additionalJOption>
@@ -328,6 +325,7 @@
                     <!-- endregion GPG Signed -->
 
                     <!-- endregion Sonatype Plugins -->
+
                 </plugins>
             </build>
         </profile>
