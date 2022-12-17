@@ -167,12 +167,15 @@ for SNAPSHOT's use:
 
 	mvn clean deploy -D target=sonatype
 	mvn release:clean release:prepare -D target=sonatype
-For Releases use version set if required:
+For Releases use version set **if required** (if you didn't manually setted in last commit):
 
 	mvn versions:set -DnewVersion=1.x.x -D target=sonatype
-Followed by:
+Followed by the DEPLOY command:
 
 	mvn clean deploy -D target=sonatype
+
+And if you want to bump to SNAPSHOT version: 
+
 	mvn release:perform -D target=sonatype
 
 ### Contribution guidelines ###
