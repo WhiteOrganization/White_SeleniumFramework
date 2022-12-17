@@ -181,6 +181,9 @@
                     <value>sonatype</value>
                 </property>
             </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
             <distributionManagement>
                 <!-- region Sonatype -->
                 <!-- You need to configure credentials for the organization ossrh in your maven settings to  deploy to the repo

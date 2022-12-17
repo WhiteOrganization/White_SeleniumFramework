@@ -23,11 +23,11 @@ public class WebDriverUtilsTest {
 	
 	@BeforeAll
 	public static void setUp() {
-		setProperty("white-selenium-framework.execute.web-driver.chrome", "true");
+		setProperty("white-selenium-framework.execute.web-driver.chrome", "false");
 		setProperty("white-selenium-framework.execute.web-driver.ie", "false");
 		setProperty("white-selenium-framework.execute.web-driver.edge", "false");
 		setProperty("white-selenium-framework.execute.web-driver.firefox", "false");
-		setProperty("white-selenium-framework.execute.web-driver.browserless", "false");
+		setProperty("white-selenium-framework.execute.web-driver.browserless", "true");
 		setProperty("white-selenium-framework.close-on-error", "true");
 	}
 	
