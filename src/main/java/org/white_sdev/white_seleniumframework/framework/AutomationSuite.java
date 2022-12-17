@@ -1,18 +1,12 @@
 package org.white_sdev.white_seleniumframework.framework;
 
-import io.github.bonigarcia.wdm.config.DriverManagerType;
 import io.github.bonigarcia.wdm.WebDriverManager;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.WebDriver;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
+
+import java.util.*;
 
 /**
  * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
@@ -83,7 +77,7 @@ public class AutomationSuite {
 				if (webDriverElements.activated) executeScenarios(webDriverElements);
 			log.trace("{}Finish - All Automation Scenario where executed", logID);
 		} catch (Exception e) {
-			throw new White_SeleniumFrameworkException("Impossible to execute Automation Suite", e);
+			throw new White_SeleniumFrameworkException("Error when executing Automation Suite", e);
 		}
 	}
 	

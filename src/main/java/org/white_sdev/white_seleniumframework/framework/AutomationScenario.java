@@ -40,7 +40,7 @@ public interface AutomationScenario {
 		try {
 			WebDriverUtils utils = new WebDriverUtils(driver);
 			run(utils);
-			if (getQuitOnFinish()) utils.quit();
+			if (getQuitOnFinish()) utils.closeWebBrowserWindow();
 		} catch (Exception ex) {
 			if (getQuitOnFinish()) driver.quit();
 			throw new White_SeleniumFrameworkException("An Error has occurred while executing the automation scenario", ex);
