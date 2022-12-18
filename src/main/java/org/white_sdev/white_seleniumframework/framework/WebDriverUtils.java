@@ -831,6 +831,145 @@ public class WebDriverUtils {
 	
 	//<editor-fold defaultstate="collapsed" desc="Table Data">
 	
+	
+	/**
+	 * Extracts all the data from a {@code <table>} and it will transform the rows ({@code <td>}s) into {@link Map}s indicating their header and cell value into its
+	 * pairs.
+	 * For example, this table: <br/>
+	 * 			<table>
+	 *             <thead>
+	 *                 <tr>
+	 *                     <th>First Name</th>
+	 *                     <th>Email</th>
+	 *                 </tr>
+	 *             </thead>
+	 *             <tbody id="usersBody">
+	 *                 <tr>
+	 *                     <td>baz</td>
+	 *                     <td>baz@zinga.com</td>
+	 *                 </tr>
+	 *                 <tr>
+	 *                     <td>bar</td>
+	 *                     <td>bar@dummy.com</td>
+	 *                 </tr>
+	 *                 <tr>
+	 *                     <td>foo</td>
+	 *                     <td>foo@dummy.com</td>
+	 *                 </tr>
+	 *             </tbody>
+	 *         </table> <br/>
+	 * will be transformed into {@link List} objects with this format:
+	 * {@code [{First Name=baz, Email=baz@zinga.com}, {First Name=bar, Email=bar@dummy.com}, {First Name=foo, Email=foo@dummy.com}]}.
+	 * <p>
+	 *     This method will use the first table if any is found.
+	 * </p>
+	 *
+	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
+	 * @throws White_SeleniumFrameworkException When an error is found.
+	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+	 */
+	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag() {
+		return getTableDataWithTag("table", null);
+	}
+	
+	private Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag(String tagName) {
+		return getTableDataWithTag(tagName, null);
+	}
+	
+	
+	/**
+	 * Extracts all the data from a {@code <table>} and it will transform the rows ({@code <td>}s) into {@link Map}s indicating their header and cell value into its
+	 * pairs.
+	 * For example, this table: <br/>
+	 * 			<table>
+	 *             <thead>
+	 *                 <tr>
+	 *                     <th>First Name</th>
+	 *                     <th>Email</th>
+	 *                 </tr>
+	 *             </thead>
+	 *             <tbody id="usersBody">
+	 *                 <tr>
+	 *                     <td>baz</td>
+	 *                     <td>baz@zinga.com</td>
+	 *                 </tr>
+	 *                 <tr>
+	 *                     <td>bar</td>
+	 *                     <td>bar@dummy.com</td>
+	 *                 </tr>
+	 *                 <tr>
+	 *                     <td>foo</td>
+	 *                     <td>foo@dummy.com</td>
+	 *                 </tr>
+	 *             </tbody>
+	 *         </table> <br/>
+	 * will be transformed into {@link List} objects with this format:
+	 * {@code [{First Name=baz, Email=baz@zinga.com}, {First Name=bar, Email=bar@dummy.com}, {First Name=foo, Email=foo@dummy.com}]}.
+	 * <p>
+	 *     This method will use the first table if any is found.
+	 * </p>
+	 *
+	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
+	 *                   default-explicit-waitFor property) if null.
+	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
+	 * @throws White_SeleniumFrameworkException When an error is found.
+	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+	 */
+	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag(Integer secsToWait) {
+		return getTableDataWithTag("table", secsToWait);
+	}
+	
+	/**
+	 * Extracts all the data from a {@code <table>} and it will transform the rows ({@code <td>}s) into {@link Map}s indicating their header and cell value into its
+	 * pairs.
+	 * For example, this table: <br/>
+	 * 			<table>
+	 *             <thead>
+	 *                 <tr>
+	 *                     <th>First Name</th>
+	 *                     <th>Email</th>
+	 *                 </tr>
+	 *             </thead>
+	 *             <tbody id="usersBody">
+	 *                 <tr>
+	 *                     <td>baz</td>
+	 *                     <td>baz@zinga.com</td>
+	 *                 </tr>
+	 *                 <tr>
+	 *                     <td>bar</td>
+	 *                     <td>bar@dummy.com</td>
+	 *                 </tr>
+	 *                 <tr>
+	 *                     <td>foo</td>
+	 *                     <td>foo@dummy.com</td>
+	 *                 </tr>
+	 *             </tbody>
+	 *         </table> <br/>
+	 * will be transformed into {@link List} objects with this format:
+	 * {@code [{First Name=baz, Email=baz@zinga.com}, {First Name=bar, Email=bar@dummy.com}, {First Name=foo, Email=foo@dummy.com}]}.
+	 * <p>
+	 *     This method will use the first table if any is found.
+	 * </p>
+	 *
+	 * @param tagName    the tag to locate the element to perform the operation with.
+	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
+	 *                   default-explicit-waitFor property) if null.
+	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
+	 * @throws White_SeleniumFrameworkException When an error is found.
+	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
+	 */
+	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag(String tagName, Integer secsToWait) {
+		String logID = "::getTableDataWithTag([tagName, keys, secsToWait]): ";
+		log.trace("{}Start ", logID);
+		if (tagName == null) return Optional.empty();
+		try {
+			return getTableData(By.tagName(tagName), secsToWait);
+		} catch (Exception ex) {
+			throw new White_SeleniumFrameworkException(String.format("Unable to obtain the data from table with tag :%s ", tagName), ex);
+		}
+	}
+	
+	
 	/**
 	 * Extracts all the data from a {@code <table>} and it will transform the rows ({@code <td>}s) into {@link Map}s indicating their header and cell value into its
 	 * pairs.
@@ -874,8 +1013,8 @@ public class WebDriverUtils {
 	}
 	
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithId(String id, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
-		String logID = "::clickId([id, nestedFrameNamesStructure, secsToWait]): ";
-		log.trace("{}Start Clicking", logID);
+		String logID = "::getTableDataWithId([id, nestedFrameNamesStructure, secsToWait]): ";
+		log.trace("{}Start ", logID);
 		if (id == null) return Optional.empty();
 		try {
 			if (nestedFrameNamesStructure != null) focus(nestedFrameNamesStructure, secsToWait);
@@ -883,15 +1022,15 @@ public class WebDriverUtils {
 		} catch (Exception ex) {
 			if (!defaultContentFocused && (nestedFrameNamesStructure == null || nestedFrameNamesStructure.isEmpty())) { //is dirty and wasn't me who got it dirty?
 				try {
-					log.warn("{}Couldn't click the element, switching to the main frame and trying again.", logID);
+					log.warn("{}Unable to obtain the data from table, switching to the main frame and trying again.", logID);
 					driver.switchTo().defaultContent();
 					defaultContentFocused = true;
 					return getTableDataWithId(id, secsToWait);
 				} catch (Exception ex2) {
-					log.error("{}Impossible to to click the element, throwing exception", logID);
+					log.error("{}Unable to obtain the data from table, throwing exception", logID);
 				}
 			}
-			throw new White_SeleniumFrameworkException("Unable to click the Button or Link:" + id, ex);
+			throw new White_SeleniumFrameworkException(String.format("Unable to obtain the data from table with id :%s ", id), ex);
 		}
 	}
 	
@@ -909,12 +1048,12 @@ public class WebDriverUtils {
 		} catch (Exception ex) {
 			if (!defaultContentFocused && (nestedFrameNamesStructure == null || nestedFrameNamesStructure.isEmpty())) { //is dirty and wasn't me who got it dirty?
 				try {
-					log.warn("{}Couldn't click the element, switching to the main frame and trying again.", logID);
+					log.warn("{}Unable to obtain the data from table, switching to the main frame and trying again.", logID);
 					driver.switchTo().defaultContent();
 					defaultContentFocused = true;
 					return getTableDataWithName(name, secsToWait);
 				} catch (Exception ex2) {
-					log.error("{}Impossible to to click the element, throwing exception", logID);
+					log.error("{}Unable to obtain the data from table, throwing exception", logID);
 				}
 			}
 			throw new White_SeleniumFrameworkException(String.format("Unable to obtain the data from table with name :%s ", name), ex);
@@ -953,7 +1092,7 @@ public class WebDriverUtils {
 		log.trace("{}Start ", logID);
 		try {
 			WebElement table = getElementBy(By.className(cssClass), relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
-			return Optional.ofNullable(getTableData(table));
+			return getTableData(table);
 		} catch (Exception ex) {
 			throw new White_SeleniumFrameworkException(String.format("Unable to obtain the data from table with css class :%s ", cssClass), ex);
 		}
@@ -1081,8 +1220,12 @@ public class WebDriverUtils {
 		String logID = "::getTableDataWithText([text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting]): ";
 		log.trace("{}Start ", logID);
 		try {
-			WebElement table = getElementByText(text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
-			return Optional.ofNullable(getTableData(table));
+			WebElement table = getElementBy(By.xpath("//table[//*//text()[contains(., '" + text + "')]]"),
+											relativeNestedFrameNamesStructure,
+											skipRetryWithNoFrames,
+											secsToWait,
+											skipRetryWithoutWaiting);
+			return getTableData(table);
 		} catch (Exception ex) {
 			throw new White_SeleniumFrameworkException("Unable to obtain data from table", ex);
 		}
@@ -1192,7 +1335,7 @@ public class WebDriverUtils {
 			if (table != null)
 				if (scrollToElement) scrollToElement(table);
 			log.trace("{} extracting", logID);
-			return Optional.ofNullable(getTableData(table));
+			return getTableData(table);
 		} catch (Exception ex) {
 			throw new White_SeleniumFrameworkException(String.format("Impossible to extract the data from the table with locator %s", locator), ex);
 		}
@@ -1230,23 +1373,31 @@ public class WebDriverUtils {
 	 * @param table {@link WebElement table} to extract the data from.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 */
-	public List<LinkedHashMap<String, String>> getTableData(WebElement table) {
+	public Optional<List<LinkedHashMap<String, String>>> getTableData(WebElement table) {
 		String logID = "::getTable([driver, table]): ";
 		log.trace("{}Start - Obtaining table data", logID);
+		if (table == null) return Optional.empty();
 		try {
 			List<String> tableHeaders = table.findElements(By.xpath(".//tr//th"))
 					.stream().map(WebElement::getText).collect(Collectors.toList());
 			
-			List<String> headers = !tableHeaders.isEmpty() ? tableHeaders :
-					table.findElements(By.xpath(".//tbody/tr")).get(0).findElements(By.tagName("td"))
+			List<String> headers;
+			if (!tableHeaders.isEmpty()) {
+				headers = tableHeaders;
+			} else {
+				List<WebElement> tableHeaderElements = table.findElements(By.xpath(".//tbody/tr"));
+				if (tableHeaderElements != null)
+					headers = tableHeaderElements.get(0).findElements(By.tagName("td"))
 							.stream().map(WebElement::getText).collect(Collectors.toList());
-			
-			return table.findElements(By.xpath(".//tbody/tr")).stream().map(tableRow -> {
+				else
+					return Optional.empty();
+			}
+			return Optional.of(table.findElements(By.xpath(".//tbody/tr")).stream().map(tableRow -> {
 				List<WebElement> tableCells = tableRow.findElements(By.tagName("td"));
 				return tableCells.stream().collect(Collectors.toMap(
 						(tableCell) -> headers.get(tableCells.indexOf(tableCell)), WebElement::getText,
 						(x, y) -> x + ", " + y, LinkedHashMap::new));
-			}).collect(Collectors.toList());
+			}).collect(Collectors.toList()));
 		} catch (Exception ex) {
 			throw new White_SeleniumFrameworkException(String.format("Impossible to obtain data from Table %s", table), ex);
 		}
@@ -1489,18 +1640,39 @@ public class WebDriverUtils {
 	
 	public WebElement getElementByText(String text, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
 									   Boolean skipRetryWithoutWaiting) {
-		log.trace("getElementByText(text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Start: ");
+		String logID = "::getElementByText([text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting]): ";
+		log.trace("{}Start ", logID);
+		WebElement element;
 		try {
-			
-			WebElement element =
+			element =
 					getElementBy(By.xpath("//*[text() = '" + text + "']"), relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait,
 								 skipRetryWithoutWaiting);
+			if (element == null) {
+				log.trace("{}Unable to obtain element by text by using first strategy, trying with a second one.", logID);
+				element = getElementBy(By.xpath("//*[text() = '" + text + "']]"),
+									   relativeNestedFrameNamesStructure,
+									   skipRetryWithNoFrames,
+									   secsToWait,
+									   skipRetryWithoutWaiting);
+			}
 			log.trace("::getElementByText(text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: ");
 			
 			return element;
 			
 		} catch (Exception ex) {
-			throw new White_SeleniumFrameworkException("Unable to obtain element with text: " + text, ex);
+			log.warn("{}Unable to obtain element by text by using first strategy, trying with a second one.", logID);
+			try {
+				element = getElementBy(By.xpath("//*[text() = '" + text + "']]"),
+									   relativeNestedFrameNamesStructure,
+									   skipRetryWithNoFrames,
+									   secsToWait,
+									   skipRetryWithoutWaiting);
+				log.trace("::getElementByText(text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting) - Finish: ");
+				return element;
+				
+			} catch (Exception e) {
+				throw new White_SeleniumFrameworkException(String.format("Unable to obtain element with text: [%s] by any methods.", text), ex);
+			}
 		}
 	}
 	
@@ -1862,7 +2034,7 @@ public class WebDriverUtils {
 	 * of the page making effectively the {@code relativeNestedFrameNamesStructure} absolute instead of relative, you can skip this operation by setting
 	 * the {@code skipRetryWithNoFrames} parameter to {@code true}, This will help your script to not modify the driver's focus if there is an error.
 	 * <i>If you don't know what does this "focus change" is, will probably mean that it won't have an impact on your scenario</i>.
-	 *
+	 * <p>
 	 * {@link WebDriver#findElement(org.openqa.selenium.By) } vs {@link WebDriver#findElements(org.openqa.selenium.By) } and
 	 * {@link WebDriverWait#until(java.util.function.Function) } on a single and multiple instances.
 	 *
