@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.whiteorganization</groupId>
     <artifactId>white-selenium-framework</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort
         to access many sections Selenium related.
@@ -11,7 +11,7 @@
     <url>https://github.com/WhiteOrganization/White_SeleniumFramework</url>
 
     <properties>
-        <!--region Project Configurations FILL THESE-->
+        <!-- region Project Configurations FILL THESE-->
         <!-- WARNING: add release scope if 1.9 and older versions are used at build/plugins/plugin/[maven-compiler-plugin]/configuration-->
         <java.version>8</java.version>
         <selenium.version>4.7.2</selenium.version>
@@ -63,12 +63,23 @@
             <version>${selenium.version}</version>
         </dependency>
 
+        <!-- region SeleniumChromeDriver -->
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-chrome-driver</artifactId>
             <version>${selenium.version}</version>
         </dependency>
+        <!-- endregion SeleniumChromeDriver -->
+
+        <!-- region HtmlUnitDriver -->
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/htmlunit-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>htmlunit-driver</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <!-- endregion -->
         <!-- endregion Pure Selenium -->
 
         <!-- region bonigarcia WebDriverManager -->
@@ -81,15 +92,6 @@
         <!-- endregion  -->
 
         <!-- endregion Selenium -->
-
-        <!-- region HtmlUnitDriver -->
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/htmlunit-driver -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit-driver</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
-        <!-- endregion -->
 
         <!-- region Logs -->
         <dependency>
