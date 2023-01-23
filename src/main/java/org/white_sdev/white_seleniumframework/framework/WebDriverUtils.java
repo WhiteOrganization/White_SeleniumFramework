@@ -2750,7 +2750,19 @@ public class WebDriverUtils {
 	
 	//<editor-fold defaultstate="collapsed" desc="PrintScreen">
 	
-	class Screenshot{
+	/**
+	 * Used to take Screenshots of the running {@link AutomationScenario scenario}. Use:
+	 * <code>
+	 *     new {@link WebDriverUtils utils}().take();
+	 * </code>
+	 * To take a screenshot of your running Web Browser, if you need to use your own {@link WebDriver} you can specify it like this:
+	 * <code>
+	 *     new {@link WebDriverUtils utils}()
+	 *     			.setDriver(myDriver)
+	 *     			.take();
+	 * </code>
+	 */
+	public class Screenshot{
 		WebDriver screenShootDriver;
 		String automationScenarioDisplayName;
 		String screenshotFileName;
