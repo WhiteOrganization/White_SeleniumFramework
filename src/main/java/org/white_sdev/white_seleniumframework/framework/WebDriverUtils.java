@@ -54,7 +54,6 @@ public class WebDriverUtils {
 	 * Default Constructor
 	 *
 	 * @param driver {@link WebDriver drier} of the Class is using this Util.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since Feb 24, 2019
 	 */
 	public WebDriverUtils(WebDriver driver) {
@@ -223,7 +222,6 @@ public class WebDriverUtils {
 	 * @param xpath      the xpath to locate the element to write to.
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void clickXpath(String xpath, Integer secsToWait) {
@@ -239,7 +237,6 @@ public class WebDriverUtils {
 	 *                                  outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
 	 * @param secsToWait                the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                                  default-explicit-waitFor property) if null.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void clickXpath(String xpath, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
@@ -290,7 +287,6 @@ public class WebDriverUtils {
 	 * @param locator    the {@link By} object to locate the element to click.
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void click(By locator, Integer secsToWait) {
@@ -365,7 +361,6 @@ public class WebDriverUtils {
 	 * @param id   the id to locate the element to write to.
 	 * @param keys The keys or {@link String text} to send to the element (usually an input) on the page.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeId(String id, String keys) {
@@ -383,7 +378,6 @@ public class WebDriverUtils {
 	 * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the
 	 *                                  outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeId(String id, String keys, Collection<String> nestedFrameNamesStructure) {
@@ -401,7 +395,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeId(String id, String keys, Integer secsToWait) {
@@ -421,7 +414,6 @@ public class WebDriverUtils {
 	 * @param secsToWait                the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                                  default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeId(String id, String keys, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
@@ -462,7 +454,6 @@ public class WebDriverUtils {
 	 * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the
 	 *                                  outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeName(String name, String keys, Collection<String> nestedFrameNamesStructure) {
@@ -479,7 +470,6 @@ public class WebDriverUtils {
 	 * @param name the name to locate the element to write to.
 	 * @param keys The keys or {@link String text} to send to the element (usually an input) on the page.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeName(String name, String keys) {
@@ -498,7 +488,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeName(String name, String keys, Integer secsToWait) {
@@ -517,7 +506,6 @@ public class WebDriverUtils {
 	 *                                  outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
 	 * @param secsToWait                the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                                  default-explicit-waitFor property) if null.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeName(String name, String keys, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
@@ -570,7 +558,6 @@ public class WebDriverUtils {
 	 * @param css  the CSS class to locate the element to write to.
 	 * @param keys The keys or {@link String text} to send to the element (usually an input) on the page.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeCSS(String css, String keys) {
@@ -589,7 +576,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeCSS(String css, String keys, Integer secsToWait) {
@@ -614,7 +600,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeTag(String keys, Integer secsToWait) {
@@ -632,7 +617,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeTag(String tagName, String keys, Integer secsToWait) {
@@ -659,7 +643,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void writeXPath(String xpath, String keys, Integer secsToWait) {
@@ -690,7 +673,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page; uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void write(By locator, String keys, Integer secsToWait) {
@@ -730,7 +712,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The text of the found element with the {@link By locator}
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public String getTextFromXpath(String xpath, Integer secsToWait) {
@@ -746,7 +727,6 @@ public class WebDriverUtils {
 	 * @param secsToWait                the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with
 	 *                                  default-explicit-waitFor property) if null.
 	 * @return The text of the found element with the {@link By locator}
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public String getTextFromXpath(String xpath, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
@@ -772,7 +752,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The text of the found element with the {@link By locator}
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public String getTextFrom(By locator, Integer secsToWait) {
@@ -812,7 +791,6 @@ public class WebDriverUtils {
 	 * @return A {@link String} with the text inside the found element with the given {@link By locator} or {@code null} if the element with that locator was not
 	 * 		found.
 	 * @throws White_SeleniumFrameworkException When a generic error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public String getTextFrom(By locator, Collection<String> nestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
@@ -867,7 +845,6 @@ public class WebDriverUtils {
 	 *
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag() {
 		return getTableDataWithTag("table", null);
@@ -914,7 +891,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag(Integer secsToWait) {
 		return getTableDataWithTag("table", secsToWait);
@@ -957,7 +933,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithTag(String tagName, Integer secsToWait) {
 		String logID = "::getTableDataWithTag([tagName, keys, secsToWait]): ";
@@ -1003,7 +978,6 @@ public class WebDriverUtils {
 	 * @param id {@link String} with the id to locate the element to perform the operation with.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithId(String id) {
 		return getTableDataWithId(id, null, null);
@@ -1145,7 +1119,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithXpath(String xpath, Integer secsToWait) {
 		return getTableDataWithXpath(xpath, null, secsToWait);
@@ -1187,7 +1160,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableDataWithXpath(String xpath, Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
 		String logID = "::getTableDataWithXpath([xpath, nestedFrameNamesStructure, secsToWait]): ";
@@ -1272,7 +1244,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableData(By locator, Integer secsToWait) {
 		String logID = "::getTableData([locator, secsToWait]): ";
@@ -1323,7 +1294,6 @@ public class WebDriverUtils {
 	 * @param scrollToElement                   {@link Boolean} value indicating if the framework should scroll the website to look for the element.
 	 * @return {@link List} of {@link Map} representing the rows and cells of the table.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 */
 	public Optional<List<LinkedHashMap<String, String>>> getTableData(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames,
 																	  Integer secsToWait, Boolean skipRetryWithoutWaiting, Boolean scrollToElement) {
@@ -1419,7 +1389,6 @@ public class WebDriverUtils {
 	 * @param name the name to locate the element to obtain
 	 * @return The found element with the name
 	 * @throws White_SeleniumFrameworkException in case the element is not found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByClassName(String name) {
@@ -1437,7 +1406,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The found element with the name
 	 * @throws White_SeleniumFrameworkException in case the element is not found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByClassName(String name, Integer secsToWait) {
@@ -1459,7 +1427,6 @@ public class WebDriverUtils {
 	 *
 	 * @param name the name to locate the element to obtain
 	 * @return The found element with the name
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @see WebDriverUtils#getElementByName(java.lang.String, java.lang.Integer)
 	 * @since 2019-03-02
 	 */
@@ -1475,7 +1442,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The found element with the name
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByName(String name, Integer secsToWait) {
@@ -1503,7 +1469,6 @@ public class WebDriverUtils {
 	 *
 	 * @param tagName the tag to locate the element to obtain
 	 * @return The found element with the tag
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByTag(String tagName) {
@@ -1520,7 +1485,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The found element with the tag
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByTag(String tagName, Integer secsToWait) {
@@ -1546,7 +1510,6 @@ public class WebDriverUtils {
 	 *
 	 * @param css the {@code CSS} class name to locate the element to obtain
 	 * @return The found element with the {@code CSS} specified.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByCSS(String css) {
@@ -1562,7 +1525,6 @@ public class WebDriverUtils {
 	 * @param secsToWait the seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The found element with the {@code CSS} specified.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByCSS(String css, Integer secsToWait) {
@@ -1585,7 +1547,6 @@ public class WebDriverUtils {
 	 *
 	 * @param xpath The {@code xPath} to locate the element to obtain.
 	 * @return The found element with the {@code xPath} provided.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @see WebDriverUtils#getElementByXPath(java.lang.String, java.lang.Integer)
 	 * @since 2019-03-02
 	 */
@@ -1601,7 +1562,6 @@ public class WebDriverUtils {
 	 * @param secsToWait The seconds to waitFor for the element to show up in the page, uses the app default (specified in .properties with
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The found element with the {@code xPath} provided.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public WebElement getElementByXPath(String xpath, Integer secsToWait) {
@@ -1751,7 +1711,6 @@ public class WebDriverUtils {
 	 * @param locator The {@link By} locator to search for the element to obtain.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator) {
@@ -1778,7 +1737,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Integer secsToWait) {
@@ -1810,7 +1768,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting In case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
@@ -1846,7 +1803,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting           in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
@@ -1879,7 +1835,6 @@ public class WebDriverUtils {
 	 *                                          {@code null}.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure) {
@@ -1915,7 +1870,6 @@ public class WebDriverUtils {
 	 *                                          {code false} if {@code null}
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames) {
@@ -1954,7 +1908,6 @@ public class WebDriverUtils {
 	 *                                          default-explicit-waitFor property) if null.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait) {
@@ -1997,7 +1950,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting           in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
@@ -2052,7 +2004,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting           in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public WebElement getSingleForcedElementBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
@@ -2148,7 +2099,6 @@ public class WebDriverUtils {
 	 * @param locator The {@link By} locator to search for the element to obtain.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator) {
@@ -2171,7 +2121,6 @@ public class WebDriverUtils {
 	 *                   default-explicit-waitFor property) if null.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Integer secsToWait) {
@@ -2199,7 +2148,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
@@ -2235,7 +2183,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting           in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Integer secsToWait, Boolean skipRetryWithoutWaiting) {
@@ -2263,7 +2210,6 @@ public class WebDriverUtils {
 	 *                                          {@code null}.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure) {
@@ -2294,7 +2240,6 @@ public class WebDriverUtils {
 	 *                                          {code false} if {@code null}
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames) {
@@ -2329,7 +2274,6 @@ public class WebDriverUtils {
 	 *                                          default-explicit-waitFor property) if null.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait) {
@@ -2366,7 +2310,6 @@ public class WebDriverUtils {
 	 * @param skipRetryWithoutWaiting           in case of an exception this will determine if a no-waiting retry should be used to try to obtain the element again.
 	 * @return The element as {@link WebElement} or {@code null} in case it is not found.
 	 * @throws White_SeleniumFrameworkException When an error is found.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2021-01-29
 	 */
 	public List<WebElement> getElementsBy(By locator, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
@@ -2478,7 +2421,6 @@ public class WebDriverUtils {
 	 * {@link #focus(java.util.Collection, java.lang.Integer)} or {@link #focusFrame(org.openqa.selenium.support.How, java.lang.String, java.lang.Integer)} method again
 	 * to obtain the element after calling this. This method also marks the focus as clean by setting {@link #defaultContentFocused} as <code>true</code>
 	 *
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void frameReloading() {
@@ -2504,7 +2446,6 @@ public class WebDriverUtils {
 	 *
 	 * @param nestedFrameNamesStructure Ordered frame name {@link Collection} that represents the frame structure of the page, beginning from the
 	 *                                  outer frame and ending with the frame where the element is contained. Does no switch of focus if null.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void focus(Collection<String> nestedFrameNamesStructure) {
@@ -2521,7 +2462,6 @@ public class WebDriverUtils {
 	 *                                  default-explicit-waitFor property) if null. The focus switch seems to take some time ignoring the waitFor in case it fails to
 	 *                                  find
 	 *                                  the frame.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void focus(Collection<String> nestedFrameNamesStructure, Integer secsToWait) {
@@ -2591,7 +2531,6 @@ public class WebDriverUtils {
 	 * @param frameNameOrId The Name or `ID` of the frame/iframe; does nothing if null.
 	 * @param secsToWait    the seconds to waitFor for the frame to show up in the page, uses the app default (specified in .properties with
 	 *                      default-explicit-waitFor property) if null. The focus switch seems to take some time ignoring the waitFor in case it fails to find the frame.
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void focusFrame(How how, String frameNameOrId, Integer secsToWait) {
@@ -2655,7 +2594,6 @@ public class WebDriverUtils {
 	/**
 	 * Assuming there is an alert popping up on your page this will just accept (click OK button) on it.
 	 *
-	 * @author <a href="mailto:obed.vazquez@gmail.com">Obed Vazquez</a>
 	 * @since 2019-03-02
 	 */
 	public void acceptAlert() {
@@ -2749,7 +2687,7 @@ public class WebDriverUtils {
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="PrintScreen">
-	
+	public Screenshot screenshot = new Screenshot();
 	/**
 	 * Used to take Screenshots of the running {@link AutomationScenario scenario}. Use:
 	 * <code>
@@ -2769,6 +2707,10 @@ public class WebDriverUtils {
 		String screenshotFilePath;
 		
 		public Screenshot(){
+			initialize();
+		}
+		
+		public void initialize(){
 			screenShootDriver = driver;
 			automationScenarioDisplayName = getDefaultScreenShotDisplayName();
 			screenshotFilePath = getDefaultScreenshotPath();
@@ -2804,8 +2746,8 @@ public class WebDriverUtils {
 		}
 		
 		public String take(){
-			String logID="::take([]): ";
-			log.trace("{}Start ", logID);
+			String logID="::take(): ";
+			log.trace("{}Start - Taking Screenshot", logID);
 			try {
 				String screenshotFileFullName = screenshotFilePath + (screenshotFileName == null
 						?getScreenshotFileName(automationScenarioDisplayName)
@@ -2813,6 +2755,7 @@ public class WebDriverUtils {
 				Thread.sleep(1000);
 				
 				FileUtils.copyFile(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE), new File(screenshotFileFullName));
+				initialize();
 				
 				log.trace("{}Finish - Screenshot saved", logID);
 				return screenshotFileFullName;
