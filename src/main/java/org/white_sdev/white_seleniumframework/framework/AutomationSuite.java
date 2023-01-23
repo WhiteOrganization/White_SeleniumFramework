@@ -100,9 +100,9 @@ public class AutomationSuite {
 		String logID = "::executeScenarios(webDriverElements): ";
 		log.trace("{}Start ", logID);
 		for (AutomationScenario automationScenario : automationScenarios) {
-			log.info("{}Executing [{}] automation scenarios over [{}]", logID, automationScenario.getScenarioFullName(), webDriverElements.driverClazz.getSimpleName());
+			log.info("{}Executing [{}] automation scenarios over [{}]", logID, automationScenario.getDisplayName(), webDriverElements.driverClazz.getSimpleName());
 			automationScenario.executeScenario(webDriverElements);
-			log.info("{}Automation Scenario [{}] Executed over [{}]", logID, automationScenario.getScenarioFullName(), webDriverElements.driverClazz.getSimpleName());
+			log.info("{}Automation Scenario [{}] Executed over [{}]", logID, automationScenario.getDisplayName(), webDriverElements.driverClazz.getSimpleName());
 		}
 	}
 	

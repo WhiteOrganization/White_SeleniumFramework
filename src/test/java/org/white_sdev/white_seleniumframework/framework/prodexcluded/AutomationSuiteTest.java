@@ -27,7 +27,7 @@ public class AutomationSuiteTest {
 		}
 		
 		@Override
-		public String getScenarioFullName() {
+		public String getDisplayName() {
 			return "Dummy Test";
 		}
 		

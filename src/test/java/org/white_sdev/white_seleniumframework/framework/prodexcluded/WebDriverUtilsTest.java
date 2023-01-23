@@ -72,7 +72,7 @@ public class WebDriverUtilsTest {
 		}
 		
 		@Override
-		public String getScenarioFullName() {
+		public String getDisplayName() {
 			return getClass().getCanonicalName();
 		}
 	}
@@ -89,7 +89,7 @@ public class WebDriverUtilsTest {
 		}
 		
 		@Override
-		public String getScenarioFullName() {
+		public String getDisplayName() {
 			return getClass().getCanonicalName();
 		}
 	}
@@ -103,7 +103,7 @@ public class WebDriverUtilsTest {
 		}
 		
 		@Override
-		public String getScenarioFullName() {
+		public String getDisplayName() {
 			return getClass().getCanonicalName();
 		}
 	}
@@ -135,7 +135,7 @@ public class WebDriverUtilsTest {
 		}
 		
 		@Override
-		public String getScenarioFullName() {
+		public String getDisplayName() {
 			return getClass().getCanonicalName();
 		}
 	}

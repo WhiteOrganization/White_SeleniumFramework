@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.whiteorganization</groupId>
     <artifactId>white-selenium-framework</artifactId>
-    <version>0.3.2</version>
+    <version>1.0.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Selenium Framework that will help to execute tests and custom scenarios faster and reduce the effort
         to access many sections Selenium related.
@@ -63,12 +63,23 @@
             <version>${selenium.version}</version>
         </dependency>
 
+        <!-- region HtmlUnitDriver -->
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/htmlunit-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>htmlunit-driver</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <!-- endregion -->
+
+        <!-- region ChromeDriver -->
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-chrome-driver</artifactId>
             <version>${selenium.version}</version>
         </dependency>
+        <!-- endregion ChromeDriver -->
         <!-- endregion Pure Selenium -->
 
         <!-- region bonigarcia WebDriverManager -->
@@ -82,14 +93,6 @@
 
         <!-- endregion Selenium -->
 
-        <!-- region HtmlUnitDriver -->
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/htmlunit-driver -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit-driver</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
-        <!-- endregion -->
 
         <!-- region Logs -->
         <dependency>

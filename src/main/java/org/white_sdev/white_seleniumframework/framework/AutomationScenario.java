@@ -95,7 +95,7 @@ public interface AutomationScenario {
 	 * This could be a detailed definition of the scenario or just a {@code getClass().getCanonicalName()}.
 	 * @return a {@link String} representation the name of the {@link AutomationScenario}
 	 */
-	String getScenarioFullName();
+	String getDisplayName();
 	
 	/**
 	 * Will <i>temporarily</i> disable any logs to the {@link System#out}.

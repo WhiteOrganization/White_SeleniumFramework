@@ -15,6 +15,7 @@ import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFramework
 
 import java.io.File;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1634,7 +1635,7 @@ public class WebDriverUtils {
 	}
 	
 	public WebElement getElementByText(String text) {
-		log.trace("getElementsByText(text) - Start: Bridging.");
+		log.trace("getElementByText(text) - Start: Bridging.");
 		return getElementByText(text, null, null, null, null);
 	}
 	
@@ -2749,34 +2750,69 @@ public class WebDriverUtils {
 	
 	//<editor-fold defaultstate="collapsed" desc="PrintScreen">
 	
-	public String takeScreenShot() {
-		return takeScreenShot((String) null);
-	}
-	
-	public String takeScreenShot(AutomationScenario tc) {
-		String screenShotFileName = "[" + driver.getClass().getSimpleName() + "] " + tc.getScenarioFullName() + ".png";
-		return takeScreenShot(screenShotFileName);
-	}
-	
-	public String takeScreenShot(String screenShotFileName) {
-		String logID = "::takeScreenShot(screenShotFileName): ";
-		log.trace("{}Start - Taking a Screenshot", logID);
-		try {
-			if (screenShotFileName == null) screenShotFileName = getDefaultScreenShotFileName();
-			
-			Thread.sleep(1000);
-			File screenShotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			File copy = new File(screenShotFileName);
-			FileUtils.copyFile(screenShotFile, copy);
-			log.trace("{}Finish - Screenshot saved", logID);
-			return copy.getAbsolutePath();
-			
-		} catch (java.io.IOException ex) {
-			throw new White_SeleniumFrameworkException("Unable to save the screenshot", ex);
-		} catch (Exception ex) {
-			throw new White_SeleniumFrameworkException("Unable to take a screenshot", ex);
+	class Screenshot{
+		WebDriver screenShootDriver;
+		String automationScenarioDisplayName;
+		String screenshotFileName;
+		String screenshotFilePath;
+		
+		public Screenshot(){
+			screenShootDriver = driver;
+			automationScenarioDisplayName = getDefaultScreenShotDisplayName();
+			screenshotFilePath = getDefaultScreenshotPath();
+		}
+		
+		private String getDefaultScreenShotDisplayName() {
+			return getScreenshotFileName("Screenshot" + (++WebDriverUtils.screenShootCounter));
+		}
+		
+		private String getScreenshotFileName(String testID){
+			return  testID + " " + LocalDate.now().toString().replace(":| ", "_") + ".png";
+		}
+		
+		private String getDefaultScreenshotPath(){
+			return "./target/test-reports/screenshots/";
+		}
+		
+		public Screenshot setDriver(WebDriver screenShootDriver){
+			this.screenShootDriver = screenShootDriver;
+			return this;
+		}
+		public Screenshot setScenarioDisplayName(String automationScenarioDisplayName){
+			this.automationScenarioDisplayName = automationScenarioDisplayName;
+			return this;
+		}
+		public Screenshot setFileName(String screenshotFileName){
+			this.screenshotFileName = screenshotFileName;
+			return this;
+		}
+		public Screenshot setFilePath(String screenshotFilePath){
+			this.screenshotFilePath = screenshotFilePath;
+			return this;
+		}
+		
+		public String take(){
+			String logID="::take([]): ";
+			log.trace("{}Start ", logID);
+			try {
+				String screenshotFileFullName = screenshotFilePath + (screenshotFileName == null
+						?getScreenshotFileName(automationScenarioDisplayName)
+						:screenshotFileName);
+				Thread.sleep(1000);
+				
+				FileUtils.copyFile(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE), new File(screenshotFileFullName));
+				
+				log.trace("{}Finish - Screenshot saved", logID);
+				return screenshotFileFullName;
+				
+			} catch (java.io.IOException ex) {
+				throw new White_SeleniumFrameworkException("Unable to save the screenshot", ex);
+			} catch (Exception ex) {
+				throw new White_SeleniumFrameworkException("Unable to take a screenshot", ex);
+			}
 		}
 	}
+	
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="WebExplorer in use">
@@ -2840,11 +2876,6 @@ public class WebDriverUtils {
 		return driver instanceof FirefoxDriver;
 	}
 	
-	private String getDefaultScreenShotFileName() {
-		String fileName = "screenshot" + WebDriverUtils.screenShootCounter + ".png";
-		WebDriverUtils.screenShootCounter++;
-		return fileName;
-	}
 	//</editor-fold>
 	//</editor-fold>
 
