@@ -2793,11 +2793,16 @@ public class WebDriverUtils {
 		
 	}
 	
-	@SneakyThrows
 	public static void saveRecording(SeleniumJupiter seleniumJupiter){
+		saveRecording(seleniumJupiter, null);
+	}
+	
+	@SneakyThrows
+	public static void saveRecording(SeleniumJupiter seleniumJupiter, String filePath){
 		String logID="::saveRecording([seleniumJupiter]): ";
 		log.trace("{}Start ", logID);
-		
+		Objects.requireNonNull(seleniumJupiter);
+		if(filePath == null) filePath = "target/test-reports/recorded/";
 		try {
 			
 			final int REC_TIMEOUT_SEC = 1;
@@ -2825,7 +2830,7 @@ public class WebDriverUtils {
 			log.debug("{}Recorded File Status: {}", logID, recFile.exists());
 			log.debug("{}File Name: {}", logID, recFile.getAbsolutePath());
 			if (recFile.exists()) {
-				File movedFile = new File("target/test-reports/recorded/" + recordedFileName + RECORDED_EXT);
+				File movedFile = new File(filePath + recordedFileName + RECORDED_EXT);
 				try {FileUtils.delete(movedFile);} catch (NoSuchFileException ex) {}
 				FileUtils.moveFile(recFile, movedFile);
 			}
