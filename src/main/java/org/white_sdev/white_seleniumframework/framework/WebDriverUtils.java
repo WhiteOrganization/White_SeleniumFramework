@@ -2775,69 +2775,17 @@ public class WebDriverUtils {
 	//</editor-fold>
 	
 	//region Record
-	static String recordedFileName;
 	
-	public static void startRecording(SeleniumJupiter seleniumJupiter, String displayName){
-		String logID="::startRecording([seleniumJupiter, displayName]): ";
-		log.trace("{}Start ", logID);
-		Objects.requireNonNull(seleniumJupiter);
-		if(displayName == null) displayName = "recorded";
-		try{
-			recordedFileName = displayName + " " + LocalDate.now().toString().replace(":| ", "_");
-			seleniumJupiter.startRecording(recordedFileName);
-			log.trace("{}Finish", logID);
-			
-		} catch (Exception ex) {
-			throw new RuntimeException("Impossible to start the recording", ex);
-		}
-		
+	public static String startRecording(SeleniumJupiter seleniumJupiter, String displayName){
+		return RecordingUtils.startRecording(seleniumJupiter, displayName);
+	}
+	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName){
+		return RecordingUtils.saveRecording(seleniumJupiter, displayName);
+	}
+	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName, String filePath, String fileName){
+		return RecordingUtils.saveRecording(seleniumJupiter, displayName, filePath, fileName);
 	}
 	
-	public static void saveRecording(SeleniumJupiter seleniumJupiter){
-		saveRecording(seleniumJupiter, null);
-	}
-	
-	@SneakyThrows
-	public static void saveRecording(SeleniumJupiter seleniumJupiter, String filePath){
-		String logID="::saveRecording([seleniumJupiter]): ";
-		log.trace("{}Start ", logID);
-		Objects.requireNonNull(seleniumJupiter);
-		if(filePath == null) filePath = "target/test-reports/recorded/";
-		try {
-			
-			final int REC_TIMEOUT_SEC = 1;
-			final int POLL_TIME_MSEC = 100;
-			
-			final String RECORDED_EXT = ".webm";
-			final String RECORDED_FOLDER_PATH = System.getProperty("user.home") + "/Downloads";
-			File targetFolder = new File(RECORDED_FOLDER_PATH);
-			
-			seleniumJupiter.stopRecording();
-			
-			long timeoutMs = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(REC_TIMEOUT_SEC);
-			
-			File recFile;
-			do {
-				recFile = new File(targetFolder, recordedFileName + RECORDED_EXT);
-				if (System.currentTimeMillis() > timeoutMs) {
-					log.error("Timeout of " + REC_TIMEOUT_SEC + " seconds waiting for recording " + recFile);
-					break;
-				}
-				Thread.sleep(POLL_TIME_MSEC);
-				
-			} while (!recFile.exists());
-			
-			log.debug("{}Recorded File Status: {}", logID, recFile.exists());
-			log.debug("{}File Name: {}", logID, recFile.getAbsolutePath());
-			if (recFile.exists()) {
-				File movedFile = new File(filePath + recordedFileName + RECORDED_EXT);
-				try {FileUtils.delete(movedFile);} catch (NoSuchFileException ex) {}
-				FileUtils.moveFile(recFile, movedFile);
-			}
-		}catch(Exception ex){
-			throw new White_SeleniumFrameworkException("An error occurred when saving the video recording.", ex);
-		}
-	}
 	//endregion Record
 	
 	//<editor-fold defaultstate="collapsed" desc="WebExplorer in use">
