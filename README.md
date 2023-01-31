@@ -33,7 +33,7 @@ WebDriver webDriver=util.driver;
 The framework will also take care of the entire configuration of the Drivers, you just need to specify what supported WebExplorers do you want to run your scenarios on.
 
 
-* Version: [1.1.0](https://github.com/orgs/WhiteOrganization/packages) 
+* Version: [2.0.0](https://github.com/orgs/WhiteOrganization/packages) 
 
     This is still in development and some methods are being constantly added as they are used. Please help us by requesting those you need or need more detailed documentation.
 
@@ -48,7 +48,7 @@ by including it in your POM](https://maven.pkg.github.com/whiteorganization/whit
 	<dependency>
     		<groupId>io.github.whiteorganization</groupId>
     		<artifactId>white-selenium-framework</artifactId>
-    		<version>1.1.0</version>
+    		<version>2.0.0</version>
 	</dependency>
 ```
 If used on a long-term heavy-use project we recommend:
@@ -61,7 +61,7 @@ If used on a long-term heavy-use project we recommend:
         <dependency>
             <groupId>io.github.whiteorganization</groupId>
             <artifactId>white-selenium-framework</artifactId>
-            <version>1.1.0</version>
+            <version>2.0.0</version>
             <!-- You need to manually import this library due to lack of maintenance on White_SeleniumFramework -->
             <exclusions>
                 <exclusion>
@@ -101,7 +101,7 @@ and import the dependency like this:
 	<dependency>
 	    <groupId>com.github.WhiteOrganization</groupId>
 	    <artifactId>White_SeleniumFramework</artifactId>
-	    <version>white-selenium-framework-1.1.0</version>
+	    <version>white-selenium-framework-2.0.0</version>
 	</dependency>
 ```
 
@@ -123,7 +123,7 @@ To run the scenarios you need to register your TestCases under TestSuite and the
 	AutomationSuite.launchExecutions();
 ```
 
-Some useful configuration you can establish on your project context [src/main/resources/<yourFileName>.properties on maven projects]
+Some useful configuration you can establish on your project context [src/main/resources/application.properties on maven projects]
 ```
 white-selenium-framework.execute.web-driver.chrome=true
 white-selenium-framework.execute.web-driver.ie=true

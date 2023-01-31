@@ -266,10 +266,15 @@ public class WebDriverUtils {
 		clickText(text, null, null, null, null);
 	}
 	
+	public void clickText(String text, Integer defaultSecsToWaitForElements) {
+		clickText(text, null, null, defaultSecsToWaitForElements, null);
+	}
+	
 	public void clickText(String text, Collection<String> relativeNestedFrameNamesStructure, Boolean skipRetryWithNoFrames, Integer secsToWait,
 						  Boolean skipRetryWithoutWaiting) {
 		try {
 			WebElement element = getElementByText(text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
+			if(!element.isEnabled()) throw new IllegalStateException("Element is not enabled to click");
 			element.click();
 		} catch (Exception ex) {
 			throw new White_SeleniumFrameworkException("Unable to click the element", ex);
@@ -2679,7 +2684,7 @@ public class WebDriverUtils {
 	}
 	
 	public void waitFor(Long milliseconds) {
-		log.trace("::wait(milliseconds) - Start: ");
+		log.trace("::waitFor(milliseconds) - Start: ");
 		Objects.requireNonNull(milliseconds);
 		try {
 			Thread.sleep(milliseconds);
@@ -2687,7 +2692,6 @@ public class WebDriverUtils {
 		} catch (Exception e) {
 			throw new White_SeleniumFrameworkException("Unable to pause the thread due to an unknown internal error.", e);
 		}
-		
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="PrintScreen">
@@ -2774,10 +2778,9 @@ public class WebDriverUtils {
 	
 	//</editor-fold>
 	
-	//region Record
-	
-	public static String startRecording(SeleniumJupiter seleniumJupiter, String displayName){
-		return RecordingUtils.startRecording(seleniumJupiter, displayName);
+	//<editor-fold defaultstate="collapsed" desc="Record">
+	public static String startRecording(SeleniumJupiter seleniumJupiter, WebDriver driver, String displayName){
+		return RecordingUtils.startRecording(seleniumJupiter, driver, displayName);
 	}
 	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName){
 		return RecordingUtils.saveRecording(seleniumJupiter, displayName);
@@ -2786,7 +2789,7 @@ public class WebDriverUtils {
 		return RecordingUtils.saveRecording(seleniumJupiter, displayName, filePath, fileName);
 	}
 	
-	//endregion Record
+	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="WebExplorer in use">
 	
