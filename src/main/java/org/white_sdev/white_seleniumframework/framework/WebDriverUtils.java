@@ -1,5 +1,6 @@
 package org.white_sdev.white_seleniumframework.framework;
 
+import io.github.bonigarcia.seljup.SeleniumJupiter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
@@ -18,7 +19,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import io.github.bonigarcia.seljup.SeleniumJupiter;
 
 import static org.white_sdev.white_seleniumframework.utils.PropertiesReader.getProperty;
 
@@ -82,7 +82,6 @@ public class WebDriverUtils {
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Actions">
-	
 	
 	//<editor-fold defaultstate="collapsed" desc="Click">
 	
@@ -261,9 +260,6 @@ public class WebDriverUtils {
 		click(By.linkText(linkText), relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting, null);
 	}
 	
-	public void forceClickText(String text){
-	
-	}
 	public void clickText(String text) {
 		clickText(text, null, null, null, null);
 	}
@@ -276,7 +272,7 @@ public class WebDriverUtils {
 						  Boolean skipRetryWithoutWaiting) {
 		try {
 			WebElement element = getElementByText(text, relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting);
-			if(!element.isEnabled()) throw new IllegalStateException("Element is not enabled to click");
+			if (!element.isEnabled()) throw new IllegalStateException("Element is not enabled to click");
 			element.click();
 		} catch (Exception ex) {
 			throw new White_SeleniumFrameworkException("Unable to click the element", ex);
@@ -2435,21 +2431,23 @@ public class WebDriverUtils {
 	 *     <li>Sub-menu A</li>
 	 *     <li>item B</li>
 	 * </ol>
+	 *
 	 * @param menus {@link String} with the name of the menus (or any text) that should be clicked sequentially.
 	 */
-	public void navigate(String menus){
+	public void navigate(String menus) {
 		navigate(Arrays.stream(menus.split(">")).toList());
 	}
 	
-	public void navigate(Collection<String> texts){
+	public void navigate(Collection<String> texts) {
 		sequentialClicksText(texts);
 	}
 	
 	/**
 	 * Will click the given {@code texts} sequentially.
+	 *
 	 * @param texts {@link Collection} of texts that should be clicked in the given order.
 	 */
-	public void sequentialClicksText(Collection<String> texts){
+	public void sequentialClicksText(Collection<String> texts) {
 		texts.forEach(this::clickText);
 	}
 	
@@ -2724,29 +2722,30 @@ public class WebDriverUtils {
 	
 	//<editor-fold defaultstate="collapsed" desc="PrintScreen">
 	public Screenshot screenshot = new Screenshot();
+	
 	/**
 	 * Used to take Screenshots of the running {@link AutomationScenario scenario}. Use:
 	 * <code>
-	 *     new {@link WebDriverUtils utils}().take();
+	 * new {@link WebDriverUtils utils}().take();
 	 * </code>
 	 * To take a screenshot of your running Web Browser, if you need to use your own {@link WebDriver} you can specify it like this:
 	 * <code>
-	 *     new {@link WebDriverUtils utils}()
-	 *     			.setDriver(myDriver)
-	 *     			.take();
+	 * new {@link WebDriverUtils utils}()
+	 * .setDriver(myDriver)
+	 * .take();
 	 * </code>
 	 */
-	public class Screenshot{
+	public class Screenshot {
 		WebDriver screenShootDriver;
 		String automationScenarioDisplayName;
 		String screenshotFileName;
 		String screenshotFilePath;
 		
-		public Screenshot(){
+		public Screenshot() {
 			initialize();
 		}
 		
-		public void initialize(){
+		public void initialize() {
 			screenShootDriver = driver;
 			automationScenarioDisplayName = getDefaultScreenShotDisplayName();
 			screenshotFilePath = getDefaultScreenshotPath();
@@ -2756,38 +2755,41 @@ public class WebDriverUtils {
 			return getScreenshotFileName("Screenshot" + (++WebDriverUtils.screenShootCounter));
 		}
 		
-		private String getScreenshotFileName(String testID){
-			return  testID + " " + LocalDate.now().toString().replace(":| ", "_") + ".png";
+		private String getScreenshotFileName(String testID) {
+			return testID + " " + LocalDate.now().toString().replace(":| ", "_") + ".png";
 		}
 		
-		private String getDefaultScreenshotPath(){
+		private String getDefaultScreenshotPath() {
 			return "./target/test-reports/screenshots/";
 		}
 		
-		public Screenshot setDriver(WebDriver screenShootDriver){
+		public Screenshot setDriver(WebDriver screenShootDriver) {
 			this.screenShootDriver = screenShootDriver;
 			return this;
 		}
-		public Screenshot setScenarioDisplayName(String automationScenarioDisplayName){
+		
+		public Screenshot setScenarioDisplayName(String automationScenarioDisplayName) {
 			this.automationScenarioDisplayName = automationScenarioDisplayName;
 			return this;
 		}
-		public Screenshot setFileName(String screenshotFileName){
+		
+		public Screenshot setFileName(String screenshotFileName) {
 			this.screenshotFileName = screenshotFileName;
 			return this;
 		}
-		public Screenshot setFilePath(String screenshotFilePath){
+		
+		public Screenshot setFilePath(String screenshotFilePath) {
 			this.screenshotFilePath = screenshotFilePath;
 			return this;
 		}
 		
-		public String take(){
-			String logID="::take(): ";
+		public String take() {
+			String logID = "::take(): ";
 			log.trace("{}Start - Taking Screenshot", logID);
 			try {
 				String screenshotFileFullName = screenshotFilePath + (screenshotFileName == null
-						?getScreenshotFileName(automationScenarioDisplayName)
-						:screenshotFileName);
+						? getScreenshotFileName(automationScenarioDisplayName)
+						: screenshotFileName);
 				Thread.sleep(1000);
 				
 				FileUtils.copyFile(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE), new File(screenshotFileFullName));
@@ -2807,13 +2809,15 @@ public class WebDriverUtils {
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="Record">
-	public static String startRecording(SeleniumJupiter seleniumJupiter, WebDriver driver, String displayName){
+	public static String startRecording(SeleniumJupiter seleniumJupiter, WebDriver driver, String displayName) {
 		return RecordingUtils.startRecording(seleniumJupiter, driver, displayName);
 	}
-	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName){
+	
+	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName) {
 		return RecordingUtils.saveRecording(seleniumJupiter, displayName);
 	}
-	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName, String filePath, String fileName){
+	
+	public static Optional<File> saveRecording(SeleniumJupiter seleniumJupiter, String displayName, String filePath, String fileName) {
 		return RecordingUtils.saveRecording(seleniumJupiter, displayName, filePath, fileName);
 	}
 	
