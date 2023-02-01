@@ -1,6 +1,5 @@
 package org.white_sdev.white_seleniumframework.framework;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
@@ -15,11 +14,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException;
 
 import java.io.File;
-import java.nio.file.NoSuchFileException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import io.github.bonigarcia.seljup.SeleniumJupiter;
 
@@ -85,6 +82,10 @@ public class WebDriverUtils {
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="Actions">
+	
+	
+	//<editor-fold defaultstate="collapsed" desc="Click">
+	
 	//<editor-fold defaultstate="collapsed" desc="No Wait Bridges|Overloaded">
 	//TODO OV: Generate documentation for all methods.
 	public void clickId(String id) {
@@ -102,10 +103,8 @@ public class WebDriverUtils {
 	public void clickName(String name, Collection<String> nestedFrameNamesStructure) {
 		clickName(name, nestedFrameNamesStructure, null);
 	}
-
-//</editor-fold>
 	
-	//<editor-fold defaultstate="collapsed" desc="Click">
+	//</editor-fold>
 	
 	public void clickId(String id, Integer secsToWait) {
 		clickId(id, null, secsToWait);
@@ -262,6 +261,9 @@ public class WebDriverUtils {
 		click(By.linkText(linkText), relativeNestedFrameNamesStructure, skipRetryWithNoFrames, secsToWait, skipRetryWithoutWaiting, null);
 	}
 	
+	public void forceClickText(String text){
+	
+	}
 	public void clickText(String text) {
 		clickText(text, null, null, null, null);
 	}
@@ -2423,6 +2425,32 @@ public class WebDriverUtils {
 		} catch (Exception e) {
 			throw new White_SeleniumFrameworkException("Impossible to openURL " + url, e);
 		}
+	}
+	
+	/**
+	 * Given a {@link String} with a list of texts separated by a '>', this will click them in the given order.
+	 * for example {@code navigate("Main Menu>Sub-menu A>item B")} will perform these clicks in this specific order:
+	 * <ol>
+	 *     <li>Main Menu</li>
+	 *     <li>Sub-menu A</li>
+	 *     <li>item B</li>
+	 * </ol>
+	 * @param menus {@link String} with the name of the menus (or any text) that should be clicked sequentially.
+	 */
+	public void navigate(String menus){
+		navigate(Arrays.stream(menus.split(">")).toList());
+	}
+	
+	public void navigate(Collection<String> texts){
+		sequentialClicksText(texts);
+	}
+	
+	/**
+	 * Will click the given {@code texts} sequentially.
+	 * @param texts {@link Collection} of texts that should be clicked in the given order.
+	 */
+	public void sequentialClicksText(Collection<String> texts){
+		texts.forEach(this::clickText);
 	}
 	
 	/**
