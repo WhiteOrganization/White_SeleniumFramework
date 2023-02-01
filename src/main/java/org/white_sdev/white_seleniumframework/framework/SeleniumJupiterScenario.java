@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;
@@ -18,10 +17,7 @@ import java.util.Map;
  * @author <a href="mailto:obed.vazquez@gmail.com>Obed Vazquez</a>
  */
 @lombok.extern.slf4j.Slf4j
-public class SeleniumJupiterScenario {
-	
-	@RegisterExtension
-	public static SeleniumJupiter seleniumJupiter = new SeleniumJupiter();
+public abstract class SeleniumJupiterScenario {
 	
 	public static WebDriver driver;
 	
@@ -31,15 +27,16 @@ public class SeleniumJupiterScenario {
 	@BeforeEach
 	public void beforeEach(TestInfo testInfo, @Watch(display = true) WebDriver driver) {
 		SeleniumJupiterScenario.driver = driver;
-		ScenarioUtils.launchEvidencesRecords(testInfo, driver, seleniumJupiter);
+		ScenarioUtils.launchEvidencesRecords(testInfo, driver, getSeleniumJupiterRegisteredExtension());
 	}
 	
+	public abstract SeleniumJupiter getSeleniumJupiterRegisteredExtension();
 	
 	@AfterEach
 	public void afterEach(TestInfo testInfo) {
 		String logID = "::afterEach([testInfo, driver]): ";
 		log.info("{}Start ", logID);
-		ScenarioUtils.stopEvidencesRecords(testInfo, seleniumJupiter, driver);
+		ScenarioUtils.stopEvidencesRecords(testInfo, getSeleniumJupiterRegisteredExtension(), driver);
 	}
 	//endregion Before&After
 	
