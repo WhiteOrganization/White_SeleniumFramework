@@ -115,7 +115,7 @@ public abstract class SeleniumJupiterScenario {
 		 * @param displayName This will be used as the name of the log file.
 		 *                    Although you can use any name it is recommended to use the Test displayed Name that you can obtain with an instance of {@link TestInfo}
 		 */
-		static void createTestLogFile(String displayName) {
+		public static void createTestLogFile(String displayName) {
 			String logID = "::createTestLogFile([displayName]): ";
 			log.trace("{}Start ", logID);
 			org.slf4j.MDC.put("testId", displayName);
@@ -127,7 +127,7 @@ public abstract class SeleniumJupiterScenario {
 		 *
 		 * @see #createTestLogFile(String)
 		 */
-		static void closeTestLogFile() {
+		public static void closeTestLogFile() {
 			String logID = "::closeTestLogFile([]): ";
 			log.trace("{}Start ", logID);
 			org.slf4j.MDC.remove("testId");
