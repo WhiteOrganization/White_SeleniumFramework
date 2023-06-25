@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.white_sdev.white_seleniumframework.framework.AutomationScenario;
 import org.white_sdev.white_seleniumframework.framework.AutomationSuite;
@@ -56,6 +57,31 @@ public class WebDriverUtilsTest {
 	public void simpleTableExtractionTest() {
 		AutomationSuite.registerAutomationScenario(new TableExtraction());
 		AutomationSuite.launchExecutions();
+	}
+	
+	@Test
+	@Disabled
+	public void navigationTest() {
+		AutomationSuite.registerAutomationScenario(new NavigateMenus());
+		AutomationSuite.launchExecutions();
+	}
+	
+	@Slf4j
+	public static class NavigateMenus implements AutomationScenario {
+		
+		@Override
+		public void run(final WebDriverUtils utils) {
+			String sutUrl = "https://bonigarcia.dev/selenium-webdriver-java/";
+			utils.openURL(sutUrl);
+			utils.navigate("Navigation>2>3");
+			String lorem = utils.getTextFrom(By.className("lead"), null);
+			assertEquals(lorem, "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+		}
+		
+		@Override
+		public String getDisplayName() {
+			return getClass().getCanonicalName();
+		}
 	}
 	
 	private static String title;
