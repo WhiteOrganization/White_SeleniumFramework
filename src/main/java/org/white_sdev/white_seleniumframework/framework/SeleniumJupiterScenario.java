@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.WebDriver;
+import org.white_sdev.white_seleniumframework.framework.utils.GeneralUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +66,7 @@ public abstract class SeleniumJupiterScenario {
 			String displayName = testInfo.getDisplayName();
 			log.trace("{}Start ", logID);
 			try{
-				WebDriverUtils.startRecording(seleniumJupiter, driver, displayName);
+				GeneralUtils.startRecording(seleniumJupiter, driver, displayName);
 			}catch (IllegalStateException ex){
 				log.error("{}There is a problem while trying to start the recording, the execution will continue.", logID, ex);
 			}
@@ -100,7 +101,7 @@ public abstract class SeleniumJupiterScenario {
 			String logID = "::stopRecording([displayName]): ";
 			log.trace("{}Start ", logID);
 			try {
-				WebDriverUtils.saveRecording(seleniumJupiter, displayName).ifPresentOrElse(
+				GeneralUtils.saveRecording(seleniumJupiter, displayName).ifPresentOrElse(
 						(fileName) -> log.debug("{}Saved recorded session at: {}", logID, fileName),
 						() -> log.error(logID + "Impossible to save the recording"));
 			} catch (org.white_sdev.white_seleniumframework.exceptions.White_SeleniumFrameworkException ex) {
